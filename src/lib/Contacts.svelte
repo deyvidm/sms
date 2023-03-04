@@ -1,6 +1,16 @@
 <script lang="ts">
+ import { beforeUpdate, afterUpdate, onDestroy } from 'svelte';
+    import { writable } from 'svelte/store';
+    import Contacts from './Contacts.svelte';
+
+    let title: string;
+    let content: string;
+    let recipients: [];
+    let yesall = false;
+
 
 </script>
+
 <div class="overflow-x-auto w-full">
     <table class="table w-full">
       <!-- head -->
@@ -8,7 +18,7 @@
         <tr>
           <th>
             <label>
-              <input type="checkbox" class="checkbox" />
+              <input bind:checked={yesall} type="checkbox" class="checkbox" />
             </label>
           </th>
           <th>Name</th>
@@ -17,6 +27,7 @@
           <th></th>
         </tr>
       </thead>
+      {#if yesall}
       <tbody>
         <!-- row 1 -->
         <tr>
@@ -52,7 +63,8 @@
         <tr>
           <th>
             <label>
-              <input type="checkbox" class="checkbox" />
+              <input name="mycheckboxes" type="checkbox" class="checkbox" />
+              <!-- <input type="checkbox" class="checkbox" /> -->
             </label>
           </th>
           <td>
@@ -139,6 +151,7 @@
           </th>
         </tr>
       </tbody>
+      {/if}
       <!-- foot -->
       <tfoot>
         <tr>

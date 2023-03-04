@@ -6,18 +6,15 @@
     let title: string;
     let content: string;
     let recipients: [];
-
+        
     onDestroy(() => {
         // save title and content so they don't get lost
     });
-
-    async function login() {
-        await pb.collection('users').authWithPassword(username, password);
-    }
-
+    
     function createEvent() {
         alert('out');
     }
+
 </script>
 
 <h2 class="mb-10 text-4xl font-extrabold dark:text-white">Create New Event</h2>
