@@ -1,7 +1,4 @@
 <script lang="ts">
-    import { beforeUpdate, afterUpdate } from 'svelte';
-    import { onMount, onDestroy } from 'svelte';
-    import { writable } from 'svelte/store';
     import ContactRow from './ContactRow.svelte';
     import {  contacts } from './pocketbase';
     let yesall = true;
