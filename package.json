@@ -3,6 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
+		"retype": "npx pocketbase-typegen --db ./pb_data/data.db --out pocketbase-types.ts",
 		"dev": "concurrently --kill-others \"npx tailwindcss -i ./src/input.css -o ./src/dist/output.css --watch\" \"vite dev\" ",
 		"build": "vite build",
 		"preview": "vite preview",
@@ -25,6 +26,8 @@
 	"type": "module",
 	"dependencies": {
 		"daisyui": "^2.51.3",
-		"pocketbase": "^0.12.0"
+		"pocketbase": "^0.12.0",
+		"pocketbase-typegen": "^1.1.7",
+		"svelte-query-pocketbase": "^0.0.0"
 	}
 }

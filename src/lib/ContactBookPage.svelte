@@ -23,7 +23,7 @@
         </thead>
 
         <tbody>
-            {#each contacts as contact}
+            {#each $contacts as contact}
                 <ContactRow checked={false} first={contact.first_name} last={contact.last_name} id={contact.id} />
             {/each}
         </tbody>

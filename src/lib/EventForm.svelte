@@ -16,6 +16,7 @@
         alert('out');
     }
 
+   onMount(get50Contacts);
 </script>
 
 <h2 class="mb-10 text-4xl font-extrabold dark:text-white">Create New Event</h2>
@@ -52,7 +53,6 @@
     <label for="my-modal-5" class="mt-12 w-1/4 btn btn-outline btn-accent">Add recipients</label>
 
     <input type="checkbox" id="my-modal-5" class="modal-toggle" />
-    {#if (contacts.length > 0)}
     <div class="modal">
         <div class="modal-box w-11/12 max-w-5xl">
             <ContactBookPage/>
@@ -61,7 +61,6 @@
             </div>
         </div>
     </div>
-    {/if}
     <div class="mt-5" />
     {#if recipients}
         <button on:click={createEvent} class="mt-12 w-1/4 btn btn-active">Create</button>

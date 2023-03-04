@@ -1,6 +1,6 @@
 
-import PocketBase from 'pocketbase';
-
+import PocketBase, { ListResult } from 'pocketbase';
+import type {  ContactsRecord,  ContactsResponse } from './pocketbase-types';
 import { writable } from 'svelte/store';
 
 // export const pb = new PocketBase('http://YOUR-SERVER-IP-OR-URL'); // remote
@@ -13,8 +13,12 @@ pb.authStore.onChange((auth) => {
     currentUser.set(pb.authStore.model);
 });
 
-export let contacts: any[] = [];
+export const contacts = writable(new Array<ContactsRecord>());
+
+
 export async function get50Contacts() {
-        const resultList = await pb.collection('contacts').getList(1, 50, {});
-        contacts = resultList.items;
+        const resultList = await pb.collection('contacts').getList(1, 50, {}) as ListResult<ContactsResponse>;
+        contacts.set(resultList.items as ContactsRecord[])
+        // contacts = resultList.items;
 }
+
