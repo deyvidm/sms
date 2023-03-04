@@ -5,7 +5,9 @@
     <div class="drawer-side">
         <label for="my-drawer-2" class="drawer-overlay" />
         <ul class="menu p-4 w-80 bg-base-100 text-base-content">
-            <li><a href="/contacts">Contact Book</a></li>
+            <li><a href="/contacts">Contacts</a></li>
+            <li><a href="/contacts"><p class="pl-10">New Contact Group</p></a></li>
+
             <li><a href="/events">Events</a></li>
             <li><a href="/events/new"><p class="pl-10">New Event</p></a></li>
         </ul>

@@ -14,8 +14,4 @@
     <td>
         <div class="font-bold">{first} {last}</div>
     </td>
-    <td>Purple</td>
-    <th>
-        <button class="btn btn-ghost btn-xs">details</button>
-    </th>
 </tr>

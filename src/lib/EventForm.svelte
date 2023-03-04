@@ -1,7 +1,7 @@
 <script lang="ts">
     import { beforeUpdate, afterUpdate, onDestroy, onMount} from 'svelte';
     import { writable } from 'svelte/store';
-    import ContactBookPage from './ContactBookPage.svelte';
+    import ContactList from './ContactList.svelte';
     import { contacts, get50Contacts } from './pocketbase';
 
     let title: string;
@@ -47,15 +47,13 @@
             id="event-content"
         />
     </div>
-    <!-- <button on:click={preloadContacts} class="mt-12 w-1/4 btn btn-outline btn-accent">Add recipients</button> -->
 
     <!-- The button to open modal -->
     <label for="my-modal-5" class="mt-12 w-1/4 btn btn-outline btn-accent">Add recipients</label>
-
     <input type="checkbox" id="my-modal-5" class="modal-toggle" />
     <div class="modal">
         <div class="modal-box w-11/12 max-w-5xl">
-            <ContactBookPage/>
+            <ContactList/>
             <div class="modal-action">
                 <label for="my-modal-5" class="btn">Finish</label>
             </div>
