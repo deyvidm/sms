@@ -1,7 +1,8 @@
 <script lang="ts">
-    import { beforeUpdate, afterUpdate, onDestroy } from 'svelte';
+    import { beforeUpdate, afterUpdate, onDestroy, onMount} from 'svelte';
     import { writable } from 'svelte/store';
-    import Contacts from './Contacts.svelte';
+    import ContactBookPage from './ContactBookPage.svelte';
+    import { contacts, get50Contacts } from './pocketbase';
 
     let title: string;
     let content: string;
@@ -45,22 +46,22 @@
             id="event-content"
         />
     </div>
-    <!-- <button on:click={login} class="mt-12 w-1/4 btn btn-outline btn-accent">Add recipients</button> -->
+    <!-- <button on:click={preloadContacts} class="mt-12 w-1/4 btn btn-outline btn-accent">Add recipients</button> -->
 
     <!-- The button to open modal -->
     <label for="my-modal-5" class="mt-12 w-1/4 btn btn-outline btn-accent">Add recipients</label>
 
     <input type="checkbox" id="my-modal-5" class="modal-toggle" />
+    {#if (contacts.length > 0)}
     <div class="modal">
         <div class="modal-box w-11/12 max-w-5xl">
-            <h3 class="font-bold text-lg">Congratulations random Internet user!</h3>
-            <Contacts/>
+            <ContactBookPage/>
             <div class="modal-action">
                 <label for="my-modal-5" class="btn">Finish</label>
             </div>
         </div>
     </div>
-
+    {/if}
     <div class="mt-5" />
     {#if recipients}
         <button on:click={createEvent} class="mt-12 w-1/4 btn btn-active">Create</button>

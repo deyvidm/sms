@@ -12,3 +12,9 @@ pb.authStore.onChange((auth) => {
     console.log('authStore changed', auth);
     currentUser.set(pb.authStore.model);
 });
+
+export let contacts: any[] = [];
+export async function get50Contacts() {
+        const resultList = await pb.collection('contacts').getList(1, 50, {});
+        contacts = resultList.items;
+}
