@@ -4,7 +4,7 @@
     import { beforeUpdate, afterUpdate, onDestroy, onMount } from 'svelte';
     import type { ContactsResponse } from './pocketbase-types';
     import { createEventDispatcher } from 'svelte';
-    
+
     let yesall = false;
     let remainingContacts = $contacts;
     let recipientContacts = new Array<ContactsResponse>();

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { beforeUpdate, afterUpdate, onDestroy, onMount} from 'svelte';
+    import { beforeUpdate, afterUpdate, onDestroy, onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import ContactList from './ContactList.svelte';
     import { contacts, get50Contacts } from './pocketbase';
@@ -9,21 +9,19 @@
     let content: string;
     let recipients = new Array<ContactsResponse>();
 
-    function handleMessage(event){
-        recipients = event.detail.recipients
+    function handleMessage(event) {
+        recipients = event.detail.recipients;
     }
     function createEvent() {
-        recipients.forEach((contact)=>{
-            console.log(contact.id)
-        })
+        recipients.forEach((contact) => {
+            console.log(contact.id);
+        });
     }
-    beforeUpdate(()=>{
-        if ($contacts.length == 0){
-            get50Contacts()
+    beforeUpdate(() => {
+        if ($contacts.length == 0) {
+            get50Contacts();
         }
-    })
-
-
+    });
 </script>
 
 <h2 class="mb-10 text-4xl font-extrabold dark:text-white">Create New Event</h2>
@@ -56,11 +54,13 @@
     </div>
 
     <!-- The button to open modal -->
-    <label for="my-modal-5" class="mt-12 w-1/4 btn btn-outline btn-accent">{recipients.length >0? "Edit Recipients" : "Add Recipients"}</label>
+    <label for="my-modal-5" class="mt-12 w-1/4 btn btn-outline btn-accent"
+        >{recipients.length > 0 ? 'Edit Recipients' : 'Add Recipients'}</label
+    >
     <input type="checkbox" id="my-modal-5" class="modal-toggle" />
     <div class="modal">
         <div class="modal-box w-11/12 max-w-5xl">
-            <ContactList on:message={handleMessage}/>
+            <ContactList on:message={handleMessage} />
             <div class="modal-action">
                 <label for="my-modal-5" class="btn">Finish</label>
             </div>
