@@ -22,3 +22,4 @@ export async function get50Contacts() {
         // contacts = resultList.items;
 }
 
+

@@ -18,7 +18,7 @@
         <a href="/" class="btn btn-ghost normal-case text-xl">SMS Thing</a>
         <div class="absolute right-2">
             Signed in as {$currentUser.username}
-            <a href="/login">
+            <a href="/">
                 <button class="btn btn-ghost right-0 " on:click={signOut}>Sign Out</button>
             </a>
         </div>
