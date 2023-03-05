@@ -8,10 +8,7 @@
     let title: string;
     let content: string;
     let recipients = new Array<ContactsResponse>();
-        
-    onDestroy(() => {
-        // save title and content so they don't get lost
-    });
+
     function handleMessage(event){
         recipients = event.detail.recipients
     }
@@ -59,7 +56,7 @@
     </div>
 
     <!-- The button to open modal -->
-    <label for="my-modal-5" class="mt-12 w-1/4 btn btn-outline btn-accent">Add recipients</label>
+    <label for="my-modal-5" class="mt-12 w-1/4 btn btn-outline btn-accent">{recipients.length >0? "Edit Recipients" : "Add Recipients"}</label>
     <input type="checkbox" id="my-modal-5" class="modal-toggle" />
     <div class="modal">
         <div class="modal-box w-11/12 max-w-5xl">
