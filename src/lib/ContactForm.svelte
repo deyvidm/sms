@@ -3,12 +3,12 @@
     import PhoneInputBox from './PhoneInputBox.svelte';
     import { pb, API, currentUser } from './pocketbase';
 
-    // <input> tags at our disposal'
+    // <input> tags at our disposal
     let firstname: InputBox;
     let lastname: InputBox;
     let phone: PhoneInputBox;
     let submit: HTMLButtonElement;
-    let submitLabel: string = "Create Contact"
+    let submitLabel: string = 'Create Contact';
 
     function createContact() {
         if (!verifyInputs() || !$currentUser) {
@@ -23,18 +23,18 @@
         API.createContact(data)
             .then((result) => setButtonStatus(true))
             .catch((error) => {
-                setButtonStatus(false)
-                console.log(error)
-                submitLabel = "shit"
+                setButtonStatus(false);
+                console.log(error);
+                submitLabel = 'shit';
             });
     }
 
     function setButtonStatus(success: boolean) {
         if (success) {
-            submit.classList.add("btn-disabled", 'btn-success');
-            submitLabel = "Success!"
+            submit.classList.add('btn-disabled', 'btn-success');
+            submitLabel = 'Success!';
         } else {
-            submit.classList.add("btn-disabled");
+            submit.classList.add('btn-disabled');
         }
     }
     function verifyInputs() {

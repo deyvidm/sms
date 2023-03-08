@@ -3,8 +3,15 @@
     import { beforeUpdate, afterUpdate, onDestroy, onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import ContactList from './ContactList.svelte';
+    import InputBox from './InputBox.svelte';
     import { createEvent, contacts, get50Contacts, pb, createInvite } from './pocketbase';
-    import { EventStatusOptions, type AttendeeRecord, type ContactResponse, type EventRecord, AttendeeStatusOptions} from './pocketbase-types';
+    import {
+        EventStatusOptions,
+        type AttendeeRecord,
+        type ContactResponse,
+        type EventRecord,
+        AttendeeStatusOptions,
+    } from './pocketbase-types';
 
     let formTitle: string;
     let content: string;
@@ -23,20 +30,22 @@
             start_date: d.toISOString(),
             end_date: d.toISOString(),
             send_invite_date: d.toISOString(),
-            status: EventStatusOptions.active
-        }).then((eventRecord)=>{
-            recipients.forEach((r)=>{
-                pb.collection('attendee').create(<AttendeeRecord>{
-                    event: eventRecord.id,
-                    contact: r.id,
-                    status: AttendeeStatusOptions['pending-invite'],
-                    paid: false
-                }).catch((error)=>{
-                    console.log(error)
-                })
-            })  
-        })
-    }   
+            status: EventStatusOptions.active,
+        }).then((eventRecord) => {
+            recipients.forEach((r) => {
+                pb.collection('attendee')
+                    .create(<AttendeeRecord>{
+                        event: eventRecord.id,
+                        contact: r.id,
+                        status: AttendeeStatusOptions['pending-invite'],
+                        paid: false,
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            });
+        });
+    }
     onMount(() => {
         get50Contacts();
     });
@@ -56,6 +65,8 @@
             class="input input-bordered w-full max-w"
             id="event-title"
         />
+
+        
         <label class="label" for="event-title">
             <span class="label-text-alt">This is just for our records</span>
         </label>

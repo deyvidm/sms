@@ -7,7 +7,6 @@
 
     const dispatch = createEventDispatcher();
 
-    // function onClick() {
     function onClick() {
         checked = !checked;
         dispatch('message', {

@@ -19,7 +19,7 @@
         let id = event.detail.id;
         let checked = event.detail.checked;
         let contact = contactIDMap.get(id);
-        
+
         if (contact == null) {
             return;
         }
@@ -28,9 +28,9 @@
                 recipientContacts.push(contact);
             }
         } else {
-            let i = recipientContacts.indexOf(contact)
-            if (i > -1){
-                recipientContacts.splice(i, 1)
+            let i = recipientContacts.indexOf(contact);
+            if (i > -1) {
+                recipientContacts.splice(i, 1);
             }
         }
         dispatch('message', {
