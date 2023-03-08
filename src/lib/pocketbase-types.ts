@@ -37,7 +37,6 @@ export type AuthSystemFields<T = never> = {
 // Record types for each collection
 
 export enum AttendeeStatusOptions {
-	"pending-invite" = "pending-invite",
 	"invited" = "invited",
 	"accepted" = "accepted",
 	"declined" = "declined",

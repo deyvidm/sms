@@ -1,6 +1,6 @@
 
-import PocketBase, { ListResult } from 'pocketbase';
-import type { ContactRecord, ContactResponse, EventRecord, InvitationRecord } from './pocketbase-types';
+import PocketBase, { ListResult, type RecordFullListQueryParams } from 'pocketbase';
+import type { AttendeeResponse, AttendeeStatusOptions, ContactRecord, ContactResponse, EventRecord, EventResponse, InvitationRecord } from './pocketbase-types';
 import { writable } from 'svelte/store';
 import { error } from '@sveltejs/kit';
 
@@ -15,11 +15,25 @@ pb.authStore.onChange((auth) => {
 });
 
 export const contacts = writable(new Array<ContactResponse>());
+export const events = writable(new Array<EventResponse>());
+export const attendees = writable(new Array<AttendeeResponse>());
 
 
 export async function get50Contacts() {
-    return pb.collection('contact').getList<ContactResponse>(1, 50, {}).then((result)=>{
+    return pb.collection('contact').getList<ContactResponse>(1, 50, {}).then((result) => {
         contacts.set(result.items)
+    });
+}
+
+export async function get50Events() {
+    return pb.collection('event').getList<EventResponse>(1, 50, {}).then((result) => {
+        events.set(result.items)
+    });
+}
+
+export async function get50Attendees(event: EventResponse) {
+    return pb.collection('attendee').getList<AttendeeResponse>(1, 50, {expand: "contact"}).then((result) => {
+        attendees.set(result.items)
     });
 }
 
@@ -31,10 +45,25 @@ export async function createInvite(r: InvitationRecord) {
     return pb.collection('invitation').create(r)
 }
 
+export function AttendeeStatusString(status: AttendeeStatusOptions): string{
+    switch(status){
+        case "invited":
+            return "invited"
+        case "accepted":
+            return "accepted"
+        case "declined":
+            return "declined"
+        case "waitlist":
+            return "waitlist"
+        case "uninvited":
+            return "uninvited"
+        default: return status
+    }
+}
 
 export const API = {
     createContact: (r: ContactRecord) => {
-        if (!pb.authStore.model?.id){
+        if (!pb.authStore.model?.id) {
             Promise.reject("not logged in")
         }
         return pb.collection("contact").create(r)

@@ -65,11 +65,6 @@
             class="input input-bordered w-full max-w"
             id="event-title"
         />
-
-        
-        <label class="label" for="event-title">
-            <span class="label-text-alt">This is just for our records</span>
-        </label>
     </div>
     <div class="mt-5">
         <label class="label" for="event-content">
