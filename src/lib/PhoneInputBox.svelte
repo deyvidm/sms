@@ -45,8 +45,6 @@
     // this function formats the value inside the text box to look like:
     // (123)-456-789
     function formatUserinput(rawVal: string): string {
-        console.log(rawVal[rawVal.length-1], parseInt(rawVal[rawVal.length-1]), isNaN(parseInt(rawVal[rawVal.length-1])));
-        console.log("\t", rawVal.slice(0,rawVal.length-2))
         if (isNaN(parseInt(rawVal[rawVal.length-1]))) {
             rawVal = rawVal.slice(0,rawVal.length-2);
         }

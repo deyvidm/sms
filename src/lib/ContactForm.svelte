@@ -24,6 +24,7 @@
             .then((result) => setButtonStatus(true))
             .catch((error) => {
                 setButtonStatus(false)
+                console.log(error)
                 submitLabel = "shit"
             });
     }
@@ -50,7 +51,6 @@
     <InputBox bind:this={firstname} label="First Name" />
     <InputBox bind:this={lastname} label="Last Name" />
     <PhoneInputBox bind:this={phone} label="Phone" />
-
     <button bind:this={submit} on:click={createContact} class="mt-12 w-auto btn btn-active"
         >{submitLabel}</button
     >

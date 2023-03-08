@@ -4,11 +4,11 @@
     import { writable } from 'svelte/store';
     import ContactList from './ContactList.svelte';
     import { createEvent, contacts, get50Contacts, pb, createInvite } from './pocketbase';
-    import { EventStatusOptions, type AttendeeRecord, type ContactsResponse, type EventRecord, AttendeeStatusOptions} from './pocketbase-types';
+    import { EventStatusOptions, type AttendeeRecord, type ContactResponse, type EventRecord, AttendeeStatusOptions} from './pocketbase-types';
 
     let formTitle: string;
     let content: string;
-    let recipients = new Array<ContactsResponse>();
+    let recipients = new Array<ContactResponse>();
 
     function handleMessage(event) {
         recipients = event.detail.recipients;

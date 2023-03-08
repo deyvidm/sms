@@ -3,10 +3,11 @@
     export let last: string;
     export let id: string;
     export let checked: boolean;
-    import { createEventDispatcher } from 'svelte';
+    import { beforeUpdate, createEventDispatcher, onMount } from 'svelte';
 
     const dispatch = createEventDispatcher();
 
+    // function onClick() {
     function onClick() {
         checked = !checked;
         dispatch('message', {

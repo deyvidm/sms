@@ -15,33 +15,26 @@
     });
 
     const dispatch = createEventDispatcher();
-    onMount(() => {});
-    afterUpdate(() => {});
-
     function handleMessage(event) {
         let id = event.detail.id;
-
+        let checked = event.detail.checked;
         let contact = contactIDMap.get(id);
+        
         if (contact == null) {
             return;
         }
-        let checked = event.detail.checked;
         if (checked) {
-            remainingContacts = remainingContacts.filter(c => c != contact)
-            recipientContacts.push(contact);
-            recipientContacts = recipientContacts; //need this called to update the component
-
-            // contact de-selected
+            if (recipientContacts.indexOf(contact) < 0) {
+                recipientContacts.push(contact);
+            }
         } else {
-            recipientContacts = recipientContacts.filter(c => c != contact);
-            remainingContacts.push(contact);
-            remainingContacts = remainingContacts; //need this called to update the component
-            // https://svelte.dev/tutorial/updating-arrays-and-objects
+            let i = recipientContacts.indexOf(contact)
+            if (i > -1){
+                recipientContacts.splice(i, 1)
+            }
         }
-
         dispatch('message', {
             recipients: recipientContacts,
-            remaining: remainingContacts,
         });
     }
 </script>
@@ -59,12 +52,11 @@
                     <th>Name</th>
                 </tr>
             </thead>
-
             <tbody>
                 {#each remainingContacts as contact}
                     <ContactRow
                         on:message={handleMessage}
-                        checked={false || yesall}
+                        checked={false}
                         first={contact.first_name}
                         last={contact.last_name}
                         id={contact.id}
@@ -72,33 +64,5 @@
                 {/each}
             </tbody>
         </table>
-        <div class="divider lg:divider-horizontal" />
-        <div class="flex flex-col w-full lg:flex-row">
-            <!-- <div class=" w-5/12 p-5 shadow-xl"> -->
-            <table class="table w-1/2">
-                <thead>
-                    <tr>
-                        <th>
-                            <label>
-                                <input bind:checked={yesall} type="checkbox" class="checkbox" />
-                            </label>
-                        </th>
-                        <th>Inbited</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {#each recipientContacts as contact}
-                        <ContactRow
-                            on:message={handleMessage}
-                            checked={true || yesall}
-                            first={contact.first_name}
-                            last={contact.last_name}
-                            id={contact.id}
-                        />
-                    {/each}
-                </tbody>
-            </table>
-        </div>
     </div>
 </div>

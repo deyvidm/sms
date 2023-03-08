@@ -18,8 +18,9 @@ export const contacts = writable(new Array<ContactResponse>());
 
 
 export async function get50Contacts() {
-    const resultList = await pb.collection('contact').getList<ContactResponse>(1, 50, {});
-    contacts.set(resultList.items)
+    return pb.collection('contact').getList<ContactResponse>(1, 50, {}).then((result)=>{
+        contacts.set(result.items)
+    });
 }
 
 export async function createEvent(r: EventRecord) {

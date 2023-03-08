@@ -6,6 +6,9 @@
     onMount(()=>{
         get50Contacts()
     })
+    function handleMessage(e){
+        console.log(e.detail)
+    }
 </script>
 
-<ContactList/>
+<ContactList on:message={handleMessage}/>
