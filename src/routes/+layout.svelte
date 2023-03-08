@@ -2,7 +2,14 @@
   import Header from "$lib/Header.svelte";
   import Sidebar from "$lib/Sidebar.svelte";
   import Login from "../lib/Login.svelte";
-  import { currentUser } from "$lib/pocketbase";
+  import { currentUser, pb } from "$lib/pocketbase";
+    import { onMount } from "svelte";
+
+  onMount(()=>{
+    if (!pb.authStore.model?.id){
+      
+    }
+  })
 </script>
 
 {#if !$currentUser}
@@ -10,9 +17,9 @@
 {:else if $currentUser}
   <Header />
   <div class="flex flex-col w-full lg:flex-row">
-    <Sidebar />
+      <Sidebar />
     <div class="divider lg:divider-horizontal" />
-    <div class=" w-5/12 p-5 shadow-xl">
+    <div class="w-3/4 p-5 shadow-xl">
       <slot />
     </div>
   </div>

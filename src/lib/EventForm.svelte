@@ -1,26 +1,44 @@
 <script lang="ts">
+    import { error } from '@sveltejs/kit';
     import { beforeUpdate, afterUpdate, onDestroy, onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import ContactList from './ContactList.svelte';
-    import { contacts, get50Contacts } from './pocketbase';
-    import type { ContactsResponse } from './pocketbase-types';
+    import { createEvent, contacts, get50Contacts, pb, createInvite } from './pocketbase';
+    import { EventStatusOptions, type AttendeeRecord, type ContactsResponse, type EventRecord, AttendeeStatusOptions} from './pocketbase-types';
 
-    let title: string;
+    let formTitle: string;
     let content: string;
     let recipients = new Array<ContactsResponse>();
 
     function handleMessage(event) {
         recipients = event.detail.recipients;
     }
-    function createEvent() {
-        recipients.forEach((contact) => {
-            console.log(contact.id);
-        });
-    }
-    beforeUpdate(() => {
-        if ($contacts.length == 0) {
-            get50Contacts();
-        }
+    function create() {
+        const d = new Date('05 October 2011 14:48 UTC');
+        createEvent(<EventRecord>{
+            organizer: pb.authStore.model?.id,
+            title: formTitle,
+            description: content,
+            capacity: 666,
+            start_date: d.toISOString(),
+            end_date: d.toISOString(),
+            send_invite_date: d.toISOString(),
+            status: EventStatusOptions.active
+        }).then((eventRecord)=>{
+            recipients.forEach((r)=>{
+                pb.collection('attendee').create(<AttendeeRecord>{
+                    event: eventRecord.id,
+                    contact: r.id,
+                    status: AttendeeStatusOptions['pending-invite'],
+                    paid: false
+                }).catch((error)=>{
+                    console.log(error)
+                })
+            })  
+        })
+    }   
+    onMount(() => {
+        get50Contacts();
     });
 </script>
 
@@ -32,7 +50,7 @@
             <span class="text-xl font-bold text-xllabel-text">Title</span>
         </label>
         <input
-            bind:value={title}
+            bind:value={formTitle}
             type="text"
             placeholder="Sunday Funday St Paddy's Vball"
             class="input input-bordered w-full max-w"
@@ -68,6 +86,6 @@
     </div>
     <div class="mt-5" />
     {#if recipients.length > 0}
-        <button on:click={createEvent} class="mt-12 w-1/4 btn btn-active">Create</button>
+        <button on:click={create} class="mt-12 w-1/4 btn btn-active">Create</button>
     {/if}
 </div>

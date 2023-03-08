@@ -4,7 +4,7 @@
 
 export enum Collections {
 	Attendee = "attendee",
-	Contacts = "contacts",
+	Contact = "contact",
 	Event = "event",
 	Invitation = "invitation",
 	Response = "response",
@@ -37,6 +37,7 @@ export type AuthSystemFields<T = never> = {
 // Record types for each collection
 
 export enum AttendeeStatusOptions {
+	"pending-invite" = "pending-invite",
 	"invited" = "invited",
 	"accepted" = "accepted",
 	"declined" = "declined",
@@ -44,13 +45,13 @@ export enum AttendeeStatusOptions {
 	"uninvited" = "uninvited",
 }
 export type AttendeeRecord = {
-	invitation: RecordIdString
+	event: RecordIdString
 	contact: RecordIdString
 	status: AttendeeStatusOptions
 	paid?: boolean
 }
 
-export type ContactsRecord = {
+export type ContactRecord = {
 	first_name: string
 	last_name: string
 	phone: string
@@ -99,7 +100,7 @@ export type UsersRecord = {
 
 // Response types include system fields and match responses from the PocketBase API
 export type AttendeeResponse<Texpand = unknown> = AttendeeRecord & BaseSystemFields<Texpand>
-export type ContactsResponse<Texpand = unknown> = ContactsRecord & BaseSystemFields<Texpand>
+export type ContactResponse<Texpand = unknown> = ContactRecord & BaseSystemFields<Texpand>
 export type EventResponse<Texpand = unknown> = EventRecord & BaseSystemFields<Texpand>
 export type InvitationResponse<Texpand = unknown> = InvitationRecord & BaseSystemFields<Texpand>
 export type ResponseResponse<Texpand = unknown> = ResponseRecord & BaseSystemFields<Texpand>
@@ -110,7 +111,7 @@ export type UsersResponse = UsersRecord & AuthSystemFields
 
 export type CollectionRecords = {
 	attendee: AttendeeRecord
-	contacts: ContactsRecord
+	contact: ContactRecord
 	event: EventRecord
 	invitation: InvitationRecord
 	response: ResponseRecord
@@ -120,7 +121,7 @@ export type CollectionRecords = {
 
 export type CollectionResponses = {
 	attendee: AttendeeResponse
-	contacts: ContactsResponse
+	contact: ContactResponse
 	event: EventResponse
 	invitation: InvitationResponse
 	response: ResponseResponse

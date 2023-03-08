@@ -23,6 +23,6 @@
         </label>
     </td>
     <td>
-        <div class="font-bold">{first}</div>
+        <div class="font-bold">{first} {last}</div>
     </td>
 </tr>

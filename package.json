@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"retype": "npx pocketbase-typegen --db ./pb_data/data.db --out pocketbase-types.ts",
+		"retype": "npx pocketbase-typegen --db ../sms-backend/pb_data/data.db --out ./src/lib/pocketbase-types.ts",
 		"dev": "concurrently --kill-others \"npx tailwindcss -i ./src/input.css -o ./src/dist/output.css --watch\" \"vite dev\" ",
 		"build": "vite build",
 		"preview": "vite preview",

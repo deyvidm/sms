@@ -50,8 +50,8 @@
     }
 </script>
 
-<div class="overflow-x-auto w-full">
-    <div class="flex flex-col w-full lg:flex-row">
+<!-- <div class="overflow-x-auto w-full">
+    <div class="flex flex-col w-full lg:flex-row"> -->
         <table class="table w-1/2">
             <thead>
                 <tr>
@@ -86,6 +86,7 @@
                             <label>
                                 <input bind:checked={yesall} type="checkbox" class="checkbox" />
                             </label>
+                            Imbited
                         </th>
                         <th>Inbited</th>
                     </tr>
@@ -104,5 +105,5 @@
                 </tbody>
             </table>
         </div>
-    </div>
-</div>
+    <!-- </div>
+</div> -->
