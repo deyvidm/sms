@@ -46,11 +46,12 @@
                 <tr>
                     <th>
                         <label>
-                            <input bind:checked={yesall} type="checkbox" class="checkbox" />
+                            <!-- <input bind:checked={yesall} type="checkbox" class="checkbox" /> -->
                         </label>
                     </th>
                     <th>First</th>
                     <th>Last</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -58,9 +59,7 @@
                     <ContactRow
                         on:message={handleMessage}
                         checked={false}
-                        first={contact.first_name}
-                        last={contact.last_name}
-                        id={contact.id}
+                        contact={contact}
                     />
                 {/each}
             </tbody>

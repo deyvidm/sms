@@ -1,31 +1,34 @@
 <script lang="ts">
-    export let first: string;
-    export let last: string;
-    export let id: string;
-    export let checked: boolean;
-    import { beforeUpdate, createEventDispatcher, onMount } from 'svelte';
 
+    import { beforeUpdate, createEventDispatcher, onMount } from 'svelte';
+    import type { ContactResponse } from './pocketbase-types';
     const dispatch = createEventDispatcher();
+
+    export let checked: boolean;
+    export let contact: ContactResponse;
 
     function onClick() {
         checked = !checked;
         dispatch('message', {
             checked: checked,
-            id: id,
+            id: contact.id,
         });
     }
 </script>
 
 <tr on:click={onClick}>
     <td>
-        <label>
+        <!-- <label>
             <input bind:checked {id} type="checkbox" class="checkbox" />
-        </label>
+        </label> -->
     </td>
     <td>
-        <div class="font-bold">{first}</div>
+        <div class="font-bold">{contact.first_name}</div>
     </td>
     <td>
-        <div class="font-bold">{last}</div>
+        <div class="font-bold">{contact.last_name}</div>
+    </td>
+    <td>
+        <div class="font-bold">{contact.status}</div>
     </td>
 </tr>

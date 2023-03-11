@@ -50,11 +50,16 @@ export type AttendeeRecord = {
 	paid?: boolean
 }
 
+export enum ContactStatusOptions {
+	"Pending" = "Pending",
+	"Verified" = "Verified",
+}
 export type ContactRecord = {
 	first_name: string
 	last_name: string
 	phone: string
 	owner: RecordIdString
+	status: ContactStatusOptions
 }
 
 export enum EventStatusOptions {
