@@ -6,11 +6,14 @@
     import { createEventDispatcher } from 'svelte';
     import EventRow from './EventRow.svelte';
 
+    let activeId = "";
     function handleMessage(event) {
-        console.log('event row click -- Event List');
+        activeId = event.detail.eventId
+        console.log(activeId)
     }
+
 </script>
 
 {#each $events as e}
-    <EventRow event={e} on:message={handleMessage} />
+    <EventRow event={e} active={(activeId == e.id)} on:message={handleMessage} />
 {/each}

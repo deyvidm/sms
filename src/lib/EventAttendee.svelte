@@ -1,23 +1,32 @@
 <script lang="ts">
-    import { createEventDispatcher, onMount } from 'svelte';
-    import { attendees, get50Attendees } from './pocketbase';
+    import { afterUpdate, createEventDispatcher, onMount } from 'svelte';
+    import { attendees, get50Attendees, pb, updateAttendee } from './pocketbase';
     import type { AttendeeResponse, EventResponse } from './pocketbase-types';
 
+    // AttendeeResponse but with .exapand
     export let who;
 
     const dispatch = createEventDispatcher();
 
     function onClick() {
         // dispatch('message', {});
+        console.log(who.paid)
     }
+    
+
+    afterUpdate(() => {
+        updateAttendee(who)
+            .then((result) => console.log(result))
+            .catch((err) => console.log(err));
+    });
 </script>
 
-<div class="left-5 mb-2 collapse  border-base-300 bg-base-100 rounded-box">
+<div class="mb-2 collapse  border-base-300 bg-base-100 rounded-box">
     <div class="overflow-x-auto w-full">
         <table class="table table-compact w-full">
             <thead>
                 <tr>
-                    <th></th>
+                    <th />
                     <th><p class="pl-2">Status</p></th>
                     <th>Paid</th>
                 </tr>
@@ -36,21 +45,14 @@
                         <span class="badge badge-lg">{who.status}</span>
                     </td>
                     <td>
-                        <!-- <label class="label cursor-pointer">
-                        <span class="label-text">paid</span> 
-                        <input type="checkbox" bind:checked={who.paid} class="checkbox" />
-                    </label> -->
+                        <label class="swap swap-flip text-3xl">
+                            <!-- this hidden checkbox controls the state -->
+                            <input bind:checked={who.paid} on:click={onClick} type="checkbox" />
 
-                    <label class="swap swap-flip text-3xl">
-  
-                        <!-- this hidden checkbox controls the state -->
-                        <input bind:value={who.paid} type="checkbox" />
-                        
-                        <div class="swap-on">💵</div>
-                        <div class="swap-off">🫰</div>
-                      </label>
+                            <div class="swap-on">💵</div>
+                            <div class="swap-off">🫰</div>
+                        </label>
                     </td>
-                    <td></td>
                 </tr>
             </tbody>
         </table>

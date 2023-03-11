@@ -41,7 +41,7 @@
 
 <div class="overflow-x-auto w-full">
     <div class="flex flex-col w-full lg:flex-row">
-        <table class="table w-1/2">
+        <table class="table w-full">
             <thead>
                 <tr>
                     <th>
@@ -49,7 +49,8 @@
                             <input bind:checked={yesall} type="checkbox" class="checkbox" />
                         </label>
                     </th>
-                    <th>Name</th>
+                    <th>First</th>
+                    <th>Last</th>
                 </tr>
             </thead>
             <tbody>

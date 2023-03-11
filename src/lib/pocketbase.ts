@@ -1,6 +1,6 @@
 
 import PocketBase, { ListResult, type RecordFullListQueryParams } from 'pocketbase';
-import type { AttendeeResponse, AttendeeStatusOptions, ContactRecord, ContactResponse, EventRecord, EventResponse, InvitationRecord } from './pocketbase-types';
+import type { AttendeeRecord, AttendeeResponse, AttendeeStatusOptions, ContactRecord, ContactResponse, EventRecord, EventResponse, InvitationRecord } from './pocketbase-types';
 import { writable } from 'svelte/store';
 import { error } from '@sveltejs/kit';
 
@@ -43,6 +43,10 @@ export async function createEvent(r: EventRecord) {
 
 export async function createInvite(r: InvitationRecord) {
     return pb.collection('invitation').create(r)
+}
+
+export async function updateAttendee(r: AttendeeResponse){
+    return pb.collection('attendee').update(r.id,{paid:r.paid})
 }
 
 export function AttendeeStatusString(status: AttendeeStatusOptions): string{
