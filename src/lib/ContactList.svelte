@@ -33,6 +33,8 @@
                 recipientContacts.splice(i, 1);
             }
         }
+        recipientContacts = recipientContacts;
+        remainingContacts = remainingContacts;
         dispatch('message', {
             recipients: recipientContacts,
         });

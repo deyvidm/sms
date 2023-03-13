@@ -37,6 +37,7 @@ export type AuthSystemFields<T = never> = {
 // Record types for each collection
 
 export enum AttendeeStatusOptions {
+	"sending-invite" = "sending-invite",
 	"invited" = "invited",
 	"accepted" = "accepted",
 	"declined" = "declined",
@@ -70,7 +71,7 @@ export enum EventStatusOptions {
 export type EventRecord = {
 	organizer: RecordIdString
 	title: string
-	description?: string
+	description: string
 	capacity: number
 	start_date: IsoDateString
 	end_date: IsoDateString

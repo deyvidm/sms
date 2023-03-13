@@ -2,6 +2,7 @@
     import InputBox from './InputBox.svelte';
     import PhoneInputBox from './PhoneInputBox.svelte';
     import { pb, API, currentUser } from './pocketbase';
+    import { ContactStatusOptions, type ContactRecord } from './pocketbase-types';
 
     // <input> tags at our disposal
     let firstname: InputBox;
@@ -14,11 +15,12 @@
         if (!verifyInputs() || !$currentUser) {
             return;
         }
-        let data = {
+        let data: ContactRecord = {
             first_name: firstname.Get(),
             last_name: lastname.Get(),
             phone: phone.Get(),
             owner: $currentUser.id,
+            status: ContactStatusOptions.Pending,
         };
         API.createContact(data)
             .then((result) => setButtonStatus(true))

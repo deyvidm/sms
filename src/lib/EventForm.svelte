@@ -21,7 +21,8 @@
         recipients = event.detail.recipients;
     }
     function create() {
-        const d = new Date('05 October 2011 14:48 UTC');
+        // const d = new Date('05 October 2011 14:48 UTC');
+        const d = new Date(Date.now())
         createEvent(<EventRecord>{
             organizer: pb.authStore.model?.id,
             title: formTitle,
@@ -33,11 +34,12 @@
             status: EventStatusOptions.active,
         }).then((eventRecord) => {
             recipients.forEach((r) => {
+                console.log("AttendeeStatusOptions['pending-invite']", AttendeeStatusOptions['sending-invite'])
                 pb.collection('attendee')
                     .create(<AttendeeRecord>{
                         event: eventRecord.id,
                         contact: r.id,
-                        status: AttendeeStatusOptions['pending-invite'],
+                        status: AttendeeStatusOptions['sending-invite'],
                         paid: false,
                     })
                     .catch((error) => {
