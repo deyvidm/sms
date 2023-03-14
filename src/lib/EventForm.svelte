@@ -4,7 +4,7 @@
     import { writable } from 'svelte/store';
     import ContactList from './ContactList.svelte';
     import InputBox from './InputBox.svelte';
-    import { createEvent, get50Contacts, pb, createInvite } from './pocketbase';
+    import { createEvent, pb } from './pocketbase';
     import {
         EventStatusOptions,
         type AttendeeRecord,
@@ -16,13 +16,14 @@
     let formTitle: string;
     let content: string;
     let recipients = new Array<ContactResponse>();
-    let contacts: Array<ContactResponse>;
+    let submitButton: HTMLButtonElement;
 
     function handleMessage(event) {
         recipients = event.detail.recipients;
     }
 
     function create() {
+        submitButton.classList.add("loading")
         // const d = new Date('05 October 2011 14:48 UTC');
         const d = new Date(Date.now());
         createEvent(<EventRecord>{
@@ -51,9 +52,12 @@
                         console.log(error);
                     });
             });
+        }).then(()=>{
+            submitButton.classList.remove("loading")
+            submitButton.classList.add("btn-disabled")
+            submitButton.textContent = "Success"
         });
     }
-
 </script>
 
 <h2 class="mb-10 text-4xl font-extrabold dark:text-white">Create New Event</h2>
@@ -89,7 +93,7 @@
     <input type="checkbox" id="my-modal-5" class="modal-toggle" />
     <div class="modal">
         <div class="modal-box w-11/12 max-w-5xl">
-            <ContactList on:message={handleMessage}/>
+            <ContactList on:message={handleMessage} />
             <div class="modal-action">
                 <label for="my-modal-5" class="btn">Finish</label>
             </div>
@@ -97,6 +101,8 @@
     </div>
     <div class="mt-5" />
     {#if recipients.length > 0}
-        <button on:click={create} class="mt-12 w-1/4 btn btn-active">Create</button>
+        <button bind:this={submitButton} on:click={create} class="mt-12 w-1/4 btn btn-active"
+            >Create</button
+        >
     {/if}
 </div>

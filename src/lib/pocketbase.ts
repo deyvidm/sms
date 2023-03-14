@@ -45,22 +45,6 @@ export async function updateAttendee(r: AttendeeResponse){
     return pb.collection('attendee').update(r.id,{paid:r.paid})
 }
 
-export function AttendeeStatusString(status: AttendeeStatusOptions): string{
-    switch(status){
-        case "invited":
-            return "invited"
-        case "accepted":
-            return "accepted"
-        case "declined":
-            return "declined"
-        case "waitlist":
-            return "waitlist"
-        case "uninvited":
-            return "uninvited"
-        default: return status
-    }
-}
-
 export const API = {
     createContact: (r: ContactRecord) => {
         if (!pb.authStore.model?.id) {

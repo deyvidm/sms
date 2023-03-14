@@ -1,6 +1,4 @@
 <script lang="ts">
-    import Testbutton from "./Testbutton.svelte";
-
 </script>
 
 <div class="drawer w-1/5 h-1/2 drawer-mobile">
