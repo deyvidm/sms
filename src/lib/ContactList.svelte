@@ -39,16 +39,8 @@
         allContacts.forEach((contact, i, arr) => {
             contactIDMap.set(contact.id, contact);
         });
-
-        ignore.forEach(id => {
-            allContacts.forEach((contact,i, arr) =>{
-                if (id == contact.id){
-                    return
-                }
-                remainingContacts.push(contact)
-            })
-        });
-        remainingContacts = remainingContacts;
+        remainingContacts = allContacts;
+        remainingContacts = remainingContacts.filter((contact)=>{return !ignore.includes(contact.id)})
     });
 
     // an array of ContactIDs to exclude when displaying the list

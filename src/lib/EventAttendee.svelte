@@ -10,13 +10,12 @@
 
     function onClick() {
         // dispatch('message', {});
-        console.log(who.paid)
     }
     
 
     afterUpdate(() => {
         updateAttendee(who)
-            .then((result) => console.log(result))
+            // .then((result) => console.log(result))
             .catch((err) => console.log(err));
     });
 </script>

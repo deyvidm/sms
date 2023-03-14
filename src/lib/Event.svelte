@@ -24,7 +24,6 @@
             });
             ignoreList = ignoreList;
         });
-        console.log(ignoreList)
     }
 
     function handleMessage(event) {
@@ -61,7 +60,7 @@
                     <div class="modal-box w-11/12 max-w-5xl">
                         <ContactList on:message={handleMessage} ignore={ignoreList} />
                         <div class="modal-action">
-                            <label for="invite-more-modal" class="btn">Finish</label>
+                            <label for="invite-more-modal" class="btn">Invite</label>
                         </div>
                     </div>
                 </div>
