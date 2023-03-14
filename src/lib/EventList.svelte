@@ -9,7 +9,6 @@
     let activeId = "";
     function handleMessage(event) {
         activeId = event.detail.eventId
-        console.log(activeId)
     }
 
 </script>

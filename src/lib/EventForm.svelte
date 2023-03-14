@@ -37,10 +37,6 @@
             status: EventStatusOptions.active,
         }).then((eventRecord) => {
             recipients.forEach((r) => {
-                console.log(
-                    "AttendeeStatusOptions['pending-invite']",
-                    AttendeeStatusOptions['sending-invite'],
-                );
                 pb.collection('attendee')
                     .create(<AttendeeRecord>{
                         event: eventRecord.id,

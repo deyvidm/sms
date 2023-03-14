@@ -7,7 +7,6 @@
         get50Events()
     })
     function handleMessage(e){
-        console.log(e.detail)
     }
 </script>
 
