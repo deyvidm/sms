@@ -32,7 +32,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr on:click={onClick} >
                     <td>
                         <div class="flex items-center space-x-3">
                             <div class="font-bold">

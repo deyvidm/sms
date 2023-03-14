@@ -30,9 +30,7 @@ export async function get50Events() {
 }
 
 export async function get50Attendees(event: EventResponse) {
-    return pb.collection('attendee').getList<AttendeeResponse>(1, 50, {expand: "contact"}).then((result) => {
-        attendees.set(result.items)
-    });
+    return pb.collection('attendee').getList<AttendeeResponse>(1, 50, {expand: "contact", filter:`event = "${event.id}"`})
 }
 
 export async function createEvent(r: EventRecord) {
