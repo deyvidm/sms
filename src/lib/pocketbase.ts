@@ -20,9 +20,7 @@ export const attendees = writable(new Array<AttendeeResponse>());
 
 
 export async function get50Contacts() {
-    return pb.collection('contact').getList<ContactResponse>(1, 50, {}).then((result) => {
-        contacts.set(result.items)
-    });
+    return pb.collection('contact').getList<ContactResponse>(1, 50, {})
 }
 
 export async function get50Events() {

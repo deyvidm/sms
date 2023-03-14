@@ -26,7 +26,6 @@
     onMount(() => {});
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
     on:click|once={loadContacts}
     class="mb-2 collapse border border-base-300 bg-base-100 rounded-box"

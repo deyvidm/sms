@@ -1,18 +1,16 @@
 <script lang="ts">
     import ContactRow from './ContactRow.svelte';
-    import { contacts } from './pocketbase';
+    import { get50Contacts } from './pocketbase';
     import { beforeUpdate, afterUpdate, onDestroy, onMount } from 'svelte';
     import type { ContactResponse } from './pocketbase-types';
     import { createEventDispatcher } from 'svelte';
 
     let yesall = false;
-    let remainingContacts = $contacts;
+    let allContacts: Array<ContactResponse>;
+    let remainingContacts = new Array<ContactResponse>();
     let recipientContacts = new Array<ContactResponse>();
 
     let contactIDMap = new Map<string, ContactResponse>();
-    $contacts.forEach((contact, i, parent) => {
-        contactIDMap.set(contact.id, contact);
-    });
 
     const dispatch = createEventDispatcher();
     function handleMessage(event) {
@@ -39,6 +37,16 @@
             recipients: recipientContacts,
         });
     }
+
+    onMount(async () => {
+        await get50Contacts().then((result) => {
+            allContacts = result.items;
+        });
+        allContacts.forEach((contact, i, parent) => {
+            contactIDMap.set(contact.id, contact);
+        });
+        remainingContacts = allContacts;
+    });
 </script>
 
 <div class="overflow-x-auto w-full">
@@ -58,11 +66,7 @@
             </thead>
             <tbody>
                 {#each remainingContacts as contact}
-                    <ContactRow
-                        on:message={handleMessage}
-                        checked={false}
-                        contact={contact}
-                    />
+                    <ContactRow on:message={handleMessage} checked={false} {contact} />
                 {/each}
             </tbody>
         </table>

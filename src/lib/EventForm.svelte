@@ -4,7 +4,7 @@
     import { writable } from 'svelte/store';
     import ContactList from './ContactList.svelte';
     import InputBox from './InputBox.svelte';
-    import { createEvent, contacts, get50Contacts, pb, createInvite } from './pocketbase';
+    import { createEvent, get50Contacts, pb, createInvite } from './pocketbase';
     import {
         EventStatusOptions,
         type AttendeeRecord,
@@ -16,13 +16,15 @@
     let formTitle: string;
     let content: string;
     let recipients = new Array<ContactResponse>();
+    let contacts: Array<ContactResponse>;
 
     function handleMessage(event) {
         recipients = event.detail.recipients;
     }
+
     function create() {
         // const d = new Date('05 October 2011 14:48 UTC');
-        const d = new Date(Date.now())
+        const d = new Date(Date.now());
         createEvent(<EventRecord>{
             organizer: pb.authStore.model?.id,
             title: formTitle,
@@ -34,7 +36,10 @@
             status: EventStatusOptions.active,
         }).then((eventRecord) => {
             recipients.forEach((r) => {
-                console.log("AttendeeStatusOptions['pending-invite']", AttendeeStatusOptions['sending-invite'])
+                console.log(
+                    "AttendeeStatusOptions['pending-invite']",
+                    AttendeeStatusOptions['sending-invite'],
+                );
                 pb.collection('attendee')
                     .create(<AttendeeRecord>{
                         event: eventRecord.id,
@@ -48,9 +53,7 @@
             });
         });
     }
-    onMount(() => {
-        get50Contacts();
-    });
+
 </script>
 
 <h2 class="mb-10 text-4xl font-extrabold dark:text-white">Create New Event</h2>
@@ -86,7 +89,7 @@
     <input type="checkbox" id="my-modal-5" class="modal-toggle" />
     <div class="modal">
         <div class="modal-box w-11/12 max-w-5xl">
-            <ContactList on:message={handleMessage} />
+            <ContactList on:message={handleMessage}/>
             <div class="modal-action">
                 <label for="my-modal-5" class="btn">Finish</label>
             </div>
