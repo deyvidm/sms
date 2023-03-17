@@ -10,4 +10,5 @@
     }
 </script>
 
+<h1>Events</h1>
 <EventList on:message={handleMessage}/>
