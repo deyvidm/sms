@@ -4,7 +4,6 @@ import type { AttendeeRecord, AttendeeResponse, AttendeeStatusOptions, ContactRe
 import { writable } from 'svelte/store';
 import { error } from '@sveltejs/kit';
 
-// export const pb = new PocketBase('http://YOUR-SERVER-IP-OR-URL'); // remote
 export const pb = new PocketBase('http://127.0.0.1:8090'); // local
 
 export const currentUser = writable(pb.authStore.model);

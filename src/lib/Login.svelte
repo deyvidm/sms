@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { prevent_default } from 'svelte/internal';
     import { currentUser, pb } from './pocketbase';
 
     let username: string;
@@ -6,6 +7,7 @@
 
     async function login() {
         await pb.collection('users').authWithPassword(username, password);
+        prevent_default()
     }
 
     function signOut() {
@@ -59,7 +61,7 @@
                         />
                     </div>
                     <button
-                        on:click={login}
+                        on:click|preventDefault={login}
                         type="submit"
                         class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                         >Sign in</button
