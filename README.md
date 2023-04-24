@@ -1,4 +1,6 @@
-# create-svelte
+## Project is a Work-In-Progress
+
+# SMS Event Planner & RSVP 
 
 Powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
 
@@ -7,6 +9,9 @@ Powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/package
 ```bash
 # install dependencies, if you haven't already
 npm install 
+
+# generate latest pocketbase (backend) data types
+npm run retype
 
 # star the dev server
 npm run dev
@@ -23,6 +28,6 @@ To create a production version:
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## Demo Screenshots
+Example of an event with a single attendee
+<img width="1680" alt="Sample Event" src="https://user-images.githubusercontent.com/16841661/233979680-1dbdcab0-c7e2-4f58-8b8e-d2895a17756e.png">
