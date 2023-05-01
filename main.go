@@ -21,10 +21,10 @@ func main() {
 	defer cleanup()
 
 	// Auto Migrate the struct
-	if err := db.AutoMigrate(&models.User{}); err != nil {
+	if err := models.SetupDB(db); err != nil {
 		panic("Error migrating!")
 	} else {
-		fmt.Println("AutoMigrate successful")
+		fmt.Println("DB setup successful")
 	}
 
 	router := gin.Default()

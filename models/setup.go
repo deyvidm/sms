@@ -26,3 +26,8 @@ func ConnectDB(dbFile string) (*gorm.DB, func()) {
 
 	return db, cleanup
 }
+
+func SetupDB(db *gorm.DB) error {
+	err := db.AutoMigrate(User{})
+	return err
+}
