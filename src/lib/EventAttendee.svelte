@@ -49,7 +49,7 @@
                             <input bind:checked={who.paid} on:click={onClick} type="checkbox" />
 
                             <div class="swap-on">💵</div>
-                            <div class="swap-off">🫰</div>
+                            <div class="swap-off">❌</div>
                         </label>
                     </td>
                 </tr>

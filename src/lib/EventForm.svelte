@@ -24,7 +24,6 @@
 
     function create() {
         submitButton.classList.add("loading")
-        // const d = new Date('05 October 2011 14:48 UTC');
         const d = new Date(Date.now());
         createEvent(<EventRecord>{
             organizer: pb.authStore.model?.id,
