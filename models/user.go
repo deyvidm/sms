@@ -4,13 +4,48 @@ import (
 	"errors"
 	"unicode"
 
+	"github.com/deyvidm/sms-backend/auth"
 	"github.com/jinzhu/gorm"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
 	gorm.Model
 	Username string `gorm:"size:255;not null;unique" json:"username"`
 	Password string `gorm:"size:255;not null;" json:"password"`
+}
+
+func GetUserByID(uid uint) (User, error) {
+	u := User{}
+	if err := DB.First(&u, uid).Error; err != nil {
+		return User{}, errors.New("User not found")
+	}
+	return u, nil
+}
+
+func LoginUser(username string, password string) (token string, err error) {
+	u := User{}
+	err = DB.Model(u).Where("username = ?", username).Take(&u).Error
+	if err != nil {
+		return "", err
+	}
+
+	err = VerifyPassword(password, u.Password)
+
+	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
+		return "", err
+	}
+
+	token, err = auth.GenerateToken(u.ID)
+
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil
+}
+func VerifyPassword(password, hashedPassword string) error {
+	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }
 
 func (u *User) SaveUser() (*User, error) {
@@ -25,6 +60,13 @@ func (u *User) BesforeSave() error {
 	if !u.isValid() {
 		return errors.New("invalid user info")
 	}
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	u.Password = string(hashedPassword)
+
 	return nil
 }
 

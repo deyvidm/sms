@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetContacts(c *gin.Context) {
+func Contacts(c *gin.Context) {
 
 }
 

@@ -11,7 +11,7 @@ type NewEventData struct {
 	Password string `json:"password" binding:"required"`
 }
 
-func GetEvents(c *gin.Context) {
+func Events(c *gin.Context) {
 
 }
 
