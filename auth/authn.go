@@ -21,6 +21,16 @@ func GenerateToken(userID uint) (string, error) {
 	return token.SignedString([]byte(os.Getenv("API_SECRET")))
 }
 
+// split on space and reutrn [1] because a correct header value looks like
+// "Bearer XXXXXXXX"
+func ExtractToken(c *gin.Context) string {
+	bearerToken := c.Request.Header.Get("Authorization")
+	if len(strings.Split(bearerToken, " ")) == 2 {
+		return strings.Split(bearerToken, " ")[1]
+	}
+	return ""
+}
+
 func TokenValid(c *gin.Context) error {
 	tokenString := ExtractToken(c)
 	_, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -29,22 +39,7 @@ func TokenValid(c *gin.Context) error {
 		}
 		return []byte(os.Getenv("API_SECRET")), nil
 	})
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func ExtractToken(c *gin.Context) string {
-	token := c.Query("token")
-	if token != "" {
-		return token
-	}
-	bearerToken := c.Request.Header.Get("Authorization")
-	if len(strings.Split(bearerToken, " ")) == 2 {
-		return strings.Split(bearerToken, " ")[1]
-	}
-	return ""
+	return err
 }
 
 func ExtractTokenID(c *gin.Context) (uint, error) {
