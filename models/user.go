@@ -25,30 +25,21 @@ func GetUserByID(uid uint) (User, error) {
 
 func LoginUser(username string, password string) (token string, err error) {
 	u := User{}
-	err = DB.Model(u).Where("username = ?", username).Take(&u).Error
-	if err != nil {
-		return "", err
+	if err = DB.Model(u).Where("username = ?", username).Take(&u).Error; err != nil {
+		return
 	}
-
-	err = VerifyPassword(password, u.Password)
-
-	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
-		return "", err
+	if err = VerifyPassword(password, u.Password); err != nil {
+		return
 	}
-
-	token, err = auth.GenerateToken(u.ID)
-
-	if err != nil {
-		return "", err
-	}
-
-	return token, nil
+	return auth.GenerateToken(u.ID)
 }
+
 func VerifyPassword(password, hashedPassword string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }
 
 func (u *User) SaveUser() (*User, error) {
+	u.BesforeSave()
 	err := DB.Create(&u).Error
 	if err != nil {
 		return &User{}, err

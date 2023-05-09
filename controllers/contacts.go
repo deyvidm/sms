@@ -17,7 +17,7 @@ type NewContactData struct {
 }
 
 func NewContact(c *gin.Context) {
-	var input NewEventData
+	var input NewContactData
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
