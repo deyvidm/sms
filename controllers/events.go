@@ -6,13 +6,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type SignInData struct {
+type NewEventData struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
-func SignIn(c *gin.Context) {
-	var input SignInData
+func GetEvents(c *gin.Context) {
+
+}
+
+func NewEvent(c *gin.Context) {
+	var input NewEventData
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

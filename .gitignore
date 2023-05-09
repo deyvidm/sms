@@ -21,3 +21,5 @@
 go.work
 
 .env
+sms
+data.db

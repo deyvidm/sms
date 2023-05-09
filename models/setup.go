@@ -5,6 +5,22 @@ import (
 	"gorm.io/gorm"
 )
 
+// This function applies/migrates all the datbase models
+// It's vital to update MODELS each time we add a new DB table/model
+func SetupDB(db *gorm.DB) error {
+	MODELS := []interface{}{
+		User{},
+		Contact{},
+	}
+
+	for _, m := range MODELS {
+		if err := db.AutoMigrate(m); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 var DB *gorm.DB
 
 func ConnectDB(dbFile string) (*gorm.DB, func()) {
@@ -24,10 +40,6 @@ func ConnectDB(dbFile string) (*gorm.DB, func()) {
 		}
 	}
 
+	DB = db
 	return db, cleanup
-}
-
-func SetupDB(db *gorm.DB) error {
-	err := db.AutoMigrate(User{})
-	return err
 }

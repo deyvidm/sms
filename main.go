@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"os"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/deyvidm/sms-backend/controllers"
 	"github.com/deyvidm/sms-backend/models"
@@ -22,15 +22,26 @@ func main() {
 
 	// Auto Migrate the struct
 	if err := models.SetupDB(db); err != nil {
-		panic("Error migrating!")
+		log.Fatal(err)
 	} else {
-		fmt.Println("DB setup successful")
+		log.Infof("DB setup successful")
 	}
 
 	router := gin.Default()
-
 	public := router.Group("/api")
-	public.POST("/login", controllers.SignIn)
+	assignRoutes(public)
 
 	router.Run(":8080")
+}
+
+func assignRoutes(router *gin.RouterGroup) {
+	// router.POST("/register", controllers.Register) //TODO
+	router.POST("/signin", controllers.SignIn)
+
+	router.POST("/contacts/new", controllers.NewContact)
+	router.GET("/contacts", controllers.GetContacts)
+
+	router.POST("/events/new", controllers.NewEvent)
+	router.GET("/events", controllers.GetEvents)
+
 }
