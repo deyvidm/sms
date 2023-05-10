@@ -57,17 +57,18 @@ func Login(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"token": token})
 }
 
-func CurrentUser(c *gin.Context) {
+func GetUserFromContext(c *gin.Context) (models.User, error) {
 	userID, err := auth.ExtractTokenID(c)
-
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+		return models.User{}, err
 	}
-
 	u, err := models.GetUserByID(userID)
 	u.Password = "no :)"
+	return u, err
+}
 
+func CurrentUser(c *gin.Context) {
+	u, err := GetUserFromContext(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

@@ -1,18 +1,35 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import (
+	"github.com/jinzhu/gorm"
+)
 
 type Contact struct {
 	gorm.Model
-	FirstName string `form:"first_name" json:"first_name" binding:"required,min=3,max=50"`
-	LastName  string `form:"last_name" json:"last_name" binding:"required,min=3,max=50"`
-	Mobile    string `form:"phone" json:"phone" binding:"required,min=10,max=10"`
+	FirstName string `gorm:"size:255;not null" json:"first_name"`
+	LastName  string `gorm:"size:255;not null" json:"last_name"`
+	Phone     string `gorm:"size:12;not null;unique" json:"phone"`
+	Owner     uint
 }
 
-func (c *Contact) SaveContact() (*Contact, error) {
-	err := DB.Create(&c).Error
+// used for returning cleaner data structs
+// otherwise API consumers also get createdAt, updatedAt, ID, etc.
+type APIContact struct {
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Phone     string `json:"phone"`
+}
+
+func (u *User) AllContacts() ([]APIContact, error) {
+	contacts := []APIContact{}
+	err := DB.Model(u).Association("Contacts").Find(&contacts)
+	return contacts, err
+}
+
+func (u *User) SaveContact(c Contact) (Contact, error) {
+	err := DB.Model(u).Association("Contacts").Append([]Contact{c})
 	if err != nil {
-		return &Contact{}, err
+		return Contact{}, err
 	}
 	return c, nil
 }
