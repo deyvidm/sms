@@ -50,5 +50,5 @@ func assignPrivateRoutes(router *gin.RouterGroup) {
 	router.GET("/contacts", controllers.AllContacts)
 
 	router.POST("/events/new", controllers.NewEvent)
-	router.GET("/events", controllers.Events)
+	router.GET("/events", controllers.AllEvents)
 }

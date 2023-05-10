@@ -13,6 +13,20 @@ type NewContactData struct {
 	Phone     string `json:"phone" binding:"required,e164"` // e164 is the standard +11234567890
 }
 
+func AllContacts(c *gin.Context) {
+	user, err := GetUserFromContext(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	contacts, err := user.AllContacts()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "success", "data": contacts})
+}
+
 func NewContact(c *gin.Context) {
 	var input NewContactData
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -37,18 +51,4 @@ func NewContact(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "success", "data": input})
-}
-
-func AllContacts(c *gin.Context) {
-	user, err := GetUserFromContext(c)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	contacts, err := user.AllContacts()
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"message": "success", "data": contacts})
 }
