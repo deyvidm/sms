@@ -3,16 +3,26 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/deyvidm/sms-backend/models"
 	"github.com/gin-gonic/gin"
 )
 
 type NewEventData struct {
-	Username string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required"`
+	Ttile string `json:"title" binding:"required,max=255"`
 }
 
-func Events(c *gin.Context) {
-
+func AllEvents(c *gin.Context) {
+	user, err := GetUserFromContext(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	events, err := user.AllEvents()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "success", "data": events})
 }
 
 func NewEvent(c *gin.Context) {
@@ -23,5 +33,18 @@ func NewEvent(c *gin.Context) {
 		return
 	}
 
+	user, err := GetUserFromContext(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = user.SaveEvent(models.Event{
+		Title: input.Ttile,
+	})
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{"message": "validated!", "data": input})
 }

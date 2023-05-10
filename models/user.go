@@ -13,6 +13,7 @@ type User struct {
 	Username string    `gorm:"size:255;not null;unique" json:"username"`
 	Password string    `gorm:"size:255;not null;" json:"password"`
 	Contacts []Contact `gorm:"foreignKey:Owner"`
+	Events   []Event   `gorm:"foreignKey:Organizer"`
 }
 
 func GetUserByID(uid uint) (User, error) {
