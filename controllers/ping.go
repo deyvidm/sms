@@ -7,5 +7,5 @@ import (
 )
 
 func Pong(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"message": "success", "data": "pong"})
+	c.JSON(http.StatusOK, gin.H{"data": "pong"})
 }

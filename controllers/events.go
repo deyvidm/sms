@@ -22,7 +22,7 @@ func AllEvents(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "success", "data": events})
+	c.JSON(http.StatusOK, gin.H{"data": events})
 }
 
 func NewEvent(c *gin.Context) {
@@ -46,5 +46,5 @@ func NewEvent(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "validated!", "data": input})
+	c.JSON(http.StatusOK, gin.H{"data": input})
 }

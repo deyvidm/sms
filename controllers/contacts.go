@@ -24,7 +24,7 @@ func AllContacts(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "success", "data": contacts})
+	c.JSON(http.StatusOK, gin.H{"data": contacts})
 }
 
 func NewContact(c *gin.Context) {
@@ -50,5 +50,5 @@ func NewContact(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "success", "data": input})
+	c.JSON(http.StatusOK, gin.H{"data": input})
 }
