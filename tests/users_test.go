@@ -2,17 +2,19 @@ package tests
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"testing"
 
 	"github.com/deyvidm/sms-backend/controllers"
-	setuputils "github.com/deyvidm/sms-backend/setupUtils"
-	"github.com/stretchr/testify/assert"
+	"github.com/deyvidm/sms-backend/types"
 	"github.com/stretchr/testify/require"
+
+	utils "github.com/deyvidm/sms-backend/utils"
 )
 
 func TestUserRegisterLoginFlow(t *testing.T) {
-	cleanupDB := setuputils.SetupDB("")
+	cleanupDB := utils.SetupDB("")
 	defer cleanupDB()
 	preTestSetup()
 	r := require.New(t)
@@ -29,33 +31,25 @@ func TestUserRegisterLoginFlow(t *testing.T) {
 		exp  expected
 	}{
 		{name: "missing user", path: "/user/login", body: user,
-			exp: expected{400, "", map[string]interface{}{
-				"error": "incorrect login details",
+			exp: expected{400, map[string]interface{}{
+				"status": types.StatusFailed,
+				"data":   "incorrect login details",
 			}}},
-		{name: "register new user", path: "/users/register", body: user,
-			exp: expected{200, "welcome user!", nil}},
+		{name: "register new user", path: "/user/register", body: user,
+			exp: expected{203, map[string]interface{}{
+				"status": types.StatusSuccess,
+				"data":   fmt.Sprintf("welcome %s!", user.Username),
+			}}},
 		// {name: "log in wrong user"},
 		// {name: "log in correct user"},
 	}
 
 	for i, s := range steps {
 		w := performRequest(router, http.MethodPost, s.path, toReader(s.body))
-		r.Equal(w.Code, s.exp.code)
 
+		r.Equal(s.exp.code, w.Code, getStepString(i, s.name, "mismatched HTTP Codes"))
 		var response map[string]interface{}
 		_ = json.Unmarshal(w.Body.Bytes(), &response)
-
-		value, exists := response["message"]
-		if s.exp.message != "" {
-			if !exists {
-				t.Fatalf("test %d : %s : missing message. expected |%s| got nothin", i, s.name, s.exp.message)
-			}
-			if value != s.exp.message {
-				t.Fatalf("test %d : %s : wrong message. expected |%s| got |%s|", i, s.name, s.exp.message, value)
-			}
-			assert.True(t, exists)
-		}
-
-		r.Equal(s.exp.data, response)
+		r.Equal(s.exp.data, response, getStepString(i, s.name, "mismatched response data"))
 	}
 }

@@ -3,20 +3,20 @@ package tests
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
 
-	setuputils "github.com/deyvidm/sms-backend/setupUtils"
+	"github.com/deyvidm/sms-backend/utils"
 	"github.com/gin-gonic/gin"
 )
 
 var router *gin.Engine
 
 type expected struct {
-	code    int
-	message string
-	data    interface{}
+	code int
+	data map[string]interface{}
 }
 
 func toReader(obj interface{}) *bytes.Reader {
@@ -27,7 +27,7 @@ func toReader(obj interface{}) *bytes.Reader {
 func preTestSetup() {
 	if router == nil {
 		gin.SetMode(gin.ReleaseMode)
-		router = setuputils.SetupRouter()
+		router = utils.SetupRouter()
 	}
 }
 
@@ -36,4 +36,8 @@ func performRequest(r http.Handler, method, path string, body io.Reader) *httpte
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	return w
+}
+
+func getStepString(stepNumber int, stepName, errMessage string) string {
+	return fmt.Sprintf("Error at step %d : %s : %s", stepNumber, stepName, errMessage)
 }

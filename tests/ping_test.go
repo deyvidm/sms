@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 	"testing"
 
-	setuputils "github.com/deyvidm/sms-backend/setupUtils"
+	utils "github.com/deyvidm/sms-backend/utils"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestPing(t *testing.T) {
-	cleanupDB := setuputils.SetupDB("")
+	cleanupDB := utils.SetupDB("")
 	defer cleanupDB()
 	preTestSetup()
 	r := require.New(t)

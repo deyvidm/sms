@@ -1,4 +1,4 @@
-package setuputils
+package utils
 
 import (
 	"os"
