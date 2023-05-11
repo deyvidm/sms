@@ -11,13 +11,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type LoginData struct {
-	Username string `json:"username" binding:"required,alphanum,min=3,max=255"` // 3 is a holy number
-	Password string `json:"password" binding:"required,alphanum,min=6,max=255"` // min 6 for brcypt hash
-}
-
 func Register(c *gin.Context) {
-	var input LoginData
+	var input types.LoginData
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"data": err.Error()})
@@ -37,7 +32,7 @@ func Register(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	var input LoginData
+	var input types.LoginData
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})

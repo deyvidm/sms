@@ -8,12 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type NewContactData struct {
-	FirstName string `json:"first_name" binding:"required,alpha,min=3,max=50"`
-	LastName  string `json:"last_name" binding:"required,alpha,min=3,max=50"`
-	Phone     string `json:"phone" binding:"required,e164"` // e164 is the standard +11234567890
-}
-
 func AllContacts(c *gin.Context) {
 	user, err := GetUserFromContext(c)
 	if err != nil {
@@ -29,7 +23,7 @@ func AllContacts(c *gin.Context) {
 }
 
 func NewContact(c *gin.Context) {
-	var input NewContactData
+	var input types.NewContactData
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})
 		return

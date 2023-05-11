@@ -1,10 +1,10 @@
 package main
 
-import setuputils "github.com/deyvidm/sms-backend/setupUtils"
+import utils "github.com/deyvidm/sms-backend/utils"
 
 func main() {
-	cleanupDB := setuputils.SetupDB("DB_FILE")
+	cleanupDB := utils.SetupDB("DB_FILE")
 	defer cleanupDB()
-	router := setuputils.SetupRouter()
+	router := utils.SetupRouter()
 	router.Run(":8080")
 }

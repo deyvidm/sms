@@ -8,10 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type NewEventData struct {
-	Ttile string `json:"title" binding:"required,max=255"`
-}
-
 func AllEvents(c *gin.Context) {
 	user, err := GetUserFromContext(c)
 	if err != nil {
@@ -27,7 +23,7 @@ func AllEvents(c *gin.Context) {
 }
 
 func NewEvent(c *gin.Context) {
-	var input NewEventData
+	var input types.NewEventData
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})

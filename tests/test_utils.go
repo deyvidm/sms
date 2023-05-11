@@ -14,11 +14,6 @@ import (
 
 var router *gin.Engine
 
-type expected struct {
-	code int
-	data map[string]interface{}
-}
-
 func toReader(obj interface{}) *bytes.Reader {
 	objBytes, _ := json.Marshal(obj)
 	return bytes.NewReader(objBytes)
@@ -38,6 +33,6 @@ func performRequest(r http.Handler, method, path string, body io.Reader) *httpte
 	return w
 }
 
-func getStepString(stepNumber int, stepName, errMessage string) string {
-	return fmt.Sprintf("Error at step %d : %s : %s", stepNumber, stepName, errMessage)
+func getStepString(stepNumber int, stepName string) string {
+	return fmt.Sprintf("Error at step %d : \"%s\" ", stepNumber, stepName)
 }
