@@ -7,19 +7,15 @@ import (
 
 	"github.com/deyvidm/sms-backend/auth"
 	"github.com/deyvidm/sms-backend/models"
+	"github.com/deyvidm/sms-backend/types"
 	"github.com/gin-gonic/gin"
 )
 
-type LoginData struct {
-	Username string `json:"username" binding:"required,alphanum,min=3,max=255"` // 3 is a holy number
-	Password string `json:"password" binding:"required,alphanum,min=6,max=255"` // min 6 for brcypt hash
-}
-
 func Register(c *gin.Context) {
-	var input LoginData
+	var input types.LoginData
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"data": err.Error()})
 		return
 	}
 
@@ -29,17 +25,17 @@ func Register(c *gin.Context) {
 	}
 	_, err := u.SaveUser()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "failed to save user"})
+		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": "failed to save user"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("welcome %s!", input.Username)})
+	c.JSON(http.StatusOK, gin.H{"status": types.StatusSuccess, "data": fmt.Sprintf("welcome %s!", input.Username)})
 }
 
 func Login(c *gin.Context) {
-	var input LoginData
+	var input types.LoginData
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})
 		return
 	}
 
@@ -51,10 +47,10 @@ func Login(c *gin.Context) {
 
 	if err != nil {
 		log.Println(err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": "incorrect login details"})
+		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": "incorrect login details"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"token": token})
+	c.JSON(http.StatusOK, gin.H{"status": types.StatusSuccess, "data": token})
 }
 
 func GetUserFromContext(c *gin.Context) (models.User, error) {
@@ -70,8 +66,8 @@ func GetUserFromContext(c *gin.Context) (models.User, error) {
 func CurrentUser(c *gin.Context) {
 	u, err := GetUserFromContext(c)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "success", "data": u})
+	c.JSON(http.StatusOK, gin.H{"status": types.StatusSuccess, "data": u})
 }
