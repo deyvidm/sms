@@ -17,7 +17,7 @@ import (
 //
 // each step is an HTTP request to the /users/ endpoints
 // this test simulates a user that:
-// 1. logs in with no account
+// 1. attempts to log in without an account, and fails
 // 2. registers
 // 3. logs in with bad credentials
 // 4. logs in with correct credentials
@@ -60,7 +60,8 @@ func TestUserRegisterLoginFlow(t *testing.T) {
 		{name: "log in correct user", path: "/user/login", body: user1,
 			exp: types.ExpectedResponse{Code: 200, ResponseBody: map[string]interface{}{
 				"status": types.StatusSuccess,
-				// "data":   " a successful login returns a unique token that we can't reproduce (except through mocking 🤮), so we leave data nil
+				// "data":  a successful login returns a unique token that we can't reproduce (except through mocking 🤮), so we leave data nil
+				// the Compare() method will only compare non-nil fields in the Resopnse Body
 			}}},
 	}
 
