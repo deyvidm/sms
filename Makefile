@@ -8,6 +8,9 @@ build:
 run: 
 	./sms 
 
+test:
+	go test ./tests
+
 host: build
 	./sms serve --http="170.187.194.105:8090"
 
