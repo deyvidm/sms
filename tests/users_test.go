@@ -11,6 +11,16 @@ import (
 	utils "github.com/deyvidm/sms-backend/utils"
 )
 
+// this test is a series of steps
+// each step must pass in order for the next one to succeed
+// i will use this pattern throughout the testing files
+//
+// each step is an HTTP request to the /users/ endpoints
+// this test simulates a user that:
+// 1. logs in with no account
+// 2. registers
+// 3. logs in with bad credentials
+// 4. logs in with correct credentials
 func TestUserRegisterLoginFlow(t *testing.T) {
 	cleanupDB := utils.SetupDB("")
 	defer cleanupDB()
