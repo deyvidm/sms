@@ -37,7 +37,7 @@ func TestNewContactFlow(t *testing.T) {
 				"status": types.StatusSuccess,
 				"data":   contactResponse,
 			}}},
-		{name: "fetch contact", method: http.MethodGet, path: routes.AllContacts, body: contact,
+		{name: "fetch all contacts", method: http.MethodGet, path: routes.AllContacts, body: contact,
 			exp: ExpectedResponse{Code: 200, ResponseBody: map[string]interface{}{
 				"status": types.StatusSuccess,
 				"data":   []interface{}{contactResponse},
