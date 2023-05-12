@@ -15,7 +15,7 @@ func TestPing(t *testing.T) {
 	preTestSetup()
 	r := require.New(t)
 
-	expected := types.ExpectedResponse{
+	expected := ExpectedResponse{
 		Code: 200,
 		ResponseBody: map[string]interface{}{
 			"status": types.StatusSuccess,
