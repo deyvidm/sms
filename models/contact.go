@@ -8,7 +8,7 @@ type Contact struct {
 	gorm.Model
 	FirstName string `gorm:"size:255;not null" json:"first_name"`
 	LastName  string `gorm:"size:255;not null" json:"last_name"`
-	Phone     string `gorm:"size:12;not null;unique" json:"phone"`
+	Phone     string `json:"phone"` // newly-registeerd users gain a blank Contact which we map to their outgoing messages
 	Owner     uint
 }
 
@@ -18,6 +18,7 @@ type APIContact struct {
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	Phone     string `json:"phone"`
+	ID        string `json:"id"`
 }
 
 func (u *User) AllContacts() ([]APIContact, error) {

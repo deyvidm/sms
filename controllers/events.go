@@ -23,7 +23,7 @@ func AllEvents(c *gin.Context) {
 }
 
 func NewEvent(c *gin.Context) {
-	var input types.NewEventData
+	var input types.NewEvent
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})

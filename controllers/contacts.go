@@ -23,7 +23,7 @@ func AllContacts(c *gin.Context) {
 }
 
 func NewContact(c *gin.Context) {
-	var input types.NewContactData
+	var input types.NewContact
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})
 		return
