@@ -49,3 +49,56 @@ func TestNewContactFlow(t *testing.T) {
 		s.exp.Compare(r, w, getStepString(i, s.name))
 	}
 }
+
+func TestAddMultipleContactsFlow(t *testing.T) {
+	cleanupDB := utils.SetupDB("")
+	defer cleanupDB()
+	preTestSetup()
+	r := require.New(t)
+
+	user := types.LoginData{
+		Username: "testUser",
+		Password: "hunter2",
+	}
+
+	contacts := []types.NewContactData{
+		{
+			FirstName: "Florian",
+			LastName:  "Degas",
+			Phone:     "+11234567890",
+		},
+		{
+			FirstName: "Sneed",
+			LastName:  "Feedenseed",
+			Phone:     "+11234567891",
+		},
+		{
+			FirstName: "Michael",
+			LastName:  "Pichaelson",
+			Phone:     "+11234567892",
+		},
+	}
+	var allContactResponse map[string]interface{}
+	b, _ := json.Marshal(contacts)
+	json.Unmarshal(b, &allContactResponse)
+
+	token := authUser(user)
+	for i := range contacts {
+		exp := ExpectedResponse{Code: 200, ResponseBody: map[string]interface{}{
+			"status": types.StatusSuccess,
+			"data":   utils.ObjToJSONObj(contacts[i]),
+		}}
+
+		w := performAuthRequest(router, http.MethodPost, routes.NewContact, token, toReader(contacts[i]))
+		exp.Compare(r, w, getStepString(i, "adding contact"))
+	}
+
+	exp := ExpectedResponse{Code: 200, ResponseBody: map[string]interface{}{
+		"status": types.StatusSuccess,
+		"data":   utils.ObjToJSONObj(contacts),
+	}}
+
+	w := performAuthRequest(router, http.MethodGet, routes.AllContacts, token, nil)
+	exp.Compare(r, w, "comparing response of all contacts")
+
+}
