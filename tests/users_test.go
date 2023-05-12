@@ -7,6 +7,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/deyvidm/sms-backend/routes"
 	"github.com/deyvidm/sms-backend/types"
 	utils "github.com/deyvidm/sms-backend/utils"
 )
@@ -36,30 +37,24 @@ func TestUserRegisterLoginFlow(t *testing.T) {
 		Password: "hunter3", // different password from user1, to simulate a bad login
 	}
 
-	steps := []struct {
-		name   string
-		method string
-		path   string
-		body   types.LoginData
-		exp    types.ExpectedResponse
-	}{
-		{name: "missing user", method: http.MethodPost, path: "/user/login", body: user1,
-			exp: types.ExpectedResponse{Code: 400, ResponseBody: map[string]interface{}{
+	steps := []TestStep{
+		{name: "missing user", method: http.MethodPost, path: routes.UserLogin, body: user1,
+			exp: ExpectedResponse{Code: 400, ResponseBody: map[string]interface{}{
 				"status": types.StatusFailed,
 				"data":   "incorrect login details",
 			}}},
-		{name: "register new user", method: http.MethodPost, path: "/user/register", body: user1,
-			exp: types.ExpectedResponse{Code: 200, ResponseBody: map[string]interface{}{
+		{name: "register new user", method: http.MethodPost, path: routes.UserRegister, body: user1,
+			exp: ExpectedResponse{Code: 200, ResponseBody: map[string]interface{}{
 				"status": types.StatusSuccess,
 				"data":   fmt.Sprintf("welcome %s!", user1.Username),
 			}}},
-		{name: "log in wrong user", method: http.MethodPost, path: "/user/login", body: user2,
-			exp: types.ExpectedResponse{Code: 400, ResponseBody: map[string]interface{}{
+		{name: "log in wrong user", method: http.MethodPost, path: routes.UserLogin, body: user2,
+			exp: ExpectedResponse{Code: 400, ResponseBody: map[string]interface{}{
 				"status": types.StatusFailed,
 				"data":   "incorrect login details",
 			}}},
-		{name: "log in correct user", method: http.MethodPost, path: "/user/login", body: user1,
-			exp: types.ExpectedResponse{Code: 200, ResponseBody: map[string]interface{}{
+		{name: "log in correct user", method: http.MethodPost, path: routes.UserLogin, body: user1,
+			exp: ExpectedResponse{Code: 200, ResponseBody: map[string]interface{}{
 				"status": types.StatusSuccess,
 				// "data":  a successful login returns a unique token that we can't reproduce (except through mocking 🤮), so we leave data nil
 				// the Compare() method will only compare non-nil fields in the Resopnse Body
