@@ -3,9 +3,9 @@ package utils
 import (
 	"os"
 
-	"github.com/deyvidm/sms-backend/controllers"
 	"github.com/deyvidm/sms-backend/middleware"
 	"github.com/deyvidm/sms-backend/models"
+	"github.com/deyvidm/sms-backend/routes"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 
@@ -15,28 +15,13 @@ import (
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
 	public := router.Group("")
-	assignPublicRoutes(public)
+	routes.AssignPublicRoutes(public)
 
-	private := router.Group("/api")
+	private := router.Group("")
 	private.Use(middleware.AuthJWT())
-	assignPrivateRoutes(private)
+	routes.AssignPrivateRoutes(private)
 
 	return router
-}
-
-func assignPublicRoutes(router *gin.RouterGroup) {
-	router.GET("/ping", controllers.Pong)
-	router.POST("/user/register", controllers.Register)
-	router.POST("/user/login", controllers.Login)
-}
-
-func assignPrivateRoutes(router *gin.RouterGroup) {
-	router.GET("/user", controllers.CurrentUser)
-	router.POST("/contacts/new", controllers.NewContact)
-	router.GET("/contacts", controllers.AllContacts)
-
-	router.POST("/events/new", controllers.NewEvent)
-	router.GET("/events", controllers.AllEvents)
 }
 
 // envName is the Environment Variable that holds the SQLite3 database filename
@@ -47,6 +32,8 @@ func SetupDB(envName string) func() {
 	dbFilePath := os.Getenv(envName)
 	if len(dbFilePath) < 1 {
 		log.Warnf("MISSING DB FILENAME: |%s| SQLITE WILL RUN IN AMNESIA MODE; YOUR DATA WILL BE LOST AFTER PROGRAM TERMINATION", dbFilePath)
+	} else {
+		log.Infof("Using Database file: %s", dbFilePath)
 	}
 	db, cleanup := models.ConnectDB(dbFilePath)
 	// Auto Migrate the database models
@@ -60,7 +47,7 @@ func SetupDB(envName string) func() {
 
 func loadEnv() {
 	// Load Env vars and connect to DB
-	if err := godotenv.Load("../.env"); err != nil {
-		log.Fatalf("Error loading .env file")
+	if err := godotenv.Load(".env"); err != nil {
+		log.Fatalf("Error loading .env file: %s", err.Error())
 	}
 }

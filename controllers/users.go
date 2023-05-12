@@ -15,7 +15,7 @@ func Register(c *gin.Context) {
 	var input types.LoginData
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"data": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})
 		return
 	}
 
