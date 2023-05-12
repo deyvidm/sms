@@ -10,7 +10,7 @@ import (
 )
 
 func TestPing(t *testing.T) {
-	cleanupDB := utils.SetupDB("")
+	cleanupDB := utils.SetupDB("../.env", "")
 	defer cleanupDB()
 	preTestSetup()
 	r := require.New(t)
