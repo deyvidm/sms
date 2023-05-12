@@ -12,6 +12,7 @@ func SetupDB(db *gorm.DB) error {
 		User{},
 		Contact{},
 		Event{},
+		Message{},
 	}
 
 	for _, m := range MODELS {
