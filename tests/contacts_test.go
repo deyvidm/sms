@@ -1,10 +1,10 @@
 package tests
 
 import (
-	"encoding/json"
 	"net/http"
 	"testing"
 
+	"github.com/deyvidm/sms-backend/models"
 	"github.com/deyvidm/sms-backend/routes"
 	"github.com/deyvidm/sms-backend/types"
 	utils "github.com/deyvidm/sms-backend/utils"
@@ -12,7 +12,7 @@ import (
 )
 
 func TestAddContactNoAuth(t *testing.T) {
-	cleanupDB := utils.SetupDB("")
+	cleanupDB := utils.SetupDB("../.env", "")
 	defer cleanupDB()
 	preTestSetup()
 	r := require.New(t)
@@ -26,38 +26,31 @@ func TestAddContactNoAuth(t *testing.T) {
 }
 
 func TestNewContactFlow(t *testing.T) {
-	cleanupDB := utils.SetupDB("")
+	cleanupDB := utils.SetupDB("../.env", "")
 	defer cleanupDB()
 	preTestSetup()
 	r := require.New(t)
 
-	user := types.LoginData{
-		Username: "testUser",
-		Password: "hunter2",
+	contactResponse := models.APIContact{
+		FirstName: Contacts[0].FirstName,
+		LastName:  Contacts[0].LastName,
+		Phone:     Contacts[0].Phone,
+		ID:        2,
 	}
-
-	contact := types.NewContactData{
-		FirstName: "Florian",
-		LastName:  "Degas",
-		Phone:     "+11234567890",
-	}
-	var contactResponse map[string]interface{}
-	b, _ := json.Marshal(contact)
-	json.Unmarshal(b, &contactResponse)
 
 	steps := []TestStep{
-		{name: "add contact", method: http.MethodPost, path: routes.NewContact, body: contact,
+		{name: "add contact", method: http.MethodPost, path: routes.NewContact, body: Contacts[0],
 			exp: ExpectedResponse{Code: 200, ResponseBody: map[string]interface{}{
 				"status": types.StatusSuccess,
-				"data":   contactResponse,
+				"data":   utils.ObjToJSONObj(contactResponse),
 			}}},
 		{name: "fetch all contacts", method: http.MethodGet, path: routes.AllContacts,
 			exp: ExpectedResponse{Code: 200, ResponseBody: map[string]interface{}{
 				"status": types.StatusSuccess,
-				"data":   []interface{}{contactResponse},
+				"data":   []interface{}{utils.ObjToJSONObj(contactResponse)},
 			}}},
 	}
-	token := authUser(user)
+	token := authUser(NewUser[0])
 	for i, s := range steps {
 		w := performAuthRequest(router, s.method, s.path, token, toReader(s.body))
 		s.exp.Compare(r, w, getStepString(i, s.name))
@@ -65,16 +58,24 @@ func TestNewContactFlow(t *testing.T) {
 }
 
 func TestAddMultipleContactsFlow(t *testing.T) {
-	cleanupDB := utils.SetupDB("")
+	cleanupDB := utils.SetupDB("../.env", "")
 	defer cleanupDB()
 	preTestSetup()
 	r := require.New(t)
 
-	token := authUser(Users[0])
+	token := authUser(NewUser[0])
+	var contactResponses []models.APIContact
 	for i := range Contacts {
+		cr := models.APIContact{
+			FirstName: Contacts[i].FirstName,
+			LastName:  Contacts[i].LastName,
+			Phone:     Contacts[i].Phone,
+			ID:        uint(i + 2),
+		}
+		contactResponses = append(contactResponses, cr)
 		exp := ExpectedResponse{Code: 200, ResponseBody: map[string]interface{}{
 			"status": types.StatusSuccess,
-			"data":   utils.ObjToJSONObj(Contacts[i]),
+			"data":   utils.ObjToJSONObj(cr),
 		}}
 
 		w := performAuthRequest(router, http.MethodPost, routes.NewContact, token, toReader(Contacts[i]))
@@ -83,7 +84,7 @@ func TestAddMultipleContactsFlow(t *testing.T) {
 
 	exp := ExpectedResponse{Code: 200, ResponseBody: map[string]interface{}{
 		"status": types.StatusSuccess,
-		"data":   utils.ObjToJSONObj(Contacts),
+		"data":   utils.ObjToJSONObj(contactResponses),
 	}}
 
 	w := performAuthRequest(router, http.MethodGet, routes.AllContacts, token, nil)

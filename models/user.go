@@ -10,15 +10,17 @@ import (
 
 type User struct {
 	gorm.Model
-	Username string    `gorm:"size:255;not null;unique" json:"username"`
-	Password string    `gorm:"size:255;not null;" json:"password"`
-	Contacts []Contact `gorm:"foreignKey:Owner"`
-	Events   []Event   `gorm:"foreignKey:Organizer"`
+	Username  string `gorm:"size:255;not null;unique" json:"username"`
+	Password  string `gorm:"size:255;not null;" json:"password"`
+	ContactID int
+	Contact   Contact   `gorm:"foreignKey:ContactID"`
+	Contacts  []Contact `gorm:"foreignKey:Owner"`
+	Events    []Event   `gorm:"foreignKey:Organizer"`
 }
 
 func GetUserByID(uid uint) (User, error) {
 	u := User{}
-	if err := DB.First(&u, uid).Error; err != nil {
+	if err := DB.Preload("Contact").Preload("Contacts").Preload("Events").First(&u, uid).Error; err != nil {
 		return User{}, errors.New("User not found")
 	}
 	return u, nil
@@ -39,7 +41,7 @@ func VerifyPassword(password, hashedPassword string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }
 
-func (u *User) SaveUser() (*User, error) {
+func (u *User) RegisterUser() (*User, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, err
