@@ -12,7 +12,7 @@ import (
 )
 
 func Register(c *gin.Context) {
-	var input types.LoginData
+	var input types.NewUser
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})
@@ -22,8 +22,12 @@ func Register(c *gin.Context) {
 	u := models.User{
 		Username: input.Username,
 		Password: input.Password,
+		Contact: models.Contact{
+			FirstName: input.FirstName,
+			LastName:  input.LastName,
+		},
 	}
-	_, err := u.SaveUser()
+	_, err := u.RegisterUser()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": "failed to save user"})
 		return
@@ -32,7 +36,7 @@ func Register(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	var input types.LoginData
+	var input types.LoginUser
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})

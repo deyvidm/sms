@@ -8,8 +8,17 @@ type Contact struct {
 	gorm.Model
 	FirstName string `gorm:"size:255;not null" json:"first_name"`
 	LastName  string `gorm:"size:255;not null" json:"last_name"`
-	Phone     string `gorm:"size:12;not null;unique" json:"phone"`
+	Phone     string `json:"phone"` // newly-registered users gain a blank Contact which we map to their outgoing messages
 	Owner     uint
+}
+
+func (c *Contact) toAPIContact() APIContact {
+	return APIContact{
+		FirstName: c.FirstName,
+		LastName:  c.LastName,
+		Phone:     c.Phone,
+		ID:        c.ID,
+	}
 }
 
 // used for returning cleaner data structs
@@ -18,6 +27,7 @@ type APIContact struct {
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	Phone     string `json:"phone"`
+	ID        uint   `json:"id"`
 }
 
 func (u *User) AllContacts() ([]APIContact, error) {
@@ -26,10 +36,16 @@ func (u *User) AllContacts() ([]APIContact, error) {
 	return contacts, err
 }
 
-func (u *User) SaveContact(c Contact) (Contact, error) {
+func (u *User) SaveContact(c Contact) (APIContact, error) {
+	var contact Contact
+	DB.Where("phone = ? AND owner = ? ", c.Phone, u.ID).First(&contact)
+	if contact != (Contact{}) {
+		return contact.toAPIContact(), nil
+	}
 	err := DB.Model(u).Association("Contacts").Append([]Contact{c})
 	if err != nil {
-		return Contact{}, err
+		return APIContact{}, err
 	}
-	return c, nil
+	DB.Where("phone = ? AND owner = ? ", c.Phone, u.ID).First(&contact)
+	return contact.toAPIContact(), nil
 }

@@ -27,8 +27,8 @@ func SetupRouter() *gin.Engine {
 // envName is the Environment Variable that holds the SQLite3 database filename
 // we use this function to set up automated tests as well, allowing us to pass in a separate DB for testing
 // it returns a databse cleanup() function that needs to be deferred from main()
-func SetupDB(envName string) func() {
-	loadEnv()
+func SetupDB(envFile, envName string) func() {
+	loadEnv(envFile)
 	dbFilePath := os.Getenv(envName)
 	if len(dbFilePath) < 1 {
 		log.Warnf("MISSING DB FILENAME: |%s| SQLITE WILL RUN IN AMNESIA MODE; YOUR DATA WILL BE LOST AFTER PROGRAM TERMINATION", dbFilePath)
@@ -45,9 +45,9 @@ func SetupDB(envName string) func() {
 	return cleanup
 }
 
-func loadEnv() {
+func loadEnv(envFile string) {
 	// Load Env vars and connect to DB
-	if err := godotenv.Load(".env"); err != nil {
+	if err := godotenv.Load(envFile); err != nil {
 		log.Fatalf("Error loading .env file: %s", err.Error())
 	}
 }

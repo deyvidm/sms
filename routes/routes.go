@@ -17,6 +17,8 @@ const AllContacts = "/contacts"
 const NewEvent = "/events/new"
 const AllEvents = "/events"
 
+const NewMessage = "/messages/new"
+
 func AssignPublicRoutes(router *gin.RouterGroup) {
 	router.GET(Ping, controllers.Pong)
 	router.POST(UserRegister, controllers.Register)
@@ -30,4 +32,6 @@ func AssignPrivateRoutes(router *gin.RouterGroup) {
 
 	router.POST(NewEvent, controllers.NewEvent)
 	router.GET(AllEvents, controllers.AllEvents)
+
+	router.POST(NewMessage, controllers.NewMessage)
 }

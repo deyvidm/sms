@@ -95,7 +95,7 @@ func getStepString(stepNumber int, stepName string) string {
 	return fmt.Sprintf("Error at step %d : \"%s\" ", stepNumber, stepName)
 }
 
-func authUser(user types.LoginData) string {
+func authUser(user types.NewUser) string {
 	performRequest(router, http.MethodPost, routes.UserRegister, toReader(user))
 	w := performRequest(router, http.MethodPost, routes.UserLogin, toReader(user))
 	return getTokenFromLoginResponse(w)
