@@ -32,6 +32,8 @@ func SetupDB(envName string) func() {
 	dbFilePath := os.Getenv(envName)
 	if len(dbFilePath) < 1 {
 		log.Warnf("MISSING DB FILENAME: |%s| SQLITE WILL RUN IN AMNESIA MODE; YOUR DATA WILL BE LOST AFTER PROGRAM TERMINATION", dbFilePath)
+	} else {
+		log.Infof("Using Database file: %s", dbFilePath)
 	}
 	db, cleanup := models.ConnectDB(dbFilePath)
 	// Auto Migrate the database models
@@ -45,7 +47,7 @@ func SetupDB(envName string) func() {
 
 func loadEnv() {
 	// Load Env vars and connect to DB
-	if err := godotenv.Load("../.env"); err != nil {
-		log.Fatalf("Error loading .env file")
+	if err := godotenv.Load(".env"); err != nil {
+		log.Fatalf("Error loading .env file: %s", err.Error())
 	}
 }
