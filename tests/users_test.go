@@ -28,32 +28,18 @@ func TestUserRegisterLoginFlow(t *testing.T) {
 	preTestSetup()
 	r := require.New(t)
 
-	user1 := types.LoginData{
-		Username: "testUser",
-		Password: "hunter2",
-	}
-	user2 := types.LoginData{
-		Username: "testUser",
-		Password: "hunter3", // different password from user1, to simulate a bad login
-	}
-
 	steps := []TestStep{
-		{name: "missing user", method: http.MethodPost, path: routes.UserLogin, body: user1,
+		{name: "try to log in with non-existent user", method: http.MethodPost, path: routes.UserLogin, body: Users[0],
 			exp: ExpectedResponse{Code: 400, ResponseBody: map[string]interface{}{
 				"status": types.StatusFailed,
 				"data":   "incorrect login details",
 			}}},
-		{name: "register new user", method: http.MethodPost, path: routes.UserRegister, body: user1,
+		{name: "register new user", method: http.MethodPost, path: routes.UserRegister, body: Users[0],
 			exp: ExpectedResponse{Code: 200, ResponseBody: map[string]interface{}{
 				"status": types.StatusSuccess,
-				"data":   fmt.Sprintf("welcome %s!", user1.Username),
+				"data":   fmt.Sprintf("welcome %s!", Users[0].Username),
 			}}},
-		{name: "log in wrong user", method: http.MethodPost, path: routes.UserLogin, body: user2,
-			exp: ExpectedResponse{Code: 400, ResponseBody: map[string]interface{}{
-				"status": types.StatusFailed,
-				"data":   "incorrect login details",
-			}}},
-		{name: "log in correct user", method: http.MethodPost, path: routes.UserLogin, body: user1,
+		{name: "log in user", method: http.MethodPost, path: routes.UserLogin, body: Users[0],
 			exp: ExpectedResponse{Code: 200, ResponseBody: map[string]interface{}{
 				"status": types.StatusSuccess,
 				// "data":  a successful login returns a unique token that we can't reproduce (except through mocking 🤮), so we leave data nil

@@ -11,6 +11,20 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestAddContactNoAuth(t *testing.T) {
+	cleanupDB := utils.SetupDB("")
+	defer cleanupDB()
+	preTestSetup()
+	r := require.New(t)
+
+	exp := ExpectedResponse{Code: 401, ResponseBody: map[string]interface{}{
+		"status": types.StatusFailed,
+		"data":   "you need to authenticate for this request",
+	}}
+	w := performAuthRequest(router, http.MethodPost, routes.NewContact, "", toReader(Contacts[0]))
+	exp.Compare(r, w, "add contact without auth")
+}
+
 func TestNewContactFlow(t *testing.T) {
 	cleanupDB := utils.SetupDB("")
 	defer cleanupDB()
@@ -56,46 +70,20 @@ func TestAddMultipleContactsFlow(t *testing.T) {
 	preTestSetup()
 	r := require.New(t)
 
-	user := types.LoginData{
-		Username: "testUser",
-		Password: "hunter2",
-	}
-
-	contacts := []types.NewContactData{
-		{
-			FirstName: "Florian",
-			LastName:  "Degas",
-			Phone:     "+11234567890",
-		},
-		{
-			FirstName: "Sneed",
-			LastName:  "Feedenseed",
-			Phone:     "+11234567891",
-		},
-		{
-			FirstName: "Michael",
-			LastName:  "Pichaelson",
-			Phone:     "+11234567892",
-		},
-	}
-	var allContactResponse map[string]interface{}
-	b, _ := json.Marshal(contacts)
-	json.Unmarshal(b, &allContactResponse)
-
-	token := authUser(user)
-	for i := range contacts {
+	token := authUser(Users[0])
+	for i := range Contacts {
 		exp := ExpectedResponse{Code: 200, ResponseBody: map[string]interface{}{
 			"status": types.StatusSuccess,
-			"data":   utils.ObjToJSONObj(contacts[i]),
+			"data":   utils.ObjToJSONObj(Contacts[i]),
 		}}
 
-		w := performAuthRequest(router, http.MethodPost, routes.NewContact, token, toReader(contacts[i]))
+		w := performAuthRequest(router, http.MethodPost, routes.NewContact, token, toReader(Contacts[i]))
 		exp.Compare(r, w, getStepString(i, "adding contact"))
 	}
 
 	exp := ExpectedResponse{Code: 200, ResponseBody: map[string]interface{}{
 		"status": types.StatusSuccess,
-		"data":   utils.ObjToJSONObj(contacts),
+		"data":   utils.ObjToJSONObj(Contacts),
 	}}
 
 	w := performAuthRequest(router, http.MethodGet, routes.AllContacts, token, nil)
