@@ -23,3 +23,4 @@ go.work
 .env
 sms
 data.db
+app.log
