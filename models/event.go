@@ -60,20 +60,37 @@ func (u *User) OrganizeEvent(eventInput types.NewEvent) error {
 		return err
 	}
 
-	DB.Transaction(func(tx *gorm.DB) error {
-		e := Event{
+	transErr := DB.Transaction(func(tx *gorm.DB) error {
+		event := Event{
 			Title:          eventInput.Title,
 			InvitationBody: eventInput.Invitebody,
 		}
-		if err := tx.Model(u).Association("Events").Append([]Event{e}); err != nil {
+		if err := tx.Model(u).Association("Events").Append([]Event{event}); err != nil {
 			return err
 		}
+
+		var invites []Invite
 		for _, contact := range contacts {
-			// 		a. create invite in db
-			// 		b. enqueue NewOutgoingMessage task
+			invites = append(invites, Invite{
+				Contact: contact,
+				Event:   event,
+			})
+		}
+
+		if err = tx.Create(invites).Error; err != nil {
+			return err
 		}
 		return nil
-	})
+	}).Error()
+
+	if len(transErr) != 0 {
+		return fmt.Errorf(transErr)
+	}
+
+	for _, c := range contacts {
+		// enqueue newMessage task
+	}
+
 	return nil
 }
 
