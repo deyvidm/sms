@@ -31,6 +31,14 @@ func ExtractToken(c *gin.Context) string {
 	return ""
 }
 
+func AsynqAuth(c *gin.Context) error {
+	tokenString := ExtractToken(c)
+	if tokenString != os.Getenv("ASYNQ_SECRET") {
+		return fmt.Errorf("doesn't match ASYNQ_SECRET")
+	}
+	return nil
+}
+
 func TokenValid(c *gin.Context) error {
 	tokenString := ExtractToken(c)
 	_, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/deyvidm/sms-backend/types"
 	"gorm.io/gorm"
 )
 
@@ -21,4 +22,8 @@ type Invite struct {
 	Event     Event  `gorm:"foreignKey:EventID"`
 	Status    string `gorm:"type:text"`
 	Paid      bool
+}
+
+func UpdateInvite(invite types.UpdateInvite) error {
+	return nil
 }

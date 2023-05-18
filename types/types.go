@@ -39,3 +39,8 @@ type NewMessage struct {
 	Content string `json:"content" binding:"required"`
 	To      int    `json:"to" bidnding:"required,num,gt=0"` // this will map to a specific Contact.ID
 }
+
+type UpdateInvite struct {
+	Status string `json:"status" binding:"alpha"`
+	Paid   bool   `json:"paid" binding:"boolean"`
+}
