@@ -1,6 +1,8 @@
 package models
 
 import (
+	"fmt"
+
 	"github.com/deyvidm/sms-backend/types"
 	"gorm.io/gorm"
 )
@@ -24,6 +26,22 @@ type Invite struct {
 	Paid      bool
 }
 
-func UpdateInvite(invite types.UpdateInvite) error {
-	return nil
+func GetInvite(id string) (Invite, error) {
+	var invite Invite
+	DB.Where("id = ?", id).First(&invite)
+	if invite == (Invite{}) {
+		return invite, fmt.Errorf("no invite with ID '%s'", id)
+	}
+	return invite, nil
+
+}
+
+func (i *Invite) Save(invite types.UpdateInvite) error {
+	if invite.Paid != nil {
+		i.Paid = *invite.Paid
+	}
+	if invite.Status != nil {
+		i.Status = *invite.Status
+	}
+	return DB.Save(i).Error
 }

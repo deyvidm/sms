@@ -9,14 +9,20 @@ import (
 )
 
 func UpdateInvite(c *gin.Context) {
+	id := c.Param("invite")
 	var input types.UpdateInvite
+
+	invite, err := models.GetInvite(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})
+	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})
 		return
 	}
 
-	err := models.UpdateInvite(input)
+	err = invite.Save(input)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})
 		return

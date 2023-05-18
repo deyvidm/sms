@@ -35,7 +35,7 @@ func AssignPrivateRoutes(router *gin.RouterGroup) {
 	router.POST(NewMessage, controllers.NewMessage)
 }
 
-const UpdateInvite = "/invite"
+const UpdateInvite = "/invite/:id"
 
 func AssignInternalRoutes(router *gin.RouterGroup) {
 	router.PUT(UpdateInvite, controllers.UpdateInvite)

@@ -40,7 +40,8 @@ type NewMessage struct {
 	To      int    `json:"to" bidnding:"required,num,gt=0"` // this will map to a specific Contact.ID
 }
 
+// pointers because we want to allow asynq to http.PUT Status without forcing defaults on Paid
 type UpdateInvite struct {
-	Status string `json:"status" binding:"alpha"`
-	Paid   bool   `json:"paid" binding:"boolean"`
+	Status *string `json:"status" binding:"alpha"`
+	Paid   *bool   `json:"paid" binding:"boolean"`
 }
