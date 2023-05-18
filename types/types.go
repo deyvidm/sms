@@ -42,6 +42,6 @@ type NewMessage struct {
 
 // pointers because we want to allow asynq to http.PUT Status without forcing defaults on Paid
 type UpdateInvite struct {
-	Status *string `json:"status" binding:"alpha"`
-	Paid   *bool   `json:"paid" binding:"boolean"`
+	Status *string `json:"status,omitempty" binding:"alpha"`
+	Paid   *bool   `json:"paid,omitempty" binding:"boolean"`
 }

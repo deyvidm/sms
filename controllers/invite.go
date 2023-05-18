@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/deyvidm/sms-backend/models"
@@ -10,7 +11,6 @@ import (
 
 func UpdateInvite(c *gin.Context) {
 	id := c.Param("id")
-	var input types.UpdateInvite
 
 	invite, err := models.GetInvite(id)
 	if err != nil {
@@ -18,7 +18,15 @@ func UpdateInvite(c *gin.Context) {
 		return
 	}
 
-	if err := c.ShouldBindJSON(&input); err != nil {
+	bytes, err := c.GetRawData()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})
+		return
+	}
+
+	var input types.UpdateInvite
+	err = json.Unmarshal(bytes, &input)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})
 		return
 	}
