@@ -2,8 +2,10 @@ package models
 
 import (
 	"database/sql/driver"
+	"fmt"
 	"time"
 
+	"github.com/deyvidm/sms-backend/types"
 	"gorm.io/gorm"
 )
 
@@ -41,13 +43,37 @@ type EventAPI struct {
 	Title string `json:"title"`
 }
 
-func (u *User) OrganizeEvent(event Event) error {
-	// 1. open SQL transaction
-	// 2. create Event
-	// 3. for each contact
-	// 		a. create Invitation
-	// 		b. queue NewMessage Event to asynq
-	// submit transaction
+func fetchContacts(owner *User, contactIDs []string) ([]Contact, error) {
+	// get all contacts where id in {} and owner=user
+	var contacts []Contact
+	DB.Where("id IN ? AND owner = ? ", contactIDs, owner.ID).Find(&contacts)
+	if len(contactIDs) != len(contacts) {
+		return nil, fmt.Errorf("missing contacts: searched for %d but only found %d", len(contactIDs), len(contacts))
+	}
+
+	return contacts, nil
+}
+
+func (u *User) OrganizeEvent(eventInput types.NewEvent) error {
+	contacts, err := fetchContacts(u, eventInput.Contacts)
+	if err != nil {
+		return err
+	}
+
+	DB.Transaction(func(tx *gorm.DB) error {
+		e := Event{
+			Title:          eventInput.Title,
+			InvitationBody: eventInput.Invitebody,
+		}
+		if err := tx.Model(u).Association("Events").Append([]Event{e}); err != nil {
+			return err
+		}
+		for _, contact := range contacts {
+			// 		a. create invite in db
+			// 		b. enqueue NewOutgoingMessage task
+		}
+		return nil
+	})
 	return nil
 }
 
