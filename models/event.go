@@ -1,31 +1,22 @@
 package models
 
 import (
-	"database/sql/driver"
 	"fmt"
+	"log"
 	"time"
 
+	"github.com/deyvidm/sms-asynq/task"
 	"github.com/deyvidm/sms-backend/types"
+	"github.com/hibiken/asynq"
 	"gorm.io/gorm"
 )
 
-type EventStatus string
-
 const (
-	EventStatus_Upcoming  EventStatus = "upcoming"
-	EventStatus_Active    EventStatus = "active"
-	EventStatus_Completed EventStatus = "completed"
-	EventStatus_Cancelled EventStatus = "cancelled"
+	EventStatus_Upcoming  = "upcoming"
+	EventStatus_Active    = "active"
+	EventStatus_Completed = "completed"
+	EventStatus_Cancelled = "cancelled"
 )
-
-func (e *EventStatus) Scan(value interface{}) error {
-	*e = EventStatus(value.([]byte))
-	return nil
-}
-
-func (e EventStatus) Value() (driver.Value, error) {
-	return string(e), nil
-}
 
 type Event struct {
 	gorm.Model
@@ -36,7 +27,7 @@ type Event struct {
 	StartDate      *time.Time `gorm:"type:datetime"`
 	EndDate        *time.Time `gorm:"type:datetime"`
 	InviteDate     *time.Time `gorm:"type:datetime"`
-	Status         EventStatus
+	Status         string     `gorm:"type:text"`
 }
 
 type EventAPI struct {
@@ -55,47 +46,46 @@ func fetchContacts(owner *User, contactIDs []string) ([]Contact, error) {
 }
 
 func (u *User) OrganizeEvent(eventInput types.NewEvent) error {
+	asynqClient := asynq.NewClient(asynq.RedisClientOpt{Addr: "localhost:6379"})
 	contacts, err := fetchContacts(u, eventInput.Contacts)
 	if err != nil {
 		return err
 	}
 
-	transErr := DB.Transaction(func(tx *gorm.DB) error {
+	return DB.Transaction(func(tx *gorm.DB) error {
 		event := Event{
 			Title:          eventInput.Title,
+			Organizer:      u.ID,
 			InvitationBody: eventInput.Invitebody,
+			Status:         EventStatus_Active,
 		}
-		if err := tx.Model(u).Association("Events").Append([]Event{event}); err != nil {
-			return err
-		}
-
 		var invites []Invite
 		for _, contact := range contacts {
 			invites = append(invites, Invite{
 				Contact: contact,
 				Event:   event,
+				Status:  InviteStatus_Sending,
 			})
 		}
-
-		if err = tx.Create(invites).Error; err != nil {
+		if err := tx.Create(invites).Error; err != nil {
 			return err
 		}
+
+		for _, c := range contacts {
+			t, err := task.NewNewMessageTask(c.Phone, eventInput.Invitebody)
+			if err != nil {
+				return err
+			}
+
+			taskInfo, err := asynqClient.Enqueue(t)
+			if err != nil {
+				return err
+			}
+
+			log.Printf("enqued task %s | inviting %s to %s...", taskInfo.ID, c.Phone, eventInput.Title)
+		}
 		return nil
-	}).Error()
-
-	if len(transErr) != 0 {
-		return fmt.Errorf(transErr)
-	}
-
-	for _, c := range contacts {
-		// enqueue newMessage task
-	}
-
-	return nil
-}
-
-func (u *User) SaveEvent(event Event) error {
-	return DB.Model(u).Association("Events").Append([]Event{event})
+	})
 }
 
 func (u *User) AllEvents() (events []EventAPI, err error) {

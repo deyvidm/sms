@@ -3,7 +3,6 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/deyvidm/sms-backend/models"
 	"github.com/deyvidm/sms-backend/types"
 	"github.com/gin-gonic/gin"
 )
@@ -36,19 +35,10 @@ func NewEvent(c *gin.Context) {
 		return
 	}
 
-	err = organizeEvent(user, input)
+	err = user.OrganizeEvent(input)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"status": types.StatusSuccess, "data": input})
-}
-
-func organizeEvent(u models.User, e types.NewEvent) error {
-	err := u.SaveEvent(models.Event{
-		Title:          e.Title,
-		InvitationBody: e.Invitebody,
-		Status:         models.EventStatus_Active,
-	})
-	return err
 }
