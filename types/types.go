@@ -28,7 +28,11 @@ type NewContact struct {
 }
 
 type NewEvent struct {
-	Ttile string `json:"title" binding:"required,max=255"`
+	Title      string   `json:"title" binding:"required,max=255"`
+	Invitebody string   `json:"invite_body" binding:"required"`
+	Contacts   []string `json:"contacts" biding:"required"`
+	//TODO start/end/invite Dates
+	// capacity
 }
 
 type NewMessage struct {

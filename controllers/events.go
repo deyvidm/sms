@@ -36,12 +36,19 @@ func NewEvent(c *gin.Context) {
 		return
 	}
 
-	err = user.SaveEvent(models.Event{
-		Title: input.Ttile,
-	})
+	err = organizeEvent(user, input)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"status": types.StatusSuccess, "data": input})
+}
+
+func organizeEvent(u models.User, e types.NewEvent) error {
+	err := u.SaveEvent(models.Event{
+		Title:          e.Title,
+		InvitationBody: e.Invitebody,
+		Status:         models.EventStatus_Active,
+	})
+	return err
 }
