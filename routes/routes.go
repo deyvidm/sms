@@ -5,6 +5,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const APIPrefix = "/api"
+
+const PublicPrefix = APIPrefix
 const Ping = "/ping"
 const UserLogin = "/users/login"
 const UserRegister = "/users/register"
@@ -15,6 +18,8 @@ func AssignPublicRoutes(router *gin.RouterGroup) {
 	router.POST(UserRegister, controllers.Register)
 	router.POST(UserLogin, controllers.Login)
 }
+
+const PrivatePrefix = APIPrefix
 
 const NewContact = "/contacts/new"
 const AllContacts = "/contacts"
@@ -34,6 +39,8 @@ func AssignPrivateRoutes(router *gin.RouterGroup) {
 
 	router.POST(NewMessage, controllers.NewMessage)
 }
+
+const InternalPrefix = APIPrefix + "/internal"
 
 const UpdateInvite = "/invite/:id"
 
