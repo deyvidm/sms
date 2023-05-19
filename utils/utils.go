@@ -3,6 +3,8 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
+	"unicode"
 )
 
 func Ptr[T any](v T) *T {
@@ -24,4 +26,26 @@ func Contains[T comparable](s []T, e T) bool {
 		}
 	}
 	return false
+}
+
+func IsAllNumeric(term string) bool {
+	_, err := strconv.Atoi(term)
+	return err == nil
+}
+
+func IsAllAlpha(term string) bool {
+	for _, ch := range term {
+		if !unicode.IsLetter(ch) {
+			return false
+		}
+	}
+	return true
+}
+
+func ParseFloat64(str string) (float64, error) {
+	result, err := strconv.ParseFloat(str, 64)
+	if err != nil {
+		return 0, err
+	}
+	return result, nil
 }

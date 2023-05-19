@@ -37,18 +37,9 @@ func (md *MessageDispatcher) HandleSendInviteTask(ctx context.Context, t *asynq.
 		return err
 	}
 
-	// invites, err := md.fetchAllInvites(p.ToPhoneNumber)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// if len(invites) > 1
-
-	// md.fetchContactInvites(p.ToPhoneNumber)
-	// return nil
 	logger.Infof("Sending invite '%s'", p.InviteID)
 	return md.wbc.UpdateInvite(client.UpdateInvite{
 		ID:     p.InviteID,
-		Status: utils.Ptr(types.InviteStatus_Invited),
+		Status: utils.Ptr(types.InviteStatus_Invited.String()),
 	})
 }

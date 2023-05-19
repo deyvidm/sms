@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 
+	"github.com/deyvidm/sms-asynq/types"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -20,7 +21,24 @@ func (irs *InviteResponseStore) SaveNewInviteEntry(phone, inviteID string) error
 	return irs.addValToOrderedSet(phone, inviteID)
 }
 
-func (irs *InviteResponseStore) FetchAllInvites(phone string) (map[float64]string, error) {
+func (irs *InviteResponseStore) FetchTargetInviteID(contactID string, parsedResponse types.ResponseInfo) (string, error) {
+	invites, err := irs.fetchAllInvites(contactID)
+	if err != nil {
+		return "", err
+	}
+	if len(invites) == 1 {
+		for _, inv := range invites {
+			return inv, nil
+		}
+	}
+
+	if parsedResponse.TargetInviteKey == nil {
+		return "", types.MissingKeyError{PendingInvites: len(invites)}
+	}
+	return invites[*parsedResponse.TargetInviteKey], nil
+}
+
+func (irs *InviteResponseStore) fetchAllInvites(phone string) (map[float64]string, error) {
 	return irs.getMapFromOrderedSet(phone)
 }
 

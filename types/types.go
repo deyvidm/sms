@@ -1,10 +1,19 @@
 package types
 
-const (
-	InviteStatus_Sending   = "sending"
-	InviteStatus_Invited   = "invited"
-	InviteStatus_Accepted  = "accepted"
-	InviteStatus_Declined  = "declined"
-	InviteStatus_Waitlist  = "waitlist"
-	InviteStatus_Uninvited = "uninvited"
-)
+type InviteStatus string
+
+var InviteStatus_Sending InviteStatus = "sending"
+var InviteStatus_Invited InviteStatus = "invited"
+var InviteStatus_Accepted InviteStatus = "accepted"
+var InviteStatus_Declined InviteStatus = "declined"
+var InviteStatus_Waitlist InviteStatus = "waitlist"
+var InviteStatus_Uninvited InviteStatus = "uninvited"
+
+func (s InviteStatus) String() string {
+	return string(s)
+}
+
+type ResponseInfo struct {
+	Status          *InviteStatus
+	TargetInviteKey *float64
+}
