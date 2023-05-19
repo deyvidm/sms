@@ -1,9 +1,13 @@
 package main
 
 import (
+	"os"
+
+	"github.com/deyvidm/sms-asynq/client"
 	"github.com/deyvidm/sms-asynq/log"
 	"github.com/deyvidm/sms-asynq/task"
 	"github.com/hibiken/asynq"
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -16,11 +20,21 @@ func main() {
 			Logger:      logger,
 		},
 	)
+	if err := godotenv.Load("../.env"); err != nil {
+		logger.Fatal(err)
+	}
+	backendClient := client.WBC.New(os.Getenv("SECRET"))
+	dispatcher := task.NewMessageDispatcher(backendClient)
 
 	mux := asynq.NewServeMux()
-	mux.HandleFunc(task.TypeNewMessage, task.HandleNewMessageTask)
+	mux.HandleFunc(task.TypeNewMessage, dispatcher.HandleNewMessageTask)
 
 	if err := srv.Run(mux); err != nil {
 		logger.Fatal(err)
 	}
+}
+
+func loadEnv(envFile string) error {
+	// Load Env vars and connect to DB
+	return godotenv.Load(envFile)
 }
