@@ -7,6 +7,8 @@ import (
 	"github.com/deyvidm/sms-asynq/client"
 	"github.com/deyvidm/sms-asynq/log"
 	"github.com/deyvidm/sms-asynq/tasks"
+	"github.com/deyvidm/sms-asynq/types"
+	"github.com/deyvidm/sms-asynq/utils"
 	"github.com/hibiken/asynq"
 )
 
@@ -44,11 +46,9 @@ func (md *MessageDispatcher) HandleSendInviteTask(ctx context.Context, t *asynq.
 
 	// md.fetchContactInvites(p.ToPhoneNumber)
 	// return nil
-	logger.Info("Sending invite '%s'", p.InviteID)
-	// return md.wbc.UpdateInvite(&client.UpdateInvite{
-	// 	ID:     p.InviteID,
-	// 	Status: utils.Ptr(types.InviteStatus_Invited),
-	// })
-
-	return nil
+	logger.Infof("Sending invite '%s'", p.InviteID)
+	return md.wbc.UpdateInvite(client.UpdateInvite{
+		ID:     p.InviteID,
+		Status: utils.Ptr(types.InviteStatus_Invited),
+	})
 }
