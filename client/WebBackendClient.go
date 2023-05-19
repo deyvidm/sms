@@ -17,8 +17,8 @@ type WebBackendClient struct {
 	client      *http.Client
 }
 
-func New(BearerToken string) WebBackendClient {
-	return WebBackendClient{
+func New(BearerToken string) *WebBackendClient {
+	return &WebBackendClient{
 		BearerToken: BearerToken,
 		Address:     defaultAddress,
 		client:      &http.Client{},
