@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/deyvidm/sms-asynq/tasks"
 	"github.com/deyvidm/sms-backend/models"
 	"github.com/deyvidm/sms-backend/types"
 	"github.com/gin-gonic/gin"
@@ -24,8 +25,21 @@ func ReceiveSNS(c *gin.Context) {
 
 	_, err = e.Save()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": "failed to save user"})
+		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err})
 		return
 	}
+
+	t, err := tasks.NewReponseTask(e.Message.OriginationNumber, e.Message.MessageBody)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err})
+		return
+	}
+	ac := GetAsynqClient()
+	_, err = ac.Enqueue(t)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"status": types.StatusSuccess, "data": e})
 }

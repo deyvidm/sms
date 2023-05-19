@@ -3,7 +3,7 @@ module github.com/deyvidm/sms-backend
 go 1.19
 
 require (
-	github.com/deyvidm/sms-asynq v0.0.0-20230519095535-1d0926882b64
+	github.com/deyvidm/sms-asynq v0.0.0-20230519152828-8be49b798c9c
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.7.7
 	github.com/hibiken/asynq v0.24.1
