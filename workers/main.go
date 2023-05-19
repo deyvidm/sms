@@ -23,7 +23,7 @@ func main() {
 	if err := godotenv.Load("../.env"); err != nil {
 		logger.Fatal(err)
 	}
-	backendClient := client.WBC.New(os.Getenv("SECRET"))
+	backendClient := client.New(os.Getenv("SECRET"))
 	dispatcher := task.NewMessageDispatcher(backendClient)
 
 	mux := asynq.NewServeMux()
@@ -32,9 +32,4 @@ func main() {
 	if err := srv.Run(mux); err != nil {
 		logger.Fatal(err)
 	}
-}
-
-func loadEnv(envFile string) error {
-	// Load Env vars and connect to DB
-	return godotenv.Load(envFile)
 }

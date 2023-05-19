@@ -15,10 +15,8 @@ type WebBackendClient struct {
 	client      *http.Client
 }
 
-var WBC WebBackendClient
-
-func (wbc *WebBackendClient) New(BearerToken string) WebBackendClient {
-	WBC = WebBackendClient{
+func New(BearerToken string) WebBackendClient {
+	return WebBackendClient{
 		BearerToken: BearerToken,
 		Address:     defaultAddress,
 		client:      &http.Client{},
@@ -32,6 +30,9 @@ type UpdateInvite struct {
 
 func (wbc *WebBackendClient) UpdateInvite(invite *UpdateInvite) error {
 	bod, err := json.Marshal(invite)
+	if err != nil {
+		return err
+	}
 	req, err := http.NewRequest(http.MethodPut, wbc.Address, bytes.NewBuffer(bod))
 	if err != nil {
 		fmt.Println("Error creating request:", err)
