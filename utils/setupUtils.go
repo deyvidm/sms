@@ -14,12 +14,16 @@ import (
 
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
-	public := router.Group("")
+	public := router.Group(routes.PublicPrefix)
 	routes.AssignPublicRoutes(public)
 
-	private := router.Group("")
+	private := router.Group(routes.PrivatePrefix)
 	private.Use(middleware.AuthJWT())
 	routes.AssignPrivateRoutes(private)
+
+	internal := router.Group(routes.InternalPrefix)
+	internal.Use(middleware.AuthAsynq())
+	routes.AssignInternalRoutes(internal)
 
 	return router
 }

@@ -28,10 +28,20 @@ type NewContact struct {
 }
 
 type NewEvent struct {
-	Ttile string `json:"title" binding:"required,max=255"`
+	Title      string   `json:"title" binding:"required,max=255"`
+	Invitebody string   `json:"invite_body" binding:"required"`
+	Contacts   []string `json:"contacts" biding:"required"`
+	//TODO start/end/invite Dates
+	// capacity
 }
 
 type NewMessage struct {
 	Content string `json:"content" binding:"required"`
 	To      int    `json:"to" bidnding:"required,num,gt=0"` // this will map to a specific Contact.ID
+}
+
+// pointers because we want to allow asynq to http.PUT Status without forcing defaults on Paid
+type UpdateInvite struct {
+	Status *string `json:"status,omitempty" binding:"alpha"`
+	Paid   *bool   `json:"paid,omitempty" binding:"boolean"`
 }
