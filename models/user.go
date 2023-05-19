@@ -4,21 +4,20 @@ import (
 	"errors"
 
 	"github.com/deyvidm/sms-backend/auth"
-	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
-	gorm.Model
+	BaseModel
 	Username  string `gorm:"size:255;not null;unique" json:"username"`
 	Password  string `gorm:"size:255;not null;" json:"password"`
-	ContactID int
+	ContactID string
 	Contact   Contact   `gorm:"foreignKey:ContactID"`
 	Contacts  []Contact `gorm:"foreignKey:Owner"`
-	Events    []Event   `gorm:"foreignKey:Organizer"`
+	Events    []Event   `gorm:"foreignKey:OrganizerID"`
 }
 
-func GetUserByID(uid uint) (User, error) {
+func GetUserByID(uid string) (User, error) {
 	u := User{}
 	if err := DB.Preload("Contact").Preload("Contacts").Preload("Events").First(&u, uid).Error; err != nil {
 		return User{}, errors.New("User not found")

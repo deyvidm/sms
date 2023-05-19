@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/deyvidm/sms-backend/types"
-	"gorm.io/gorm"
 )
 
 const (
@@ -17,10 +16,10 @@ const (
 )
 
 type Invite struct {
-	gorm.Model
-	ContactID uint
+	BaseModel
+	ContactID string
 	Contact   Contact `gorm:"foreignKey:ContactID"`
-	EventID   uint
+	EventID   string
 	Event     Event  `gorm:"foreignKey:EventID"`
 	Status    string `gorm:"type:text"`
 	Paid      bool
