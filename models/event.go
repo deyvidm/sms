@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/deyvidm/sms-asynq/task"
+	"github.com/deyvidm/sms-asynq/tasks"
 	"github.com/deyvidm/sms-backend/types"
 	"github.com/hibiken/asynq"
 	"gorm.io/gorm"
@@ -72,7 +72,7 @@ func (u *User) OrganizeEvent(eventInput types.NewEvent) error {
 		}
 
 		for _, inv := range invites {
-			t, err := task.NewNewMessageTask(inv.ID, inv.Contact.Phone, eventInput.Invitebody)
+			t, err := tasks.NewInviteTask(inv.ID, inv.Contact.Phone, eventInput.Invitebody)
 			if err != nil {
 				return err
 			}
