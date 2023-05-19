@@ -1,6 +1,7 @@
 package models
 
 import (
+	log "github.com/sirupsen/logrus"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -16,6 +17,7 @@ func SetupDB(db *gorm.DB) error {
 	}
 
 	for _, m := range MODELS {
+		log.Info("Auto migrating ", m)
 		if err := db.AutoMigrate(m); err != nil {
 			return err
 		}
@@ -31,9 +33,6 @@ func ConnectDB(dbFile string) (*gorm.DB, func()) {
 	if err != nil {
 		panic("failed to connect database")
 	}
-
-	// Auto Migrate the struct
-	db.AutoMigrate(&User{})
 
 	// Return a closure to close the database connection
 	cleanup := func() {

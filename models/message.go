@@ -4,13 +4,12 @@ import (
 	"fmt"
 
 	"github.com/deyvidm/sms-backend/types"
-	"github.com/jinzhu/gorm"
 )
 
 type Message struct {
-	gorm.Model
-	SenderID    uint
-	RecipientID uint
+	BaseModel
+	SenderID    string
+	RecipientID string
 	From        Contact `gorm:"not null;foreignKey:SenderID"`
 	To          Contact `gorm:"not null;foreignKey:RecipientID"`
 	Body        string

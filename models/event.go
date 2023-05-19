@@ -19,8 +19,8 @@ const (
 )
 
 type Event struct {
-	gorm.Model
-	Organizer      uint
+	BaseModel
+	OrganizerID    string
 	Title          string
 	InvitationBody string
 	TargetCapacity int
@@ -55,7 +55,7 @@ func (u *User) OrganizeEvent(eventInput types.NewEvent) error {
 	return DB.Transaction(func(tx *gorm.DB) error {
 		event := Event{
 			Title:          eventInput.Title,
-			Organizer:      u.ID,
+			OrganizerID:    u.ID,
 			InvitationBody: eventInput.Invitebody,
 			Status:         EventStatus_Active,
 		}
@@ -71,8 +71,8 @@ func (u *User) OrganizeEvent(eventInput types.NewEvent) error {
 			return err
 		}
 
-		for _, c := range contacts {
-			t, err := task.NewNewMessageTask(c.Phone, eventInput.Invitebody)
+		for _, inv := range invites {
+			t, err := task.NewNewMessageTask(inv.ID, inv.Contact.Phone, eventInput.Invitebody)
 			if err != nil {
 				return err
 			}
@@ -82,7 +82,7 @@ func (u *User) OrganizeEvent(eventInput types.NewEvent) error {
 				return err
 			}
 
-			log.Printf("enqued task %s | inviting %s to %s...", taskInfo.ID, c.Phone, eventInput.Title)
+			log.Printf("enqued task %s | inviting %s to %s...", taskInfo.ID, inv.Contact.Phone, eventInput.Title)
 		}
 		return nil
 	})
