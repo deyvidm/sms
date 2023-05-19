@@ -7,23 +7,20 @@ import (
 	"github.com/deyvidm/sms-asynq/client"
 	"github.com/deyvidm/sms-asynq/log"
 	"github.com/deyvidm/sms-asynq/tasks"
-	"github.com/deyvidm/sms-asynq/types"
-	"github.com/deyvidm/sms-asynq/utils"
 	"github.com/hibiken/asynq"
-	"github.com/redis/go-redis/v9"
 )
 
 var logger = log.GetLogger()
 
 type MessageDispatcher struct {
 	wbc *client.WebBackendClient
-	rdb *redis.Client
+	irs *client.InviteResponseStore
 }
 
-func NewMessageDispatcher(wbc *client.WebBackendClient, rdb *redis.Client) *MessageDispatcher {
+func NewMessageDispatcher(wbc *client.WebBackendClient, irs *client.InviteResponseStore) *MessageDispatcher {
 	return &MessageDispatcher{
 		wbc: wbc,
-		rdb: rdb,
+		irs: irs,
 	}
 }
 
@@ -34,9 +31,24 @@ func (md *MessageDispatcher) HandleSendInviteTask(ctx context.Context, t *asynq.
 		return err
 	}
 
+	if err := md.irs.SaveNewInviteEntry(p.ToPhoneNumber, p.InviteID); err != nil {
+		return err
+	}
+
+	// invites, err := md.fetchAllInvites(p.ToPhoneNumber)
+	// if err != nil {
+	// 	return err
+	// }
+
+	// if len(invites) > 1
+
+	// md.fetchContactInvites(p.ToPhoneNumber)
+	// return nil
 	logger.Info("Sending invite '%s'", p.InviteID)
-	return md.wbc.UpdateInvite(&client.UpdateInvite{
-		ID:     p.InviteID,
-		Status: utils.Ptr(types.InviteStatus_Invited),
-	})
+	// return md.wbc.UpdateInvite(&client.UpdateInvite{
+	// 	ID:     p.InviteID,
+	// 	Status: utils.Ptr(types.InviteStatus_Invited),
+	// })
+
+	return nil
 }

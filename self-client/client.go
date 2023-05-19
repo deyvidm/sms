@@ -16,11 +16,11 @@ func main() {
 
 	var t *asynq.Task
 
-	t, _ = tasks.NewInviteTask("123", "+11234567890", "tiger butts")
+	t, _ = tasks.NewInviteTask("inviteID123", "+11234567890", "tiger butts")
 	logAndEnqueue(client, t)
 
-	t, _ = tasks.NewReponseTask("+11234567890", "YOOO")
-	logAndEnqueue(client, t)
+	// t, _ = tasks.NewReponseTask("+11234567890", "YOOO")
+	// logAndEnqueue(client, t)
 
 }
 
