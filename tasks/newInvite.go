@@ -16,7 +16,7 @@ type SendInvitePayload struct {
 	Content       string
 }
 
-func SendInviteTask(inviteID string, toPhoneNumber, content string) (*asynq.Task, error) {
+func NewInviteTask(inviteID string, toPhoneNumber, content string) (*asynq.Task, error) {
 	payload, err := json.Marshal(SendInvitePayload{InviteID: inviteID, ToPhoneNumber: toPhoneNumber, Content: content})
 	if err != nil {
 		return nil, err
