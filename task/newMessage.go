@@ -16,12 +16,13 @@ const (
 var logger = log.GetLogger()
 
 type NewMessagePayload struct {
+	InviteID      string
 	ToPhoneNumber string
 	Content       string
 }
 
-func NewNewMessageTask(ToPhoneNumber, Content string) (*asynq.Task, error) {
-	payload, err := json.Marshal(NewMessagePayload{ToPhoneNumber: ToPhoneNumber, Content: Content})
+func NewNewMessageTask(inviteID, toPhoneNumber, content string) (*asynq.Task, error) {
+	payload, err := json.Marshal(NewMessagePayload{InviteID: inviteID, ToPhoneNumber: toPhoneNumber, Content: content})
 	if err != nil {
 		return nil, err
 	}
@@ -50,6 +51,7 @@ func (md *MessageDispatcher) HandleNewMessageTask(ctx context.Context, t *asynq.
 	}
 	logger.Printf("Sending message '%s' to '%s'", p.Content, p.ToPhoneNumber)
 	md.wbc.UpdateInvite(&client.UpdateInvite{
+		ID:     p.InviteID,
 		Status: Ptr("invited"),
 	})
 	return nil

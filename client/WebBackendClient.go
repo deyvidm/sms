@@ -24,12 +24,14 @@ func New(BearerToken string) WebBackendClient {
 }
 
 type UpdateInvite struct {
+	ID     string  `json:"-"`
 	Status *string `json:"status,omitempty"`
 	Paid   *bool   `json:"paid,omitempty"`
 }
 
 func (wbc *WebBackendClient) UpdateInvite(invite *UpdateInvite) error {
-	url := "/api/internal/invite/1"
+	url := "/api/internal/invite/" + invite.ID
+	fmt.Println("shooting to ", url)
 	bod, err := json.Marshal(invite)
 	if err != nil {
 		return err
