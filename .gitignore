@@ -21,3 +21,4 @@
 go.work
 app.log
 dump.rdb
+.env
