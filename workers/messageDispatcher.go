@@ -24,9 +24,9 @@ func NewMessageDispatcher(wbc client.WebBackendClient) *MessageDispatcher {
 	}
 }
 
-func (md *MessageDispatcher) HandleNewMessageTask(ctx context.Context, t *asynq.Task) error {
+func (md *MessageDispatcher) HandleSendInviteTask(ctx context.Context, t *asynq.Task) error {
 	logger.Infof("Received task %s with ID %s", t.Type(), t.ResultWriter().TaskID())
-	var p tasks.NewMessagePayload
+	var p tasks.SendInvitePayload
 	if err := json.Unmarshal(t.Payload(), &p); err != nil {
 		return err
 	}

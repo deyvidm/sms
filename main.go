@@ -28,7 +28,7 @@ func main() {
 	dispatcher := workers.NewMessageDispatcher(backendClient)
 
 	mux := asynq.NewServeMux()
-	mux.HandleFunc(tasks.TypeNewMessage, dispatcher.HandleNewMessageTask)
+	mux.HandleFunc(tasks.TypeNewInvite, dispatcher.HandleSendInviteTask)
 
 	if err := srv.Run(mux); err != nil {
 		logger.Fatal(err)

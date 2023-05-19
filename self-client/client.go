@@ -11,7 +11,7 @@ func main() {
 	logger.Info("Test Client initiated")
 	client := asynq.NewClient(asynq.RedisClientOpt{Addr: "localhost:6379"})
 
-	t1, err := tasks.NewNewMessageTask("123", "+11234567890", "tiger butts")
+	t1, err := tasks.SendInviteTask("123", "+11234567890", "tiger butts")
 	if err != nil {
 		logger.Fatal(err)
 	}
