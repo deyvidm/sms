@@ -27,14 +27,14 @@ curl \
   -H 'Content-Type: application/json' \
   -H "Accept: application/json" \
   -H 'Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE2ODI1NjU1MjcsImlkIjoicWdkY3AxdjZwOWptZ3lyIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.uuQrSviPGz5gEd9EvTuM4gmWZ0FG9AUsc2-tbKh3y6w' \
-  -X POST --data "$(generate_post_data)" http://127.0.0.1:8090/api/respond
+  -X POST --data "$(generate_post_data)" http://127.0.0.1:8080/api/respond
 
 # curl 'http://127.0.0.1:8090/api/respond' \
 # -X POST \
 # -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/110.0' \
 # -H 'Accept: */*' \
 # -H 'Accept-Language: en-US' \
-# -H 'Accept-Encoding: gzip, deflate, br' \
+# -H 'Accept-Encoding: gzip, deflate,   br' \
 # -H 'Content-Type: application/json' \
 # -H 'Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE2ODI1NjU1MjcsImlkIjoicWdkY3AxdjZwOWptZ3lyIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.uuQrSviPGz5gEd9EvTuM4gmWZ0FG9AUsc2-tbKh3y6w' \
 # -H 'Origin: http://localhost:5173' \

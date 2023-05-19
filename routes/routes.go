@@ -8,15 +8,20 @@ import (
 const APIPrefix = "/api"
 
 const PublicPrefix = APIPrefix
+
 const Ping = "/ping"
+
 const UserLogin = "/users/login"
 const UserRegister = "/users/register"
 const CurrentUser = "/user"
+
+const SNSEvent = "/respond"
 
 func AssignPublicRoutes(router *gin.RouterGroup) {
 	router.GET(Ping, controllers.Pong)
 	router.POST(UserRegister, controllers.Register)
 	router.POST(UserLogin, controllers.Login)
+	router.POST(SNSEvent, controllers.ReceiveSNS)
 }
 
 const PrivatePrefix = APIPrefix

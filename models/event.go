@@ -45,6 +45,14 @@ func fetchContacts(owner *User, contactIDs []string) ([]Contact, error) {
 	return contacts, nil
 }
 
+func EventFromInput(e types.NewEvent) Event {
+	return Event{
+		Title:          e.Title,
+		InvitationBody: e.Invitebody,
+		Status:         EventStatus_Active,
+	}
+}
+
 func (u *User) OrganizeEvent(eventInput types.NewEvent) error {
 	asynqClient := asynq.NewClient(asynq.RedisClientOpt{Addr: "localhost:6379"})
 	contacts, err := fetchContacts(u, eventInput.Contacts)
@@ -53,12 +61,9 @@ func (u *User) OrganizeEvent(eventInput types.NewEvent) error {
 	}
 
 	return DB.Transaction(func(tx *gorm.DB) error {
-		event := Event{
-			Title:          eventInput.Title,
-			OrganizerID:    u.ID,
-			InvitationBody: eventInput.Invitebody,
-			Status:         EventStatus_Active,
-		}
+		event := EventFromInput(eventInput)
+		event.OrganizerID = u.ID
+
 		var invites []Invite
 		for _, contact := range contacts {
 			invites = append(invites, Invite{
