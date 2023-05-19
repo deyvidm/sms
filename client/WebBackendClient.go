@@ -17,8 +17,8 @@ type WebBackendClient struct {
 	client      *http.Client
 }
 
-func New(BearerToken string) WebBackendClient {
-	return WebBackendClient{
+func NewWebBackendClient(BearerToken string) *WebBackendClient {
+	return &WebBackendClient{
 		BearerToken: BearerToken,
 		Address:     defaultAddress,
 		client:      &http.Client{},
@@ -33,9 +33,9 @@ type UpdateInvite struct {
 
 var logger = log.GetLogger()
 
-func (wbc *WebBackendClient) UpdateInvite(invite *UpdateInvite) error {
+func (wbc *WebBackendClient) UpdateInvite(invite UpdateInvite) error {
 	url := "/api/internal/invite/" + invite.ID
-	logger.Infof("updating invite %s", invite.ID)
+	logger.Infof("updating invite %s with %s", invite.ID, *invite.Status)
 	bod, err := json.Marshal(invite)
 	if err != nil {
 		return err
@@ -55,7 +55,7 @@ func (wbc *WebBackendClient) UpdateInvite(invite *UpdateInvite) error {
 	}
 	defer resp.Body.Close()
 
-	if resp.Status != fmt.Sprint(http.StatusOK) {
+	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("got %s Response trying to update %s", resp.Status, invite.ID)
 	}
 	return nil

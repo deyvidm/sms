@@ -4,20 +4,28 @@ import (
 	"github.com/deyvidm/sms-asynq/log"
 	"github.com/deyvidm/sms-asynq/tasks"
 	"github.com/hibiken/asynq"
+	"github.com/sirupsen/logrus"
 )
 
+var logger *logrus.Logger
+
 func main() {
-	logger := log.GetLogger()
+	logger = log.GetLogger()
 	logger.Info("Test Client initiated")
 	client := asynq.NewClient(asynq.RedisClientOpt{Addr: "localhost:6379"})
 
-	t1, err := tasks.NewInviteTask("123", "+11234567890", "tiger butts")
-	if err != nil {
-		logger.Fatal(err)
-	}
+	var t *asynq.Task
 
-	logger.Infof("Enquing task %s", t1.Type())
-	info, err := client.Enqueue(t1)
+	t, _ = tasks.NewInviteTask("inviteID123", "+11234567890", "tiger butts")
+	logAndEnqueue(client, t)
+
+	// t, _ = tasks.NewReponseTask("+11234567890", "YOOO")
+	// logAndEnqueue(client, t)
+
+}
+
+func logAndEnqueue(c *asynq.Client, t *asynq.Task) {
+	info, err := c.Enqueue(t)
 	if err != nil {
 		logger.Fatal(err)
 	}
