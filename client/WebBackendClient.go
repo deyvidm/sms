@@ -29,11 +29,12 @@ type UpdateInvite struct {
 }
 
 func (wbc *WebBackendClient) UpdateInvite(invite *UpdateInvite) error {
+	url := "/api/internal/invite/1"
 	bod, err := json.Marshal(invite)
 	if err != nil {
 		return err
 	}
-	req, err := http.NewRequest(http.MethodPut, wbc.Address, bytes.NewBuffer(bod))
+	req, err := http.NewRequest(http.MethodPut, wbc.Address+url, bytes.NewBuffer(bod))
 	if err != nil {
 		fmt.Println("Error creating request:", err)
 		return err

@@ -20,7 +20,7 @@ func main() {
 			Logger:      logger,
 		},
 	)
-	if err := godotenv.Load("../.env"); err != nil {
+	if err := godotenv.Load(".env"); err != nil {
 		logger.Fatal(err)
 	}
 	backendClient := client.New(os.Getenv("SECRET"))
