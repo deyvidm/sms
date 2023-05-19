@@ -5,7 +5,8 @@ import (
 
 	"github.com/deyvidm/sms-asynq/client"
 	"github.com/deyvidm/sms-asynq/log"
-	"github.com/deyvidm/sms-asynq/task"
+	"github.com/deyvidm/sms-asynq/tasks"
+	"github.com/deyvidm/sms-asynq/workers"
 	"github.com/hibiken/asynq"
 	"github.com/joho/godotenv"
 )
@@ -24,10 +25,10 @@ func main() {
 		logger.Fatal(err)
 	}
 	backendClient := client.New(os.Getenv("SECRET"))
-	dispatcher := task.NewMessageDispatcher(backendClient)
+	dispatcher := workers.NewMessageDispatcher(backendClient)
 
 	mux := asynq.NewServeMux()
-	mux.HandleFunc(task.TypeNewMessage, dispatcher.HandleNewMessageTask)
+	mux.HandleFunc(tasks.TypeNewMessage, dispatcher.HandleNewMessageTask)
 
 	if err := srv.Run(mux); err != nil {
 		logger.Fatal(err)

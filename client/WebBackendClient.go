@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/deyvidm/sms-asynq/log"
 )
 
 const defaultAddress = "http://localhost:8080"
@@ -29,36 +31,32 @@ type UpdateInvite struct {
 	Paid   *bool   `json:"paid,omitempty"`
 }
 
+var logger = log.GetLogger()
+
 func (wbc *WebBackendClient) UpdateInvite(invite *UpdateInvite) error {
 	url := "/api/internal/invite/" + invite.ID
-	fmt.Println("shooting to ", url)
+	logger.Infof("updating invite %s", invite.ID)
 	bod, err := json.Marshal(invite)
 	if err != nil {
 		return err
 	}
 	req, err := http.NewRequest(http.MethodPut, wbc.Address+url, bytes.NewBuffer(bod))
 	if err != nil {
-		fmt.Println("Error creating request:", err)
+		logger.Errorf("Error creating request:", err)
 		return err
 	}
-
-	// Set the request header (if needed)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer astynq")
 
-	// Send the request
 	resp, err := wbc.client.Do(req)
 	if err != nil {
-		fmt.Println("Error sending request:", err)
+		logger.Errorf("Error sending request:", err)
 		return err
 	}
 	defer resp.Body.Close()
 
-	// Process the response
-	fmt.Println("Response Status:", resp.Status)
-	// Read the response body, if required
-	// responseBody, _ := ioutil.ReadAll(resp.Body)
-	// fmt.Println("Response Body:", string(responseBody))
-
+	if resp.Status != fmt.Sprint(http.StatusOK) {
+		return fmt.Errorf("got %s Response trying to update %s", resp.Status, invite.ID)
+	}
 	return nil
 }
