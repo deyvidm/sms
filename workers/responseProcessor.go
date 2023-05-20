@@ -58,8 +58,12 @@ func (rp *ResponseProcessor) HandleResponse(ctx context.Context, t *asynq.Task) 
 		return err
 	}
 	logger.Info("%+v", parsedInfo)
-	return rp.wbc.UpdateInvite(client.UpdateInvite{
+	if err = rp.wbc.UpdateInvite(client.UpdateInvite{
 		ID:     targetInviteID,
 		Status: utils.Ptr(parsedInfo.Status.String()),
-	})
+	}); err != nil {
+		return err
+	}
+
+	return rp.irs.PopInvite(p.From, targetInviteID)
 }
