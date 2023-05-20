@@ -27,17 +27,17 @@ func NewMessageDispatcher(wbc *client.WebBackendClient, irs *client.InviteRespon
 }
 
 func (md *MessageDispatcher) HandleSendInviteTask(ctx context.Context, t *asynq.Task) error {
-	logger.Infof("Received task %s with ID %s", t.Type(), t.ResultWriter().TaskID())
 	var p tasks.NewInvitePayload
 	if err := json.Unmarshal(t.Payload(), &p); err != nil {
 		return err
 	}
 
+	logger.Infof("|%s|\tinviting %s to %s : '%s'", t.Type(), p.ToPhoneNumber, p.InviteID, p.Content)
+
 	if err := md.irs.SaveNewInviteEntry(p.ToPhoneNumber, p.InviteID); err != nil {
 		return err
 	}
 
-	logger.Infof("Sending invite '%s'", p.InviteID)
 	return md.wbc.UpdateInvite(client.UpdateInvite{
 		ID:     p.InviteID,
 		Status: utils.Ptr(types.InviteStatus_Invited.String()),
