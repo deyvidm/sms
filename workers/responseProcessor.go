@@ -3,8 +3,6 @@ package workers
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-	"strings"
 
 	"github.com/deyvidm/sms-asynq/client"
 	"github.com/deyvidm/sms-asynq/tasks"
@@ -25,26 +23,6 @@ func NewResponseProcessor(wbc *client.WebBackendClient, irs *client.InviteRespon
 	}
 }
 
-var AcceptedResponseStrings = []string{"yes", "y"}
-var DeclinedResponseStrings = []string{"no", "n"}
-
-func (rp *ResponseProcessor) getInviteStatus(content string) string {
-	content = strings.ToLower(content)
-	if utils.Contains(AcceptedResponseStrings, content) {
-		return types.InviteStatus_Accepted
-	}
-	if utils.Contains(DeclinedResponseStrings, content) {
-		return types.InviteStatus_Declined
-	}
-	return ""
-}
-
-func (rp *ResponseProcessor) isValidResponseString(content string) bool {
-	content = strings.ToLower(content)
-	return utils.Contains(AcceptedResponseStrings, content) ||
-		utils.Contains(DeclinedResponseStrings, content)
-}
-
 func (rp *ResponseProcessor) HandleResponse(ctx context.Context, t *asynq.Task) error {
 	var p tasks.NewResponsePayload
 	if err := json.Unmarshal(t.Payload(), &p); err != nil {
@@ -53,25 +31,39 @@ func (rp *ResponseProcessor) HandleResponse(ctx context.Context, t *asynq.Task) 
 
 	logger.Infof("Response from %s : '%s'", p.From, p.Content)
 
-	invites, err := rp.irs.FetchAllInvites(p.From)
-	if err != nil {
+	parsedInfo := types.ResponseInfo{}
+	err := p.Parse(&parsedInfo)
+	switch err {
+	case types.ResponseParseError{}:
+		logger.Errorf("bad response content: |%s|; prompt user to resubmit", p.Content)
+		// TODO: create and queue new task prompting user for another response
+		return nil
+	case nil:
+		break
+	default:
+		logger.Errorf("error while processing task: ", err)
 		return err
 	}
 
-	if !rp.isValidResponseString(p.Content) {
-		return fmt.Errorf("invalid response '%s'", p.Content)
-	}
-	if len(invites) == 1 {
-		for _, inv := range invites {
-			return rp.wbc.UpdateInvite(client.UpdateInvite{
-				ID:     inv,
-				Status: utils.Ptr(rp.getInviteStatus(p.Content)),
-			})
-		}
-	} else {
-		//TODO handle multiple invites
+	targetInviteID, err := rp.irs.FetchTargetInviteID(p.From, parsedInfo)
+	switch err {
+	case types.MissingKeyError{}:
+		logger.Errorf(err.Error())
+		// TODO: create and queue new task prompting user for another response
 		return nil
+	case nil:
+		break
+	default:
+		logger.Errorf("error while processing task: %s", err)
+		return err
+	}
+	logger.Info("%+v", parsedInfo)
+	if err = rp.wbc.UpdateInvite(client.UpdateInvite{
+		ID:     targetInviteID,
+		Status: utils.Ptr(parsedInfo.Status.String()),
+	}); err != nil {
+		return err
 	}
 
-	return nil
+	return rp.irs.PopInvite(p.From, targetInviteID)
 }

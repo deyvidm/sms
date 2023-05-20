@@ -35,7 +35,7 @@ var logger = log.GetLogger()
 
 func (wbc *WebBackendClient) UpdateInvite(invite UpdateInvite) error {
 	url := "/api/internal/invite/" + invite.ID
-	logger.Infof("updating invite %s with %s", invite.ID, *invite.Status)
+	logger.Infof("\tupdating invite %s with %s", invite.ID, *invite.Status)
 	bod, err := json.Marshal(invite)
 	if err != nil {
 		return err

@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 
+	"github.com/deyvidm/sms-asynq/types"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -16,11 +17,68 @@ func NewInviteResponseStore(client *redis.Client) *InviteResponseStore {
 	}
 }
 
+// Remove an invitation from the contact's list,
+// and decrement all the following weights so that weight order stays continuous
+// ex.   (1 2 3 4 5).Pop(3) => {1-->1, 2-->2, 3-->rm, 4-->3, 5-->4} => {1,2,3,4}
+func (irs *InviteResponseStore) PopInvite(phone string, inviteID string) error {
+	// Retrieve the popped invite's weight
+	poppedWeight, err := irs.client.ZScore(context.Background(), phone, inviteID).Result()
+	if err != nil {
+		return err
+	}
+
+	// Delete the specific member from the sorted set
+	err = irs.client.ZRem(context.Background(), phone, inviteID).Err()
+	if err != nil {
+		return err
+	}
+
+	// Adjust the scores of the remaining elements with higher weights
+	elements, err := irs.client.ZRangeWithScores(context.Background(), phone, 0, -1).Result()
+	if err != nil {
+		return err
+	}
+
+	for _, element := range elements {
+		if element.Score > poppedWeight {
+			newScore := element.Score - 1
+
+			err = irs.client.ZAdd(context.Background(), phone, redis.Z{
+				Score:  newScore,
+				Member: element.Member,
+			}).Err()
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+// Save a new x:inviteID pair under contact's pending invites
 func (irs *InviteResponseStore) SaveNewInviteEntry(phone, inviteID string) error {
 	return irs.addValToOrderedSet(phone, inviteID)
 }
 
-func (irs *InviteResponseStore) FetchAllInvites(phone string) (map[float64]string, error) {
+func (irs *InviteResponseStore) FetchTargetInviteID(contactID string, parsedResponse types.ResponseInfo) (string, error) {
+	invites, err := irs.fetchAllInvites(contactID)
+	if err != nil {
+		return "", err
+	}
+	if len(invites) == 1 {
+		for _, inv := range invites {
+			return inv, nil
+		}
+	}
+
+	if parsedResponse.TargetInviteKey == nil {
+		return "", types.MissingKeyError{PendingInvites: len(invites)}
+	}
+	return invites[*parsedResponse.TargetInviteKey], nil
+}
+
+func (irs *InviteResponseStore) fetchAllInvites(phone string) (map[float64]string, error) {
 	return irs.getMapFromOrderedSet(phone)
 }
 
