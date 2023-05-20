@@ -11,6 +11,8 @@ github.com/deyvidm/sms-asynq v0.0.0-20230519095205-aea2226c0921 h1:PopDpRzZAkGnP
 github.com/deyvidm/sms-asynq v0.0.0-20230519095205-aea2226c0921/go.mod h1:HJURaF5I9+5seqyX+v3xTlpYJAvlsbyyTAYAEWZeDEg=
 github.com/deyvidm/sms-asynq v0.0.0-20230519095535-1d0926882b64 h1:JK/xAPuUMAhRCcFMQVjLPc78a47N10dX6moDdDpnDZ0=
 github.com/deyvidm/sms-asynq v0.0.0-20230519095535-1d0926882b64/go.mod h1:UB3/OAriZQnu2PhyOgorFGwKFrwMdv/Z6oeItKpTcE0=
+github.com/deyvidm/sms-asynq v0.0.0-20230519152828-8be49b798c9c h1:/+q0F5o/DJfzZ56ukxrHDfokZ8rXwUsd/JA0E+owl0s=
+github.com/deyvidm/sms-asynq v0.0.0-20230519152828-8be49b798c9c/go.mod h1:UB3/OAriZQnu2PhyOgorFGwKFrwMdv/Z6oeItKpTcE0=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible h1:7qlOGliEKZXTDg6OTjfoBKDXWrumCAMpl/TFQ4/5kLM=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=
 github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f h1:lO4WD4F/rVNCu3HqELle0jiPLLBs70cWOduZpkS1E78=

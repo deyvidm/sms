@@ -14,10 +14,12 @@ func SetupDB(db *gorm.DB) error {
 		Contact{},
 		Event{},
 		Invite{},
+		SNSEvent{},
+		SNSRawMesage{},
 	}
 
 	for _, m := range MODELS {
-		log.Info("Auto migrating ", m)
+		log.Infof("Auto migrating %T", m)
 		if err := db.AutoMigrate(m); err != nil {
 			return err
 		}

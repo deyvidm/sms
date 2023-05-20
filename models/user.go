@@ -19,7 +19,7 @@ type User struct {
 
 func GetUserByID(uid string) (User, error) {
 	u := User{}
-	if err := DB.Preload("Contact").Preload("Contacts").Preload("Events").First(&u, uid).Error; err != nil {
+	if err := DB.Preload("Contact").Preload("Contacts").Preload("Events").Where("id = ?", uid).First(&u).Error; err != nil {
 		return User{}, errors.New("User not found")
 	}
 	return u, nil

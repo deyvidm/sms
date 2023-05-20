@@ -45,6 +45,14 @@ func fetchContacts(owner *User, contactIDs []string) ([]Contact, error) {
 	return contacts, nil
 }
 
+func EventFromInput(e types.NewEvent) Event {
+	return Event{
+		Title:          e.Title,
+		InvitationBody: e.Invitebody,
+		Status:         EventStatus_Active,
+	}
+}
+
 func (u *User) OrganizeEvent(eventInput types.NewEvent) error {
 	asynqClient := asynq.NewClient(asynq.RedisClientOpt{Addr: "localhost:6379"})
 	contacts, err := fetchContacts(u, eventInput.Contacts)
@@ -53,36 +61,38 @@ func (u *User) OrganizeEvent(eventInput types.NewEvent) error {
 	}
 
 	return DB.Transaction(func(tx *gorm.DB) error {
-		event := Event{
-			Title:          eventInput.Title,
-			OrganizerID:    u.ID,
-			InvitationBody: eventInput.Invitebody,
-			Status:         EventStatus_Active,
-		}
+		event := EventFromInput(eventInput)
+		event.OrganizerID = u.ID
+
 		var invites []Invite
 		for _, contact := range contacts {
 			invites = append(invites, Invite{
-				Contact: contact,
-				Event:   event,
-				Status:  InviteStatus_Sending,
+				ContactID: contact.ID,
+				Event:     event,
+				Status:    InviteStatus_Sending,
 			})
 		}
-		if err := tx.Create(invites).Error; err != nil {
+		if err := tx.Create(&invites).Error; err != nil {
 			return err
 		}
 
 		for _, inv := range invites {
-			t, err := tasks.NewInviteTask(inv.ID, inv.Contact.Phone, eventInput.Invitebody)
-			if err != nil {
-				return err
-			}
+			for _, contact := range contacts {
+				if contact.ID != inv.ContactID {
+					continue
+				}
+				t, err := tasks.NewInviteTask(inv.ID, contact.Phone, eventInput.Invitebody)
+				if err != nil {
+					return err
+				}
 
-			taskInfo, err := asynqClient.Enqueue(t)
-			if err != nil {
-				return err
-			}
+				taskInfo, err := asynqClient.Enqueue(t)
+				if err != nil {
+					return err
+				}
 
-			log.Printf("enqued task %s | inviting %s to %s...", taskInfo.ID, inv.Contact.Phone, eventInput.Title)
+				log.Printf("enqued task %s | inviting %s to %s...", taskInfo.ID, inv.Contact.Phone, eventInput.Title)
+			}
 		}
 		return nil
 	})

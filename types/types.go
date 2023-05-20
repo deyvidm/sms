@@ -45,3 +45,16 @@ type UpdateInvite struct {
 	Status *string `json:"status,omitempty" binding:"alpha"`
 	Paid   *bool   `json:"paid,omitempty" binding:"boolean"`
 }
+
+// This comes in Straight from SNS (AWS)
+type SNSEvent struct {
+	Type             string `json:"Type"`
+	Message          string `json:"Message"` // this is all stringified+escaped JSON => SNSRawMessage
+	MessageId        string `json:"MessageId"`
+	TopicArn         string `json:"TopicArn"`
+	Timestamp        string `json:"Timestamp"`
+	SignatureVersion string `json:"SignatureVersion"`
+	Signature        string `json:"Signature"`
+	SigningCertURL   string `json:"SigningCertURL"`
+	UnsubscribeURL   string `json:"UnsubscribeURL"`
+}
