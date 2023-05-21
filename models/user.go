@@ -2,9 +2,11 @@ package models
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/deyvidm/sms-backend/auth"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 type User struct {
@@ -24,6 +26,7 @@ type APIUser struct {
 }
 
 func (u *User) ToAPIUser() APIUser {
+	fmt.Println(len(u.Contacts))
 	return APIUser{
 		Username: u.Username,
 		Contacts: u.Contacts,
@@ -31,9 +34,13 @@ func (u *User) ToAPIUser() APIUser {
 	}
 }
 
+func userPreload() (tx *gorm.DB) {
+	return DB.Preload("Contacts").Preload("Events")
+}
+
 func GetUserByID(uid string) (User, error) {
 	u := User{}
-	if err := DB.Preload("Contact").Preload("Contacts").Preload("Events").Where("id = ?", uid).First(&u).Error; err != nil {
+	if err := userPreload().Where("id = ?", uid).First(&u).Error; err != nil {
 		return User{}, errors.New("User not found")
 	}
 	return u, nil
@@ -41,7 +48,7 @@ func GetUserByID(uid string) (User, error) {
 
 func LoginUser(username string, password string) (user APIUser, token string, err error) {
 	u := User{}
-	if err = DB.Model(u).Where("username = ?", username).Take(&u).Error; err != nil {
+	if err = DB.Preload("Contact").Preload("Contacts").Preload("Events").Where("username = ?", username).First(&u).Error; err != nil {
 		return
 	}
 	if err = VerifyPassword(password, u.Password); err != nil {
