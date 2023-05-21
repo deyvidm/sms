@@ -4,6 +4,8 @@
     import { beforeUpdate, afterUpdate, onDestroy, onMount } from 'svelte';
     import type { AttendeeResponse, ContactResponse } from './pocketbase-types';
     import { createEventDispatcher } from 'svelte';
+    import { currentUser } from './gin';
+    import type { Contact } from './Types';
 
     const dispatch = createEventDispatcher();
 
@@ -33,9 +35,10 @@
     }
 
     onMount(async () => {
-        await get50Contacts().then((result) => {
-            allContacts = result.items;
-        });
+        allContacts = $currentUser?.contacts
+        if (!allContacts) {
+            return
+        }
         allContacts.forEach((contact, i, arr) => {
             contactIDMap.set(contact.id, contact);
         });
@@ -48,11 +51,11 @@
     // i.e. hide attending contacts
     export let ignore = new Array<String>();
 
-    let allContacts: Array<ContactResponse>;
-    let remainingContacts = new Array<ContactResponse>();
-    let selectedContacts = new Array<ContactResponse>();
+    let allContacts: Array<Contact> | undefined;
+    let remainingContacts = new Array<Contact>();
+    let selectedContacts = new Array<Contact>();
 
-    let contactIDMap = new Map<string, ContactResponse>();
+    let contactIDMap = new Map<string, Contact>();
 
 
 </script>
@@ -69,7 +72,7 @@
                     </th>
                     <th>First</th>
                     <th>Last</th>
-                    <th>Status</th>
+                    <th>Phone</th>
                 </tr>
             </thead>
             <tbody>

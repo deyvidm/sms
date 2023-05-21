@@ -1,8 +1,7 @@
 <script lang="ts">
     import InputBox from './InputBox.svelte';
     import PhoneInputBox from './PhoneInputBox.svelte';
-    import { pb, API, currentUser } from './pocketbase';
-    import { ContactStatusOptions, type ContactRecord } from './pocketbase-types';
+    import { apiClient } from './gin';
 
     // <input> tags at our disposal
     let firstname: InputBox;
@@ -12,18 +11,14 @@
     let submitLabel: string = 'Create Contact';
 
     function createContact() {
-        if (!verifyInputs() || !$currentUser) {
+        if (!verifyInputs()) {
             return;
         }
-        let data: ContactRecord = {
-            first_name: firstname.Get(),
-            last_name: lastname.Get(),
-            phone: phone.Get(),
-            owner: $currentUser.id,
-            status: ContactStatusOptions.Pending,
-        };
-        API.createContact(data)
-            .then((result) => setButtonStatus(true))
+
+        apiClient.AddContact(firstname.Get(), lastname.Get(), phone.Get())
+            .then((result) => {
+                setButtonStatus(result)
+            })
             .catch((error) => {
                 setButtonStatus(false);
                 console.log(error);

@@ -15,6 +15,27 @@ export class APIClient {
         this.token = ""
         this.user = null
         currentUser.update(u => u = null)
+        window.sessionStorage.setItem("store", "")
+    }
+
+    public async AddContact(first_name: string, last_name: string, phone: string): Promise<boolean> {
+        const response = await fetch("http://localhost:8080/api/contacts/new", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + this.token
+            },
+            body: JSON.stringify({first_name, last_name, phone}),
+        });
+
+        if (!response.ok) {
+            return false
+        }
+        const data = await response.json()
+        if (data.status != "success") {
+            return false
+        }
+        return true
     }
 
     public async UserLogin(username: string, password: string): Promise<boolean> {

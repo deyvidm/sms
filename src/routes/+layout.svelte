@@ -3,7 +3,23 @@
   import Sidebar from "$lib/Sidebar.svelte";
   import Login from "../lib/Login.svelte";
 
+  import { onMount } from "svelte"
+
   import { currentUser } from "$lib/gin";
+
+  let savestore = false
+  $: if (savestore && $currentUser) {
+    window.sessionStorage.setItem("store", JSON.stringify($currentUser))
+  }
+  onMount(async () => {
+    let ses = window.sessionStorage.getItem("store")
+      if (ses) {
+        console.log("sob-- ~ loading ses", ses)
+        $currentUser = JSON.parse(ses)
+      }
+    savestore = true
+  })
+
 </script>
 
 {#if $currentUser}
