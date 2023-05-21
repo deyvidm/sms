@@ -19,6 +19,7 @@ const SNSEvent = "/respond"
 
 func AssignPublicRoutes(router *gin.RouterGroup) {
 	router.GET(Ping, controllers.Pong)
+	router.GET(CurrentUser, controllers.CurrentUser)
 	router.POST(UserRegister, controllers.Register)
 	router.POST(UserLogin, controllers.Login)
 	router.POST(SNSEvent, controllers.ReceiveSNS)
@@ -35,7 +36,6 @@ const AllEvents = "/events"
 const NewMessage = "/messages/new"
 
 func AssignPrivateRoutes(router *gin.RouterGroup) {
-	router.GET(CurrentUser, controllers.CurrentUser)
 	router.POST(NewContact, controllers.NewContact)
 	router.GET(AllContacts, controllers.AllContacts)
 

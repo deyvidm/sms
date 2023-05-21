@@ -47,14 +47,14 @@ func Login(c *gin.Context) {
 		Username: input.Username,
 		Password: input.Password,
 	}
-	token, err := models.LoginUser(u.Username, u.Password)
+	u, token, err := models.LoginUser(u.Username, u.Password)
 
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": "incorrect login details"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"status": types.StatusSuccess, "data": token})
+	c.JSON(http.StatusOK, gin.H{"status": types.StatusSuccess, "data": map[string]interface{}{"token": token, "user": u}})
 }
 
 func GetUserFromContext(c *gin.Context) (models.User, error) {

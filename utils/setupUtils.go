@@ -6,6 +6,7 @@ import (
 	"github.com/deyvidm/sms-backend/middleware"
 	"github.com/deyvidm/sms-backend/models"
 	"github.com/deyvidm/sms-backend/routes"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 
@@ -14,6 +15,10 @@ import (
 
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
+	router.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"http://localhost:5173"},
+		AllowHeaders: []string{"Content-Type"},
+	}))
 	public := router.Group(routes.PublicPrefix)
 	routes.AssignPublicRoutes(public)
 
