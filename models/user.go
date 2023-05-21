@@ -9,12 +9,26 @@ import (
 
 type User struct {
 	BaseModel
-	Username  string `gorm:"size:255;not null;unique" json:"username"`
-	Password  string `gorm:"size:255;not null;" json:"password"`
+	Username  string `gorm:"size:255;not null;unique"`
+	Password  string `gorm:"size:255;not null;"`
 	ContactID string
 	Contact   Contact   `gorm:"foreignKey:ContactID"`
 	Contacts  []Contact `gorm:"foreignKey:Owner"`
 	Events    []Event   `gorm:"foreignKey:OrganizerID"`
+}
+
+type APIUser struct {
+	Username string    `json:"username"`
+	Contacts []Contact `json:"contacts"`
+	Events   []Event   `json:"events"`
+}
+
+func (u *User) ToAPIUser() APIUser {
+	return APIUser{
+		Username: u.Username,
+		Contacts: u.Contacts,
+		Events:   u.Events,
+	}
 }
 
 func GetUserByID(uid string) (User, error) {
@@ -25,7 +39,7 @@ func GetUserByID(uid string) (User, error) {
 	return u, nil
 }
 
-func LoginUser(username string, password string) (token string, err error) {
+func LoginUser(username string, password string) (user APIUser, token string, err error) {
 	u := User{}
 	if err = DB.Model(u).Where("username = ?", username).Take(&u).Error; err != nil {
 		return
@@ -33,7 +47,8 @@ func LoginUser(username string, password string) (token string, err error) {
 	if err = VerifyPassword(password, u.Password); err != nil {
 		return
 	}
-	return auth.GenerateToken(u.ID)
+	token, err = auth.GenerateToken(u.ID)
+	return u.ToAPIUser(), token, err
 }
 
 func VerifyPassword(password, hashedPassword string) error {
