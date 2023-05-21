@@ -1,17 +1,18 @@
 <script lang="ts">
-    import { prevent_default } from 'svelte/internal';
-    import { currentUser, pb } from './pocketbase';
+    import { apiClient, currentUser } from './gin';
 
     let username: string;
     let password: string;
-
-    async function login() {
-        await pb.collection('users').authWithPassword(username, password);
-        prevent_default()
-    }
-
-    function signOut() {
-        pb.authStore.clear();
+    
+    async function login(event) {
+        username = 'user2';
+        password = 'hunter2';
+        const response = await apiClient.UserLogin(username, password);
+        if (response) {
+            console.log('yay');
+        } else {
+            console.error('aw');
+        }
     }
 </script>
 
@@ -57,7 +58,7 @@
                             name="password"
                             id="password"
                             placeholder="••••••••"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white "
+                            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                         />
                     </div>
                     <button
