@@ -1,12 +1,13 @@
 import { writable, type Writable } from 'svelte/store';
-import type { CurrentUser } from './Types';
+import type { Contact, CurrentUser, Event } from './Types';
 
-export const currentUser = writable<CurrentUser | null>(null)
+export const currentUser = writable<CurrentUser>({username:"",contacts:[]})
+export const userContacts = writable<Contact[]>([])
+export const userEvents = writable<Event[]>([])
 
 export class APIClient {
     private token = ""
-    private user = null
-
+    private user;
 
     constructor() {
     }
@@ -14,8 +15,27 @@ export class APIClient {
     public SignOut() {
         this.token = ""
         this.user = null
-        currentUser.update(u => u = null)
+        currentUser.update(u => u = {username:"", contacts:[]})
         window.sessionStorage.setItem("store", "")
+    }
+
+    public async UpdateContacts(): Promise<boolean> {
+        const response = await fetch("http://localhost:8080/api/contacts", {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + this.token
+            },
+        });
+
+        if (!response.ok) {
+            return false
+        }
+        const data = await response.json()
+        if (data.status != "success") {
+            return false
+        }
+        userContacts.update(u => u = data.data)
+        return true
     }
 
     public async AddContact(first_name: string, last_name: string, phone: string): Promise<boolean> {
@@ -53,6 +73,8 @@ export class APIClient {
                 this.token = data.data.token;
                 this.user = data.data.user
                 currentUser.update(u => u = this.user)
+                userContacts.update(c => c = data.data.user.contacts)
+                userEvents.update(c => c = data.data.user.events)
             }
             return true;
         } else {

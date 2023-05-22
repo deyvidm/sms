@@ -1,13 +1,26 @@
 <script lang="ts">
-    import { get50Events } from "$lib/pocketbase";
     import { onMount } from "svelte";
-    import EventList from "$lib/EventList.svelte";
-    
-    onMount(()=>{
-        get50Events()
-    })
-    function handleMessage(e){
+    import { userEvents } from "$lib/gin";
+    import type { Event } from "$lib/Types";
+    import EventRow from "$lib/EventRow.svelte"
+
+    let events = new Array<Event>();
+
+    onMount(async () => {
+        console.log("mounted events page")
+        if ($userEvents) {
+            events = $userEvents;
+        } 
+        console.log(events)
+    });
+
+    let activeId = "";
+    function handleMessage(event) {
+        activeId = event.detail.eventId;
     }
 </script>
 
-<EventList on:message={handleMessage}/>
+<!-- <p>events: {events.length}</p> -->
+{#each events as e}
+     <EventRow event={e} active={activeId == e.id} on:message={handleMessage} />
+{/each}
