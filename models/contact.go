@@ -8,22 +8,32 @@ type Contact struct {
 	Owner     string
 }
 
-func (c *Contact) toAPIContact() APIContact {
-	return APIContact{
-		FirstName: c.FirstName,
-		LastName:  c.LastName,
-		Phone:     c.Phone,
-		ID:        c.ID,
-	}
-}
-
 // used for returning cleaner data structs
 // otherwise API consumers also get createdAt, updatedAt, ID, etc.
 type APIContact struct {
+	ID        string `json:"id"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	Phone     string `json:"phone"`
-	ID        string `json:"id"`
+}
+
+func (c *Contact) toAPIContact() APIContact {
+	return APIContact{
+		ID:        c.ID,
+		FirstName: c.FirstName,
+		LastName:  c.LastName,
+		Phone:     c.Phone,
+	}
+}
+
+type Contacts []Contact
+
+func (contacts Contacts) toAPIContact() []APIContact {
+	var ret []APIContact
+	for _, c := range contacts {
+		ret = append(ret, c.toAPIContact())
+	}
+	return ret
 }
 
 func (u *User) AllContacts() ([]APIContact, error) {

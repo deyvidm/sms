@@ -30,8 +30,32 @@ type Event struct {
 	Status         string     `gorm:"type:text"`
 }
 
-type EventAPI struct {
-	Title string `json:"title"`
+type APIEvent struct {
+	ID             string     `json:"id"`
+	Title          string     `json:"title"`
+	TargetCapacity int        `json:"capacity"`
+	StartDate      *time.Time `json:"start_date"`
+	EndDate        *time.Time `json:"type:end_date"`
+}
+
+func (e *Event) ToAPIEvent() APIEvent {
+	return APIEvent{
+		ID:             e.ID,
+		Title:          e.Title,
+		TargetCapacity: e.TargetCapacity,
+		StartDate:      e.StartDate,
+		EndDate:        e.EndDate,
+	}
+}
+
+type Events []Event
+
+func (events Events) toAPIEvent() []APIEvent {
+	var ret []APIEvent
+	for _, c := range events {
+		ret = append(ret, c.ToAPIEvent())
+	}
+	return ret
 }
 
 func fetchContacts(owner *User, contactIDs []string) ([]Contact, error) {
@@ -98,7 +122,7 @@ func (u *User) OrganizeEvent(eventInput types.NewEvent) error {
 	})
 }
 
-func (u *User) AllEvents() (events []EventAPI, err error) {
+func (u *User) AllEvents() (events []APIEvent, err error) {
 	err = DB.Model(u).Association("Events").Find(&events)
 	return
 }

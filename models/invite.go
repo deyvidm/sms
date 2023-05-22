@@ -25,6 +25,24 @@ type Invite struct {
 	Paid      bool
 }
 
+type APIInvite struct {
+	ID      string     `json:"id"`
+	Contact APIContact `json:"contact"`
+	Event   APIEvent   `json:"event"`
+	Status  string     `status:"status"`
+	Paid    bool       `json:"paid"`
+}
+
+func (i *Invite) ToAPIInvite() APIInvite {
+	return APIInvite{
+		ID:      i.ID,
+		Contact: i.Contact.toAPIContact(),
+		Event:   i.Event.ToAPIEvent(),
+		Status:  i.Status,
+		Paid:    i.Paid,
+	}
+}
+
 func GetInvite(id string) (Invite, error) {
 	var invite Invite
 	DB.Where("id = ?", id).First(&invite)
