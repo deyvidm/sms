@@ -2,28 +2,22 @@
     import { beforeUpdate, createEventDispatcher, onMount } from 'svelte';
     import { detach } from 'svelte/internal';
     import EventAttendee from './EventAttendee.svelte';
-    import { get50Attendees } from './pocketbase';
     import ContactList from './ContactList.svelte';
-    import {
-        type EventRecord,
-        type EventResponse,
-        type AttendeeResponse,
-        AttendeeStatusOptions,
-    } from './pocketbase-types';
+    import type { Event } from './Types';
 
     const dispatch = createEventDispatcher();
 
     async function loadAttendance() {
-        await get50Attendees(event).then((result) => {
-            attendees = result.items;
-            attendees.forEach((a) => {
-                if (a.status == AttendeeStatusOptions.accepted) {
-                    attendeesConfirmed++;
-                }
-                ignoreList.push(a.contact)
-            });
-            ignoreList = ignoreList;
-        });
+        // await get50Attendees(event).then((result) => {
+        //     attendees = result.items;
+        //     attendees.forEach((a) => {
+        //         if (a.status == AttendeeStatusOptions.accepted) {
+        //             attendeesConfirmed++;
+        //         }
+        //         ignoreList.push(a.contact)
+        //     });
+        //     ignoreList = ignoreList;
+        // });
     }
 
     function handleMessage(event) {
@@ -31,15 +25,15 @@
     }
 
 
-    export let event: EventResponse;
+    export let event: Event;
     export let active: boolean = false;
-    let attendees = new Array<AttendeeResponse>();
+    // let attendees = new Array<AttendeeResponse>();
     let attendeesConfirmed = 0;
     let ignoreList = new Array<string>();
 </script>
 
 <div
-    on:click|once={loadAttendance}
+    on:click|once={handleMessage}
     class="mb-5 collapse border border-base-300 bg-base-200 rounded-box {active
         ? 'bg-base-300'
         : ''}"
@@ -51,7 +45,7 @@
     </div>
 
     <div class="collapse-content">
-        {#if active}
+        <!-- {#if active}
             <div class="mb-5">
                 <div class="mb-2">attendance: {attendeesConfirmed}/{attendees.length}</div>
                 <label for="invite-more-modal" class="m-2 ml-0 btn btn-outline">Invite More</label>
@@ -73,6 +67,6 @@
 
         {#each attendees as a}
             <EventAttendee who={a} />
-        {/each}
+        {/each} -->
     </div>
 </div>

@@ -4,7 +4,8 @@
     import { beforeUpdate, afterUpdate, onDestroy, onMount } from 'svelte';
     import type { ContactResponse } from './pocketbase-types';
     import { createEventDispatcher } from 'svelte';
-    import Event from './Event.svelte';
+    import Event from './EventRow.svelte';
+    import { userEvents } from './gin';
 
     let activeId = "";
     function handleMessage(event) {
@@ -13,6 +14,6 @@
 
 </script>
 
-{#each $events as e}
+{#each $userEvents as e}
     <Event event={e} active={(activeId == e.id)} on:message={handleMessage} />
 {/each}

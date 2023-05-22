@@ -5,24 +5,23 @@
 
   import { onMount } from "svelte"
 
-  import { currentUser } from "$lib/gin";
+  import { currentUser, userEvents } from "$lib/gin";
 
   let savestore = false
-  $: if (savestore && $currentUser) {
-    window.sessionStorage.setItem("store", JSON.stringify($currentUser))
-  }
+  
   onMount(async () => {
-    let ses = window.sessionStorage.getItem("store")
-      if (ses) {
-        console.log("sob-- ~ loading ses", ses)
-        $currentUser = JSON.parse(ses)
-      }
-    savestore = true
+    console.log("mounted root layout")
+    // let ses = window.sessionStorage.setItem("store","")
+    //   if (ses) {
+    //     console.log("sob-- ~ loading ses", ses)
+    //     $currentUser = JSON.parse(ses)
+    //   }
+    // savestore = true
   })
 
 </script>
 
-{#if $currentUser}
+{#if $currentUser.username.length > 0}
   <Header />
   <div class="flex flex-col w-full lg:flex-row">
     <Sidebar />
