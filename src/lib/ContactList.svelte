@@ -9,6 +9,8 @@
 
     const dispatch = createEventDispatcher();
 
+    export let contacts: Array<any>;
+
     function handleMessage(event) {
         let id = event.detail.id;
         let checked = event.detail.checked;
@@ -35,7 +37,7 @@
     }
 
     onMount(async () => {
-        allContacts = $currentUser?.contacts
+        allContacts = contacts
         if (!allContacts) {
             return
         }
@@ -51,7 +53,7 @@
     // i.e. hide attending contacts
     export let ignore = new Array<String>();
 
-    let allContacts: Array<Contact> | undefined;
+    let allContacts = new Array();
     let remainingContacts = new Array<Contact>();
     let selectedContacts = new Array<Contact>();
 
