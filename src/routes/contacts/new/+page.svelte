@@ -2,4 +2,6 @@
     import ContactForm from "$lib/ContactForm.svelte";
 
 </script>
-<ContactForm/>
+<div class="w-3/4 p-5 shadow-xl">
+    <ContactForm/>
+</div>

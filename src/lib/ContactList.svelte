@@ -5,7 +5,7 @@
     import type { AttendeeResponse, ContactResponse } from './pocketbase-types';
     import { createEventDispatcher } from 'svelte';
     import { currentUser } from './gin';
-    import type { Contact } from './Types';
+    import type { Contact } from './gripes';
 
     const dispatch = createEventDispatcher();
 

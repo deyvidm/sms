@@ -16,6 +16,9 @@ export class APIClient {
     constructor() {
     }
 
+    public setToken(token: string) {
+        this.token = token
+    }
     public SignOut() {
         this.token = ""
         this.user = null
@@ -62,7 +65,7 @@ export class APIClient {
         return true
     }
 
-    public async UserLogin(username: string, password: string): Promise<any> {
+    public async UserLogin(username: string | null , password: string | null ): Promise<any> {
         // const response = await fetch("http://localhost:8080/api/users/login", {
         //     method: "POST",
         //     headers: {
@@ -71,39 +74,57 @@ export class APIClient {
         //     body: JSON.stringify({ username, password }),
         // });
 
-        let data;
-        const body = this.post("/users/login", { username, password })
-            .then((respData) => {
-                console.log(respData)
-                this.token = respData.data.token;
-                this.user = respData.data.user
-                data = respData.data
-                console.log("return respData")
-                return respData.data
-            })
+        // let data;
+        // const body = this.post("/users/login", { username, password })
+        //     .then((respData) => {
+        //         console.log(respData)
+        //         this.token = respData.data.token;
+        //         this.user = respData.data.user
+        //         data = respData.data
+        //         console.log("return respData")
+        //     })
 
-        console.log("return data")
+        // return body
     }
 
 
 
-    private async send({ method, path, data }) {
-        const opts = { method, headers: {}, body: "" };
-
-        if (data) {
-            opts.headers['Content-Type'] = 'application/json';
-            opts.body = JSON.stringify(data);
-        }
+    private buildReq(method, path, data) {
+        let headers = {}
 
         if (this.token) {
-            opts.headers['Authorization'] = `Bearer ${this.token}`;
+            headers['Authorization'] = `Bearer ${this.token}`
         }
 
-        const res = await fetch(`${base}${path}`, opts);
+        if (data && method != "GET") {
+            headers['Content-Type'] = 'application/json';
+            return {
+                method: method,
+                headers: headers,
+                body: JSON.stringify(data)
+            }
+        }
+        return {
+            method: method,
+            headers: headers,
+            body: null  
+        }
+
+    }
+
+    private async send({ method, path, data }) {
+        
+        let req = this.buildReq(method, path, data)
+        console.log(req)
+        console.log("---------------------- crash after this")
+
+        const res = await fetch(`${base}${path}`, req);
         if (res.ok || res.status === 422) {
             const text = await res.text();
             return text ? JSON.parse(text) : {};
         }
+        console.log(method," to ", path, " : ", res.ok)
+        res.text().then((text)=>console.log(method," to ", path, " : ", res.text()))
 
         throw error(res.status);
     }

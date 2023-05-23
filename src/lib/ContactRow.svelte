@@ -2,7 +2,7 @@
 
     import { beforeUpdate, createEventDispatcher, onMount } from 'svelte';
     import type { ContactResponse } from './pocketbase-types';
-    import type { Contact } from './Types';
+    import type { Contact } from './gripes';
     const dispatch = createEventDispatcher();
 
     export let checked: boolean;

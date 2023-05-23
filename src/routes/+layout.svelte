@@ -1,35 +1,35 @@
 <script lang="ts">
-  import Header from "$lib/Header.svelte";
+  import Header from "./Header.svelte";
   import Sidebar from "$lib/Sidebar.svelte";
+  import { navigating } from "$app/stores";
+
   import Login from "../lib/Login.svelte";
 
-  import { onMount } from "svelte"
+  import { onMount } from "svelte";
 
   import { currentUser, userEvents } from "$lib/gin";
 
-  let savestore = false
-  
-  onMount(async () => {
-    console.log("mounted root layout")
-    // let ses = window.sessionStorage.setItem("store","")
-    //   if (ses) {
-    //     console.log("sob-- ~ loading ses", ses)
-    //     $currentUser = JSON.parse(ses)
-    //   }
-    // savestore = true
-  })
+  /** @type {import('./$types').PageData} */
+  export let data;
 
+  onMount(async () => {
+    console.log("mounted root layout");
+  });
 </script>
 
-{#if $currentUser.username.length > 0}
-  <Header />
-  <div class="flex flex-col w-full lg:flex-row">
-    <Sidebar />
-    <div class="divider lg:divider-horizontal" />
-    <div class="w-3/4 p-5 shadow-xl">
-      <slot />
-    </div>
-  </div>
+<Header user={data.user}/>
+{#if $navigating}
+  <h1>We out here navigating</h1>
+{/if}
+
+{#if data.user}
+<div class="flex flex-col w-full lg:flex-row">
+  <Sidebar />
+  <div class="divider lg:divider-horizontal" />
+  <!-- <div class="w-3/4 p-5 shadow-xl"> -->
+    <slot />
+  <!-- </div> -->
+</div>
 {:else}
-  <Login/>
+<slot />
 {/if}

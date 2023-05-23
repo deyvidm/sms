@@ -5,8 +5,12 @@
   import { onMount } from "svelte";
   import { apiClient, userEvents, userContacts } from "$lib/gin";
   import { createEventDispatcher } from "svelte";
-  import type { Contact } from "$lib/Types";
-  
+  import type { Contact } from "$lib/gripes";
+
+
+	/** @type {import('./$types').PageData} */
+	export let data;
+
   const dispatch = createEventDispatcher();
 
   function handleMessage(event) {
@@ -35,11 +39,10 @@
   }
 
   onMount(async () => {
-    console.log("mounting contacts page")
-    console.log($userContacts)
+    console.log("mounting contacts page");
+    console.log(data.contacts);
 
-    apiClient.UpdateContacts();
-    allContacts = $userContacts;
+    allContacts = data.contacts
     if (!allContacts) {
       return;
     }
@@ -64,26 +67,28 @@
   let contactIDMap = new Map<string, Contact>();
 </script>
 
-<div class="overflow-x-auto w-full">
-  <div class="flex flex-col w-full lg:flex-row">
-    <table class="table w-full">
-      <thead>
-        <tr>
-          <th>
-            <label>
-              <!-- <input bind:checked={yesall} type="checkbox" class="checkbox" /> -->
-            </label>
-          </th>
-          <th>First</th>
-          <th>Last</th>
-          <th>Phone</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#each remainingContacts as contact}
-          <ContactRow on:message={handleMessage} checked={false} {contact} />
-        {/each}
-      </tbody>
-    </table>
+<div class="w-3/4 p-5 pt-20 shadow-xl">
+  <div class="overflow-x-auto w-full">
+    <div class="flex flex-col w-full lg:flex-row">
+      <table class="table w-full">
+        <thead>
+          <tr>
+            <th>
+              <label>
+                <!-- <input bind:checked={yesall} type="checkbox" class="checkbox" /> -->
+              </label>
+            </th>
+            <th>First</th>
+            <th>Last</th>
+            <th>Phone</th>
+          </tr>
+        </thead>
+        <tbody>
+          {#each remainingContacts as contact}
+            <ContactRow on:message={handleMessage} checked={false} {contact} />
+          {/each}
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

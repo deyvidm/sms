@@ -3,12 +3,13 @@
     import { detach } from 'svelte/internal';
     import EventAttendee from './EventAttendee.svelte';
     import ContactList from './ContactList.svelte';
-    import type { Event } from './Types';
+    import type { Event } from './gripes';
+    import { apiClient } from './gin';
 
     const dispatch = createEventDispatcher();
 
     async function loadAttendance() {
-        // await get50Attendees(event).then((result) => {
+        // await apiClient.GetAttendees(event).then((result) => {
         //     attendees = result.items;
         //     attendees.forEach((a) => {
         //         if (a.status == AttendeeStatusOptions.accepted) {
@@ -33,7 +34,7 @@
 </script>
 
 <div
-    on:click|once={handleMessage}
+    on:click|once={loadAttendance}
     class="mb-5 collapse border border-base-300 bg-base-200 rounded-box {active
         ? 'bg-base-300'
         : ''}"
@@ -45,9 +46,9 @@
     </div>
 
     <div class="collapse-content">
-        <!-- {#if active}
+        {#if active}
             <div class="mb-5">
-                <div class="mb-2">attendance: {attendeesConfirmed}/{attendees.length}</div>
+                <!-- <div class="mb-2">attendance: {attendeesConfirmed}/{attendees.length}</div> -->
                 <label for="invite-more-modal" class="m-2 ml-0 btn btn-outline">Invite More</label>
                 <input type="checkbox" id="invite-more-modal" class="modal-toggle" />
                 <div class="modal">
@@ -65,7 +66,7 @@
             </div>
         {/if}
 
-        {#each attendees as a}
+        <!-- {#each attendees as a}
             <EventAttendee who={a} />
         {/each} -->
     </div>
