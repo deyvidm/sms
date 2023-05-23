@@ -3,5 +3,6 @@
 
 </script>
 <div class="w-3/4 p-5 shadow-xl">
-    <ContactForm/>
+    Disabled
+    <!-- <ContactForm/> -->
 </div>

@@ -8,16 +8,6 @@ export const actions = {
 		data.set("username", "user2")
 		data.set("password", "hunter2")
 
-
-		// const body = await apiClient.UserLogin("user2","hunter2");
-
-		// console.log("/users/login body: ")
-		// console.log(body)
-		// apiClient.setToken(body.data.token)
-		// const value = btoa(JSON.stringify(body.data.token));
-		// cookies.set('jwt', value, { path: '/' });
-
-
 		const body = await apiClient.post('/users/login', {
 			username: data.get('username'),
 		    password: data.get('password')
