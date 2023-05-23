@@ -67,7 +67,7 @@
   let contactIDMap = new Map<string, Contact>();
 </script>
 
-<div class="w-3/4 p-5 pt-20 shadow-xl">
+<!-- <div class="w-3/4 p-5 pt-20 shadow-xl"> -->
   <div class="overflow-x-auto w-full">
     <div class="flex flex-col w-full lg:flex-row">
       <table class="table w-full">
@@ -91,4 +91,4 @@
       </table>
     </div>
   </div>
-</div>
+<!-- </div> -->

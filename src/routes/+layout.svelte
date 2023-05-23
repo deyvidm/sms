@@ -26,9 +26,9 @@
 <div class="flex flex-col w-full lg:flex-row">
   <Sidebar />
   <div class="divider lg:divider-horizontal" />
-  <!-- <div class="w-3/4 p-5 shadow-xl"> -->
+  <div class="w-3/4 p-5 shadow-xl">
     <slot />
-  <!-- </div> -->
+  </div>
 </div>
 {:else}
 <slot />

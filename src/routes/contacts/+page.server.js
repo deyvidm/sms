@@ -3,15 +3,13 @@ import { apiClient } from '$lib/gin';
 import { fail, redirect } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageServerLoad} */
-export async function load({ parent, locals, url }) {
+export async function load({ fetch, parent, locals, url }) {
 	 
     const { user } = await parent();
 	if (!user) throw redirect(307, '/');
 
-    console.log(locals)
-    apiClient.setToken(locals.user)
-    console.log("before GET")
-    const body = await apiClient.get('/contacts')
+    console.log("/contacts page server before GET")
+    const body = await apiClient.get(fetch, '/contacts')
 
     if (body.errors) {
         return fail(401, body);

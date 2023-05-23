@@ -20,7 +20,7 @@
         {/if}
 
         {#if user}
-            Signed in as {user}
+            Signed in as {user.username}
             <a href="/logout">
                 <button class="btn btn-ghost right-0">Sign Out</button>
             </a>

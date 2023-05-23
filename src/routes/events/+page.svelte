@@ -2,16 +2,18 @@
     import { onMount } from "svelte";
     import { userEvents } from "$lib/gin";
     import type { Event } from "$lib/gripes";
-    import EventRow from "$lib/EventRow.svelte"
+    import EventRow from "$lib/EventRow.svelte";
 
+    /** @type {import('./$types').PageData} */
+    export let data;
     let events = new Array<Event>();
 
     onMount(async () => {
-        console.log("mounted events page")
-        if ($userEvents) {
-            events = $userEvents;
-        } 
-        console.log(events)
+        console.log("mounted events page");
+        if (data.events) {
+            events = data.events;
+        }
+        console.log(events);
     });
 
     let activeId = "";
@@ -20,7 +22,6 @@
     }
 </script>
 
-<!-- <p>events: {events.length}</p> -->
 {#each events as e}
-     <EventRow event={e} active={activeId == e.id} on:message={handleMessage} />
+    <EventRow event={e} active={activeId == e.id} on:message={handleMessage} />
 {/each}

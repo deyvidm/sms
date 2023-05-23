@@ -89,7 +89,7 @@ export class APIClient {
 
 
 
-    private buildReq(method, path, data) {
+    public buildReq(method, path, data) {
         let headers = {}
 
         if (this.token) {
@@ -107,12 +107,12 @@ export class APIClient {
         return {
             method: method,
             headers: headers,
-            body: null  
         }
 
     }
 
-    private async send({ method, path, data }) {
+    private async send(fetch, {method, path, data}) {
+
         
         let req = this.buildReq(method, path, data)
         console.log(req)
@@ -129,21 +129,22 @@ export class APIClient {
         throw error(res.status);
     }
 
-    public get(path) {
-        return this.send({ method: 'GET', path, data: []});
+    public async get(fetch, path) {
+        return this.send(fetch, {method: 'GET', path, data:{}});
     }
-
-    public del(path) {
-        return this.send({ method: 'DELETE', path, data: []});
+    
+    public async del(fetch, path) {
+        return this.send(fetch, {method: 'DELETE', path, data:{}});
     }
-
-    public post(path, data) {
-        return this.send({ method: 'POST', path, data});
+    
+    public async post(fetch, path, data) {
+        return this.send(fetch, {method: 'POST', path, data});
     }
-
-    public put(path, data) {
-        return this.send({ method: 'PUT', path, data});
+    
+    public async put(fetch, path, data) {
+        return this.send(fetch, {method: 'PUT', path, data});
     }
+    
 
 }
 
