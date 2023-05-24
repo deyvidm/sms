@@ -8,11 +8,9 @@
     let events = new Array<Event>();
 
     onMount(async () => {
-        console.log("mounted events page");
         if (data.events) {
             events = data.events;
         }
-        console.log(events);
     });
 
     let activeId = "";

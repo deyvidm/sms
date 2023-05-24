@@ -9,8 +9,7 @@ export const actions = {
 		data.set("password", "hunter2")
 		
 		apiClient.fetch = fetch
-		const body = await apiClient.post(fetch, '/users/login',
-		{
+		const body = await apiClient.post('/users/login',{
 			username: data.get('username'),
 		    password: data.get('password')
 		});
@@ -18,11 +17,8 @@ export const actions = {
 		if (body.errors) {
 			return fail(401, body);
 		}
-
-		console.log("/users/login body: ")
-		console.log(body)
+		
 		locals = body
-		// apiClient.setToken(body.data.token)
 		const value = btoa(JSON.stringify(body.data));
 		cookies.set('jwt', value, { path: '/' });
 

@@ -11,10 +11,7 @@
 
   /** @type {import('./$types').PageData} */
   export let data;
-  
-  onMount(async () => {
-    console.log("mounted root layout, token: ", apiClient.getToken());
-  });
+
 </script>
 
 <Header user={data.user}/>

@@ -73,9 +73,7 @@ export class APIClient {
 
 
     public SignOut() {
-        this.token = ""
-        currentUser.update(u => u = { username: "", contacts: [] })
-        window.sessionStorage.setItem("store", "")
+        this.setToken("")
     }
 
     public async UpdateContacts(): Promise<boolean> {

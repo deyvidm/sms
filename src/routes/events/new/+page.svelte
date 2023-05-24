@@ -16,15 +16,12 @@ function extractIDs(iterable) {
 }
 
   async function create() {
-    console.log("create new event ---")
     submitButton.classList.add("loading")
-    const d = new Date(Date.now());
     const body = await apiClient.post("/events/new",{
       title: title,
       invite_body: invite_body,
       contacts: extractIDs(recipients)
     }).then((body)=>{
-        console.log(body)
         submitButton.classList.remove("loading")
         submitButton.classList.add("btn-disabled")
         submitButton.classList.add("btn-primary")

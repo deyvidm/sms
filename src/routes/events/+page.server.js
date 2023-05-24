@@ -12,9 +12,5 @@ export async function load({ fetch, locals, parent }) {
         return fail(401, body);
     }
 
-    console.log("/events body: ")
-    console.log(body)
-	locals.user.events = body.data 
-	console.log("\t3: ", apiClient.getToken())
 	return {events: body.data}
 }

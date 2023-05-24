@@ -9,24 +9,4 @@ export function handle({event, resolve }) {
 	}
 	console.log("1:", apiClient.getToken())
 	return resolve(event);
-	// let data;
-	// try {
-	// 	if (jwt) {
-	// 		data = JSON.parse(atob(jwt))
-	// 	}
-	// } catch (e) {
-	// 	console.log(e)
-	// }
-	// if (!data) {
-	// 	data = {
-	// 		user: {},
-	// 		token: "",
-	// 	}
-	// }
-	// event.locals = {
-	// 	user: data.user,
-	// 	token: data.token,
-	// }
-	// apiClient.setToken(data.token)
-	// return resolve(event);
 }
