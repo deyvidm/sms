@@ -58,8 +58,6 @@
 <h2 class="mb-10 text-4xl font-extrabold dark:text-white">Create New Event</h2>
 
 <div class="form-control w-full ">
-    <form class="space-y-4 md:space-y-6" action="?/login" >
-
     <div>
         <label class="label" for="event-title">
             <span class="text-xl font-bold text-xllabel-text">Title</span>
@@ -102,5 +100,4 @@
             >Create</button
         >
     {/if}
-    </form>
 </div>

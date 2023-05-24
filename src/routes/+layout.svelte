@@ -7,13 +7,13 @@
 
   import { onMount } from "svelte";
 
-  import { currentUser, userEvents } from "$lib/gin";
+  import { apiClient, currentUser, userEvents } from "$lib/gin";
 
   /** @type {import('./$types').PageData} */
   export let data;
-
+  
   onMount(async () => {
-    console.log("mounted root layout");
+    console.log("mounted root layout, token: ", apiClient.getToken());
   });
 </script>
 

@@ -1,19 +1,36 @@
 <script lang="ts">
-  import { error } from "@sveltejs/kit";
   import ContactList from "$lib/ContactList.svelte";
+    import { apiClient } from "$lib/gin";
 
-  let formTitle: string;
-  let content: string;
+  let title: string;
+  let invite_body: string;
   let recipients = new Array();
   let submitButton: HTMLButtonElement;
-
+  
   function handleMessage(event) {
     recipients = event.detail.recipients;
   }
 
-  function create() {
-    // submitButton.classList.add("loading")
-    // const d = new Date(Date.now());
+function extractIDs(iterable) {
+  return Array.from(iterable, node => node.id);
+}
+
+  async function create() {
+    console.log("create new event ---")
+    submitButton.classList.add("loading")
+    const d = new Date(Date.now());
+    const body = await apiClient.post("/events/new",{
+      title: title,
+      invite_body: invite_body,
+      contacts: extractIDs(recipients)
+    }).then((body)=>{
+        console.log(body)
+        submitButton.classList.remove("loading")
+        submitButton.classList.add("btn-disabled")
+        submitButton.classList.add("btn-primary")
+        submitButton.textContent = "Success"
+    });
+
     // createEvent(<EventRecord>{
     //     organizer: pb.authStore.model?.id,
     //     title: formTitle,
@@ -45,24 +62,23 @@
   /** @type {import('./$types').PageData} */
   export let data;
   let contacts = new Array();
-  contacts = data.user.contacts
-
+  contacts = data.user.contacts;
 </script>
 
 <h2 class="mb-10 text-4xl font-extrabold dark:text-white">Create New Event</h2>
 
 <div class="form-control w-full">
-  <form class="space-y-4 md:space-y-6" action="?/login">
+  <form class="space-y-4 md:space-y-6" on:submit|preventDefault={create}>
     <div>
       <label class="label" for="event-title">
         <span class="text-xl font-bold text-xllabel-text">Title</span>
       </label>
       <input
-        bind:value={formTitle}
+      bind:value={title}
         type="text"
+        name="title"
         placeholder="Sunday Funday St Paddy's Vball"
         class="input input-bordered w-full max-w"
-        id="event-title"
       />
     </div>
     <div class="mt-5">
@@ -70,32 +86,16 @@
         <span class="text-xl font-bold text-xllabel-text">SMS Content</span>
       </label>
       <textarea
-        bind:value={content}
+      bind:value={invite_body}
+        name="content"
         class="w-full h-96 pb-10 textarea textarea-bordered"
-        id="event-content"
       />
     </div>
 
-    <!-- The button to open modal -->
-    <label for="my-modal-5" class="mt-12 w-1/4 btn btn-outline btn-accent"
-      >{recipients.length > 0 ? "Edit Recipients" : "Add Recipients"}</label
-    >
-    <input type="checkbox" id="my-modal-5" class="modal-toggle" />
-    <div class="modal">
-      <div class="modal-box w-11/12 max-w-5xl">
-        <ContactList contacts={contacts} on:message={handleMessage} />
-        <div class="modal-action">
-          <label for="my-modal-5" class="btn">Finish</label>
-        </div>
-      </div>
-    </div>
-    <div class="mt-5" />
+    <ContactList {contacts} on:message={handleMessage} />
+    <input type="hidden" name="recipients"  value={recipients}/>
     {#if recipients.length > 0}
-      <button
-        bind:this={submitButton}
-        on:click={create}
-        class="mt-12 w-1/4 btn btn-active">Create</button
-      >
+      <button bind:this={submitButton}  class="mt-12 w-1/4 btn btn-active">Create</button>
     {/if}
   </form>
 </div>

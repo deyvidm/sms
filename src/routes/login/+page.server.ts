@@ -3,11 +3,12 @@ import { apiClient } from '$lib/gin.js';
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-	default: async ({ fetch, cookies, request }) => {
+	default: async ({ fetch, cookies, request, locals }) => {
 		const data = await request.formData();
 		data.set("username", "user2")
 		data.set("password", "hunter2")
-
+		
+		apiClient.fetch = fetch
 		const body = await apiClient.post(fetch, '/users/login',
 		{
 			username: data.get('username'),
@@ -20,7 +21,8 @@ export const actions = {
 
 		console.log("/users/login body: ")
 		console.log(body)
-		apiClient.setToken(body.data.token)
+		locals = body
+		// apiClient.setToken(body.data.token)
 		const value = btoa(JSON.stringify(body.data));
 		cookies.set('jwt', value, { path: '/' });
 

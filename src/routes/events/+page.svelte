@@ -1,6 +1,5 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { userEvents } from "$lib/gin";
     import type { Event } from "$lib/gripes";
     import EventRow from "$lib/EventRow.svelte";
 

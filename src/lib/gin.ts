@@ -10,18 +10,70 @@ const base = 'http://localhost:8080/api';
 
 
 export class APIClient {
-    private token = ""
-    private user;
+    private token;
 
     constructor() {
     }
-
+    
+    public getToken() {
+        return this.token
+    }
     public setToken(token: string) {
         this.token = token
     }
+
+    public buildReq(method, path, data) {
+        let headers = {}
+        const token = this.getToken()
+        if (token.length > 0) {
+            headers['Authorization'] = `Bearer ${token}`
+        }
+
+        if (data && method != "GET") {
+            headers['Content-Type'] = 'application/json';
+            return {
+                method: method,
+                headers: headers,
+                body: JSON.stringify(data)
+            }
+        }
+        return {
+            method: method,
+            headers: headers,
+        }
+
+    }
+
+    private async send({method, path, data}) {        
+        let req = this.buildReq(method, path, data)
+        const res = await fetch(`${base}${path}`, req);
+        if (res.ok || res.status === 422) {
+            const text = await res.text();
+            return text ? JSON.parse(text) : {};
+        }
+        throw error(res.status);
+    }
+
+    public async get(path) {
+        return this.send({method: 'GET', path, data:{}});
+    }
+    
+    public async del(path) {
+        return this.send({method: 'DELETE', path, data:{}});
+    }
+    
+    public async post(path, data) {
+        return this.send({method: 'POST', path, data});
+    }
+    
+    public async put(path, data) {
+        return this.send({method: 'PUT', path, data});
+    }
+    
+
+
     public SignOut() {
         this.token = ""
-        this.user = null
         currentUser.update(u => u = { username: "", contacts: [] })
         window.sessionStorage.setItem("store", "")
     }
@@ -86,69 +138,7 @@ export class APIClient {
 
         // return body
     }
-
-
-
-    public buildReq(method, path, data) {
-        let headers = {}
-
-        if (this.token) {
-            headers['Authorization'] = `Bearer ${this.token}`
-        }
-
-        if (data && method != "GET") {
-            headers['Content-Type'] = 'application/json';
-            return {
-                method: method,
-                headers: headers,
-                body: JSON.stringify(data)
-            }
-        }
-        return {
-            method: method,
-            headers: headers,
-        }
-
-    }
-
-    private async send(fetch, {method, path, data}) {
-
-        
-        let req = this.buildReq(method, path, data)
-        console.log(req)
-        console.log("---------------------- crash after this")
-
-        const res = await fetch(`${base}${path}`, req);
-        if (res.ok || res.status === 422) {
-            const text = await res.text();
-            return text ? JSON.parse(text) : {};
-        }
-        console.log(method," to ", path, " : ", res.ok)
-        res.text().then((text)=>console.log(method," to ", path, " : ", res.text()))
-
-        throw error(res.status);
-    }
-
-    public async get(fetch, path) {
-        return this.send(fetch, {method: 'GET', path, data:{}});
-    }
-    
-    public async del(fetch, path) {
-        return this.send(fetch, {method: 'DELETE', path, data:{}});
-    }
-    
-    public async post(fetch, path, data) {
-        return this.send(fetch, {method: 'POST', path, data});
-    }
-    
-    public async put(fetch, path, data) {
-        return this.send(fetch, {method: 'PUT', path, data});
-    }
-    
-
 }
-
-
 
 
 export const apiClient = new APIClient()

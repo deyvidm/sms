@@ -6,7 +6,7 @@ export async function load({ fetch, locals, parent }) {
     const { user } = await parent();
 	if (!user) throw redirect(307, '/');
 
-	const body = await apiClient.get(fetch, "/events")
+	const body = await apiClient.get("/events")
 
 	if (body.errors) {
         return fail(401, body);
@@ -15,5 +15,6 @@ export async function load({ fetch, locals, parent }) {
     console.log("/events body: ")
     console.log(body)
 	locals.user.events = body.data 
+	console.log("\t3: ", apiClient.getToken())
 	return {events: body.data}
 }

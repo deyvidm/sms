@@ -4,19 +4,22 @@ import { fail, redirect } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ locals, url }) {
-	let log;
+    if (!locals) throw redirect(302, '/login');
+	// let log;
+    // console.log("load root page server ")
+    // if (locals.user?.username){
+    //     log = "logged in: " + locals.user.username
+    // } else {
+    //     log = "-0-"
+    // }
 
-    if (locals.user?.username){
-        log = "logged in: " + locals.user.username
-    } else {
-        log = "-0-"
-    }
+    // console.log("Page Server", log)
 
-    console.log("Page Server", log)
+	// return {
 
-	return {
+	// };
+	console.log("\t2: ", apiClient.getToken())
 
-	};
 }
 
 
