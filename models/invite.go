@@ -1,8 +1,6 @@
 package models
 
 import (
-	"fmt"
-
 	"github.com/deyvidm/sms-backend/types"
 )
 
@@ -28,16 +26,16 @@ type Invite struct {
 type APIInvite struct {
 	ID      string     `json:"id"`
 	Contact APIContact `json:"contact"`
-	Event   APIEvent   `json:"event"`
+	Event   APIEvent   `json:"-"`
 	Status  string     `status:"status"`
 	Paid    bool       `json:"paid"`
 }
 
-func (i *Invite) ToAPIInvite() APIInvite {
+func (i *Invite) ToAPI() APIInvite {
 	return APIInvite{
 		ID:      i.ID,
-		Contact: i.Contact.toAPIContact(),
-		Event:   i.Event.ToAPIEvent(),
+		Contact: i.Contact.ToAPI(),
+		Event:   i.Event.ToAPI(),
 		Status:  i.Status,
 		Paid:    i.Paid,
 	}
@@ -46,9 +44,9 @@ func (i *Invite) ToAPIInvite() APIInvite {
 func GetInvite(id string) (Invite, error) {
 	var invite Invite
 	DB.Where("id = ?", id).First(&invite)
-	if invite == (Invite{}) {
-		return invite, fmt.Errorf("no invite with ID '%s'", id)
-	}
+	// if invite == (Invite{}) {
+	// 	return invite, fmt.Errorf("no invite with ID '%s'", id)
+	// }
 	return invite, nil
 
 }

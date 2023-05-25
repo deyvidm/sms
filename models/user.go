@@ -29,8 +29,8 @@ func (u *User) ToAPIUser() APIUser {
 	fmt.Println(len(u.Contacts))
 	return APIUser{
 		Username: u.Username,
-		Contacts: Contacts(u.Contacts).toAPIContact(),
-		Events:   Events(u.Events).toAPIEvent(),
+		Contacts: Contacts(u.Contacts).ToAPI(),
+		Events:   Events(u.Events).ToAPI(),
 	}
 }
 

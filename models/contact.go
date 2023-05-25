@@ -17,7 +17,7 @@ type APIContact struct {
 	Phone     string `json:"phone"`
 }
 
-func (c *Contact) toAPIContact() APIContact {
+func (c *Contact) ToAPI() APIContact {
 	return APIContact{
 		ID:        c.ID,
 		FirstName: c.FirstName,
@@ -28,10 +28,10 @@ func (c *Contact) toAPIContact() APIContact {
 
 type Contacts []Contact
 
-func (contacts Contacts) toAPIContact() []APIContact {
+func (contacts Contacts) ToAPI() []APIContact {
 	var ret []APIContact
 	for _, c := range contacts {
-		ret = append(ret, c.toAPIContact())
+		ret = append(ret, c.ToAPI())
 	}
 	return ret
 }
@@ -46,12 +46,12 @@ func (u *User) SaveContact(c Contact) (APIContact, error) {
 	var contact Contact
 	DB.Where("phone = ? AND owner = ? ", c.Phone, u.ID).First(&contact)
 	if contact != (Contact{}) {
-		return contact.toAPIContact(), nil
+		return contact.ToAPI(), nil
 	}
 	err := DB.Model(u).Association("Contacts").Append([]Contact{c})
 	if err != nil {
 		return APIContact{}, err
 	}
 	DB.Where("phone = ? AND owner = ? ", c.Phone, u.ID).First(&contact)
-	return contact.toAPIContact(), nil
+	return contact.ToAPI(), nil
 }
