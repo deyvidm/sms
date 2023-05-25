@@ -9,6 +9,18 @@
     const dispatch = createEventDispatcher();
 
     async function loadAttendance() {
+        await apiClient.GetInvitations(event.id).then((resp)=>{
+            // could also scan resp.status == success
+            attendees = resp.data.invites;
+            // attendees.forEach((a) => {
+            //     if (a.status == AttendeeStatusOptions.accepted) {
+            //         attendeesConfirmed++;
+            //     }
+            //     ignoreList.push(a.contact)
+            // });
+            // ignoreList = ignoreList;
+            return resp.data
+        })
         // await apiClient.GetAttendees(event).then((result) => {
         //     attendees = result.items;
         //     attendees.forEach((a) => {
@@ -28,7 +40,7 @@
 
     export let event: Event;
     export let active: boolean = false;
-    // let attendees = new Array<AttendeeResponse>();
+    let attendees = new Array();
     let attendeesConfirmed = 0;
     let ignoreList = new Array<string>();
 </script>
@@ -53,7 +65,7 @@
                 <input type="checkbox" id="invite-more-modal" class="modal-toggle" />
                 <div class="modal">
                     <div class="modal-box w-11/12 max-w-5xl">
-                        <ContactList on:message={handleMessage} ignore={ignoreList} />
+                        <ContactList contacts={[]} on:message={handleMessage} />
                         <div class="modal-action">
                             <label for="invite-more-modal" class="btn">Invite</label>
                         </div>

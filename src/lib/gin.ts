@@ -1,9 +1,9 @@
 import { writable, type Writable } from 'svelte/store';
-import type { Contact, CurrentUser, Event } from './gripes';
+import type { Contact, User, Event } from './gripes';
 import { error, json } from '@sveltejs/kit';
 
 
-export const currentUser = writable<CurrentUser>({ username: "", contacts: [] })
+export const currentUser = writable<User>()
 export const userContacts = writable<Contact[]>([])
 export const userEvents = writable<Event[]>([])
 const base = 'http://localhost:8080/api';
@@ -76,43 +76,8 @@ export class APIClient {
         this.setToken("")
     }
 
-    public async UpdateContacts(): Promise<boolean> {
-        const response = await fetch("http://localhost:8080/api/contacts", {
-            method: "GET",
-            headers: {
-                "Authorization": "Bearer " + this.token
-            },
-        });
-
-        if (!response.ok) {
-            return false
-        }
-        const data = await response.json()
-        if (data.status != "success") {
-            return false
-        }
-        userContacts.update(u => u = data.data)
-        return true
-    }
-
-    public async AddContact(first_name: string, last_name: string, phone: string): Promise<boolean> {
-        const response = await fetch("http://localhost:8080/api/contacts/new", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + this.token
-            },
-            body: JSON.stringify({ first_name, last_name, phone }),
-        });
-
-        if (!response.ok) {
-            return false
-        }
-        const data = await response.json()
-        if (data.status != "success") {
-            return false
-        }
-        return true
+    public async GetInvitations(eventID: string) {
+        return this.get("/events/"+eventID)
     }
 
     public async UserLogin(username: string | null , password: string | null ): Promise<any> {

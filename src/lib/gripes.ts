@@ -9,11 +9,6 @@ export interface Contact {
     last_name: string;
     phone: string;
 }
-export interface CurrentUser {
-    username: string;
-    contacts: Contact[];
-}
-
 export interface Event {
     id: string;
 	title: string;
@@ -21,3 +16,10 @@ export interface Event {
 	start_date: string;
 	end_date:   string;
 }
+
+export interface User {
+    username: string;
+    contacts: Contact[];
+    events: Event[];
+}
+

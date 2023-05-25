@@ -8,7 +8,6 @@ export const actions = {
 		data.set("username", "user2")
 		data.set("password", "hunter2")
 		
-		apiClient.fetch = fetch
 		const body = await apiClient.post('/users/login',{
 			username: data.get('username'),
 		    password: data.get('password')
@@ -20,8 +19,8 @@ export const actions = {
 		
 		locals = body
 		const value = btoa(JSON.stringify(body.data));
+		apiClient.setToken(body.data.token)
 		cookies.set('jwt', value, { path: '/' });
-
 		throw redirect(307, '/');
 	}
 };

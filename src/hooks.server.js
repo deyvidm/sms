@@ -7,6 +7,5 @@ export function handle({event, resolve }) {
 	if (event.locals) {
 		apiClient.setToken(event.locals.token)
 	}
-	console.log("1:", apiClient.getToken())
 	return resolve(event);
 }
