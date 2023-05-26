@@ -8,19 +8,25 @@
 
     const dispatch = createEventDispatcher();
 
+    export let event: Event;
+    export let active: boolean = false;
+    let attendees = new Array();
+    let attendeesConfirmed = 0;
+    let ignoreList = new Array<string>();
+
     async function loadAttendance() {
-        await apiClient.GetInvitations(event.id).then((resp)=>{
+        await apiClient.GetInvitations(event.id).then((resp) => {
             // could also scan resp.status == success
             attendees = resp.data.invites;
-            // attendees.forEach((a) => {
-            //     if (a.status == AttendeeStatusOptions.accepted) {
-            //         attendeesConfirmed++;
-            //     }
-            //     ignoreList.push(a.contact)
-            // });
+            attendees.forEach((a) => {
+                if (a.status == 'accepted') {
+                    attendeesConfirmed++;
+                }
+                //     ignoreList.push(a.contact)
+            });
             // ignoreList = ignoreList;
-            return resp.data
-        })
+            // return resp.data;
+        });
         // await apiClient.GetAttendees(event).then((result) => {
         //     attendees = result.items;
         //     attendees.forEach((a) => {
@@ -36,13 +42,6 @@
     function handleMessage(event) {
         console.log(event.detail);
     }
-
-
-    export let event: Event;
-    export let active: boolean = false;
-    let attendees = new Array();
-    let attendeesConfirmed = 0;
-    let ignoreList = new Array<string>();
 </script>
 
 <div
@@ -65,7 +64,7 @@
                 <input type="checkbox" id="invite-more-modal" class="modal-toggle" />
                 <div class="modal">
                     <div class="modal-box w-11/12 max-w-5xl">
-                        <ContactList contacts={[]} on:message={handleMessage} />
+                        <ContactList contacts={ignoreList} on:message={handleMessage} />
                         <div class="modal-action">
                             <label for="invite-more-modal" class="btn">Invite</label>
                         </div>
@@ -78,8 +77,8 @@
             </div>
         {/if}
 
-        <!-- {#each attendees as a}
+        {#each attendees as a}
             <EventAttendee who={a} />
-        {/each} -->
+        {/each}
     </div>
 </div>

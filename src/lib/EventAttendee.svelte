@@ -35,8 +35,8 @@
                     <td>
                         <div class="flex items-center space-x-3">
                             <div class="font-bold">
-                                {who.expand.contact.first_name}
-                                {who.expand.contact.last_name}
+                                {who.contact.first_name}
+                                {who.contact.last_name}
                             </div>
                         </div>
                     </td>
