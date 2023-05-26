@@ -27,7 +27,7 @@ type APIInvite struct {
 	ID      string     `json:"id"`
 	Contact APIContact `json:"contact"`
 	Event   APIEvent   `json:"-"`
-	Status  string     `status:"status"`
+	Status  string     `json:"status"`
 	Paid    bool       `json:"paid"`
 }
 
