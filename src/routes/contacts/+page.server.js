@@ -12,6 +12,5 @@ export async function load({ fetch, parent, locals, url }) {
     if (body.errors) {
         return fail(401, body);
     }
-    
     return {contacts: body.data}
 }

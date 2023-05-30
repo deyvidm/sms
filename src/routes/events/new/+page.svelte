@@ -12,7 +12,7 @@
   }
 
 function extractIDs(iterable) {
-  return Array.from(iterable, node => node.id);
+  // return Array.from(iterable, (node) => console.log(node.id));
 }
 
   async function create() {
@@ -59,7 +59,7 @@ function extractIDs(iterable) {
   /** @type {import('./$types').PageData} */
   export let data;
   let contacts = new Array();
-  contacts = data.user.contacts;
+  contacts = data.contacts;
 </script>
 
 <h2 class="mb-10 text-4xl font-extrabold dark:text-white">Create New Event</h2>
