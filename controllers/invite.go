@@ -4,15 +4,19 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/deyvidm/sms-backend/models"
 	"github.com/deyvidm/sms-backend/types"
 	"github.com/gin-gonic/gin"
 )
 
-func UpdateInvite(c *gin.Context) {
-	id := c.Param("id")
+func PatchInvite(c *gin.Context) {
+	u, err := GetUserFromContext(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})
+		return
+	}
 
-	invite, err := models.GetInvite(id)
+	id := c.Param("id")
+	invite, err := u.GetInviteByID(id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})
 		return
