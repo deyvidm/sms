@@ -1,10 +1,14 @@
-<script lang="ts">
+<script>
+	import { enhance } from '$app/forms';
+	import ListErrors from '$lib/ListErrors.svelte';
 
-
-    let username: string;
-    let password: string;
-
+    /** @type {import('./$types').ActionData} */
+    export let form;
 </script>
+
+<svelte:head>
+	<title>Sign in • SMSThing</title>
+</svelte:head>
 
 <section class="bg-gray-50 dark:bg-gray-900">
     <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -20,18 +24,22 @@
             class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
         >
             <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-                <form class="space-y-4 md:space-y-6" action="?/login" >
+
+
+				<ListErrors errors={form?.errors} />
+
+
+                <form class="space-y-4 md:space-y-6" use:enhance method="POST">
                     <div>
                         <label
-                            for="email"
+                            for="username"
                             class="mb-2 text-sm font-medium text-gray-900 dark:text-white"
                             >Username</label
                         >
                         <input
-                            bind:value={username}
-                            type="email"
-                            name="email"
-                            id="email"
+                            type="username"
+                            name="username"
+                            id="username"
                             class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                             placeholder="barfield"
                         />
@@ -43,7 +51,6 @@
                             >Password</label
                         >
                         <input
-                            bind:value={password}
                             type="password"
                             name="password"
                             id="password"

@@ -1,16 +1,12 @@
 <script lang="ts">
-    import { currentUser, pb } from './pocketbase';
+    import { currentUser, apiClient } from './gin';
 
     let username: string;
     let password: string;
 
-    async function login() {
-        await pb.collection('users').authWithPassword(username, password);
-    }
-
     function signOut() {
-        pb.authStore.clear();
-    }
+        apiClient.SignOut()
+    }  
 </script>
 
 {#if $currentUser}

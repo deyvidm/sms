@@ -1,26 +1,32 @@
 <script lang="ts">
-  import Header from "$lib/Header.svelte";
+  import Header from "./Header.svelte";
   import Sidebar from "$lib/Sidebar.svelte";
-  import Login from "../lib/Login.svelte";
-  import { currentUser, pb } from "$lib/pocketbase";
-    import { onMount } from "svelte";
+  import { navigating } from "$app/stores";
 
-  onMount(()=>{
-    if (!pb.authStore.model?.id){
-      
-    }
-  })
+  import Login from "../lib/Login.svelte";
+
+  import { onMount } from "svelte";
+
+  import { apiClient, currentUser, userEvents } from "$lib/gin";
+
+  /** @type {import('./$types').PageData} */
+  export let data;
+
 </script>
 
-{#if !$currentUser}
-  <Login />
-{:else if $currentUser}
-  <Header />
-  <div class="flex flex-col w-full lg:flex-row">
-      <Sidebar />
-    <div class="divider lg:divider-horizontal" />
-    <div class="w-3/4 p-5 shadow-xl">
-      <slot />
-    </div>
+<Header user={data.user}/>
+{#if $navigating}
+  <h1>We out here navigating</h1>
+{/if}
+
+{#if data.user}
+<div class="flex flex-col w-full lg:flex-row">
+  <Sidebar />
+  <div class="divider lg:divider-horizontal" />
+  <div class="w-3/4 p-5 shadow-xl">
+    <slot />
   </div>
+</div>
+{:else}
+<slot />
 {/if}

@@ -14,10 +14,11 @@
     
 
     afterUpdate(() => {
-        updateAttendee(who)
+        // updateAttendee(who)
             // .then((result) => console.log(result))
-            .catch((err) => console.log(err));
+            // .catch((err) => console.log(err));
     });
+    
 </script>
 
 <div class="mb-2 collapse  border-base-300 bg-base-100 rounded-box">
@@ -35,8 +36,8 @@
                     <td>
                         <div class="flex items-center space-x-3">
                             <div class="font-bold">
-                                {who.expand.contact.first_name}
-                                {who.expand.contact.last_name}
+                                {who.contact.first_name}
+                                {who.contact.last_name}
                             </div>
                         </div>
                     </td>

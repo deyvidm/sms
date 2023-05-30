@@ -2,10 +2,11 @@
 
     import { beforeUpdate, createEventDispatcher, onMount } from 'svelte';
     import type { ContactResponse } from './pocketbase-types';
+    import type { Contact } from './gripes';
     const dispatch = createEventDispatcher();
 
     export let checked: boolean;
-    export let contact: ContactResponse;
+    export let contact: Contact;
 
     function onClick() {
         checked = !checked;
@@ -29,6 +30,6 @@
         <div class="font-bold">{contact.last_name}</div>
     </td>
     <td>
-        <div class="font-bold">{contact.status}</div>
+        <div class="font-bold">{contact.phone}</div>
     </td>
 </tr>

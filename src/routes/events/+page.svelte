@@ -1,13 +1,24 @@
 <script lang="ts">
-    import { get50Events } from "$lib/pocketbase";
     import { onMount } from "svelte";
-    import EventList from "$lib/EventList.svelte";
-    
-    onMount(()=>{
-        get50Events()
-    })
-    function handleMessage(e){
+    import type { Event } from "$lib/gripes";
+    import EventRow from "$lib/EventRow.svelte";
+
+    /** @type {import('./$types').PageData} */
+    export let data;
+    let events = new Array<Event>();
+
+    onMount(async () => {
+        if (data.events) {
+            events = data.events;
+        }
+    });
+
+    let activeId = "";
+    function handleMessage(event) {
+        activeId = event.detail.eventId;
     }
 </script>
 
-<EventList on:message={handleMessage}/>
+{#each events as e}
+    <EventRow event={e} active={activeId == e.id} on:message={handleMessage} />
+{/each}

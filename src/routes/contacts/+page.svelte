@@ -1,11 +1,14 @@
-<script lang="ts">
-    import ContactList from "$lib/ContactList.svelte";
-    import { get50Contacts } from "$lib/pocketbase";
-    import { onMount } from "svelte";
-    
+<script>
+    import { Record } from 'pocketbase';
+    import ContactList from '$lib/ContactList.svelte';
 
-    function handleMessage(e){
+    /** @type {import('./$types').PageData} */
+    export let data;
+
+    function handleMessage(event) {
+        let recipients = event.detail.recipients;
     }
-</script>
 
-<ContactList on:message={handleMessage}/>
+
+</script>
+<ContactList contacts={data.contacts} on:message={handleMessage} />

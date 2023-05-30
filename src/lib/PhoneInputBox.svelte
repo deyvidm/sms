@@ -1,7 +1,7 @@
 <script lang="ts">
     import type pocketbaseEs from 'pocketbase';
     import { afterUpdate } from 'svelte';
-    import { InputType } from './Types';
+    import { InputType } from './gripes';
 
     export let label: string;
     let input: HTMLInputElement;
