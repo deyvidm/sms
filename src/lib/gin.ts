@@ -75,6 +75,10 @@ export class APIClient {
         return this.send({ method: 'PUT', path, data });
     }
 
+    public async patch(path, data) {
+        return this.send({ method: 'PATCH', path, data });
+    }
+
 
 
     public SignOut() {
