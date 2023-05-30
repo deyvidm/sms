@@ -28,7 +28,7 @@ type Event struct {
 	EndDate        *time.Time `gorm:"type:datetime"`
 	InviteDate     *time.Time `gorm:"type:datetime"`
 	Status         string     `gorm:"type:text"`
-	// Invites        []Invite   `gorm:"foreignKey:event"`
+	Invites        []Invite   `gorm:"foreignKey:EventID"`
 }
 type APIEvent struct {
 	ID             string     `json:"id"`
@@ -128,11 +128,11 @@ func (u *User) OrganizeEvent(eventInput types.NewEvent) error {
 		for _, contact := range contacts {
 			invites = append(invites, Invite{
 				ContactID: contact.ID,
-				Event:     event,
 				Status:    InviteStatus_Sending,
 			})
 		}
-		if err := tx.Create(&invites).Error; err != nil {
+		event.Invites = invites
+		if err := tx.Create(&event).Error; err != nil {
 			return err
 		}
 

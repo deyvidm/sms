@@ -18,7 +18,6 @@ type Invite struct {
 	ContactID string
 	Contact   Contact `gorm:"foreignKey:ContactID"`
 	EventID   string
-	Event     Event  `gorm:"foreignKey:EventID"`
 	Status    string `gorm:"type:text"`
 	Paid      bool
 }
@@ -26,7 +25,6 @@ type Invite struct {
 type APIInvite struct {
 	ID      string     `json:"id"`
 	Contact APIContact `json:"contact"`
-	Event   APIEvent   `json:"-"`
 	Status  string     `json:"status"`
 	Paid    bool       `json:"paid"`
 }
@@ -35,7 +33,6 @@ func (i *Invite) ToAPI() APIInvite {
 	return APIInvite{
 		ID:      i.ID,
 		Contact: i.Contact.ToAPI(),
-		Event:   i.Event.ToAPI(),
 		Status:  i.Status,
 		Paid:    i.Paid,
 	}
