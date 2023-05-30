@@ -18,9 +18,9 @@
 </script>
 
 <tr on:click={onClick}>
-    <td>
+    <td hidden={true} >
         <label>
-            <input bind:checked id={contact.id} type="checkbox" class="checkbox" />
+            <input bind:checked id={contact.id} type="checkbox" class="checkbox"  />
         </label>
     </td>
     <td>

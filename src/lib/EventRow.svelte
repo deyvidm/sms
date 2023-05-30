@@ -64,7 +64,7 @@
                 <input type="checkbox" id="invite-more-modal" class="modal-toggle" />
                 <div class="modal">
                     <div class="modal-box w-11/12 max-w-5xl">
-                        <ContactList contacts={ignoreList} on:message={handleMessage} />
+                        <!-- <ContactList contacts={ignoreList} on:message={handleMessage} /> -->
                         <div class="modal-action">
                             <label for="invite-more-modal" class="btn">Invite</label>
                         </div>
@@ -77,8 +77,21 @@
             </div>
         {/if}
 
-        {#each attendees as a}
-            <EventAttendee invite={a} />
-        {/each}
+        <div class="mb-2 collapse border-base-300 bg-base-100 rounded-box">
+            <div class="overflow-x-auto w-full">
+                <table class="table table-compact w-full">
+                    <thead>
+                        <tr>
+                            <th />
+                            <th><p class="pl-2">Status</p></th>
+                            <th>Paid</th>
+                        </tr>
+                    </thead>
+                    {#each attendees as a}
+                        <EventAttendee invite={a} />
+                    {/each}
+                </table>
+            </div>
+        </div>
     </div>
 </div>
