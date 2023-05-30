@@ -16,8 +16,8 @@ import (
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
-		AllowOrigins: []string{"http://localhost:5173"},
-		AllowHeaders: []string{"Content-Type", "Authorization"},
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{"*"},
 	}))
 	public := router.Group(routes.PublicPrefix)
 	routes.AssignPublicRoutes(public)
