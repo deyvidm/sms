@@ -10,11 +10,11 @@ const base = 'http://localhost:8080/api';
 
 
 export class APIClient {
-    private token;
+    private token = "";
 
     constructor() {
     }
-    
+
     public getToken() {
         return this.token
     }
@@ -23,7 +23,11 @@ export class APIClient {
     }
 
     public buildReq(method, path, data) {
-        let headers = {}
+        let headers = {
+            "access-control-allow-origin": "*",
+            'Access-Control-Allow-Headers': "*",
+            'Access-Control-Allow-Methods': "*",
+        }
         const token = this.getToken()
         if (token.length > 0) {
             headers['Authorization'] = `Bearer ${token}`
@@ -44,7 +48,8 @@ export class APIClient {
 
     }
 
-    private async send({method, path, data}) {        
+
+    private async send({method, path, data}) {
         let req = this.buildReq(method, path, data)
         const res = await fetch(`${base}${path}`, req);
         if (res.ok || res.status === 422) {
@@ -55,21 +60,21 @@ export class APIClient {
     }
 
     public async get(path) {
-        return this.send({method: 'GET', path, data:{}});
+        return this.send({ method: 'GET', path, data: {} });
     }
-    
+
     public async del(path) {
-        return this.send({method: 'DELETE', path, data:{}});
+        return this.send({ method: 'DELETE', path, data: {} });
     }
-    
+
     public async post(path, data) {
-        return this.send({method: 'POST', path, data});
+        return this.send({ method: 'POST', path, data });
     }
-    
+
     public async put(path, data) {
-        return this.send({method: 'PUT', path, data});
+        return this.send({ method: 'PUT', path, data });
     }
-    
+
 
 
     public SignOut() {
@@ -77,10 +82,10 @@ export class APIClient {
     }
 
     public async GetInvitations(eventID: string) {
-        return this.get("/events/"+eventID)
+        return this.get("/events/" + eventID)
     }
 
-    public async UserLogin(username: string | null , password: string | null ): Promise<any> {
+    public async UserLogin(username: string | null, password: string | null): Promise<any> {
         // const response = await fetch("http://localhost:8080/api/users/login", {
         //     method: "POST",
         //     headers: {
