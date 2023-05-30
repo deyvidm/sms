@@ -1,6 +1,7 @@
 <script lang="ts">
   import ContactList from "$lib/ContactList.svelte";
   import { apiClient } from "$lib/gin";
+  import type { Contact } from "$lib/gripes";
   import { onMount } from "svelte";
 
   /** @type {import('./$types').PageData} */
@@ -8,17 +9,25 @@
 
   let title: string;
   let invite_body: string;
-  let available = new Array();
+  let available = data.contacts;
   let invited = new Array();
-  let submitButton: HTMLButtonElement;
-  let contacts = new Array();
 
-  function handleMessage(event) {
-    available = event.detail.recipients;
+  let submitButton: HTMLButtonElement;
+
+  function handleInvite(event) {
+    console.log(available.length);
+    available = available.filter((c) => c.id != event.detail.recipient.id);
+    invited = [...invited, event.detail.recipient];
   }
 
-  function extractIDs(iterable) {
-    // return Array.from(iterable, (node) => console.log(node.id));
+  function handleUninvite(event) {
+    console.log(event);
+    invited = invited.filter((c) => c.id != event.detail.recipient.id);
+    available = [...available, event.detail.recipient];
+  }
+
+  function extractIDs(iterable: Array<Contact>) {
+    return iterable.map((c) => c.id);
   }
 
   async function create() {
@@ -27,7 +36,7 @@
       .post("/events/new", {
         title: title,
         invite_body: invite_body,
-        contacts: extractIDs(available),
+        contacts: extractIDs(invited),
       })
       .then((body) => {
         submitButton.classList.remove("loading");
@@ -37,11 +46,7 @@
       });
   }
 
-  onMount(async () => {
-    available = data.contacts;
-    console.log("bam ", available.length)
-  });
-
+  onMount(async () => {});
 </script>
 
 <h2 class="mb-10 text-4xl font-extrabold dark:text-white">Create New Event</h2>
@@ -74,15 +79,15 @@
     <div class="flex space-x-4">
       <span>
         <span class="text-xl font-bold text-xllabel-text">Available</span>
-        <ContactList contacts={available} on:message={handleMessage} />
+        <ContactList contacts={available} on:message={handleInvite} />
       </span>
       <span>
         <span class="text-xl font-bold text-xllabel-text">Invited</span>
-        <ContactList contacts={invited} on:message={handleMessage} />
+        <ContactList contacts={invited} on:message={handleUninvite} />
       </span>
     </div>
-    <input type="hidden" name="recipients" value={available} />
-    {#if available.length > 0}
+    <input type="hidden" name="recipients" value={invited} />
+    {#if invited.length > 0}
       <button bind:this={submitButton} class="mt-12 w-1/4 btn btn-active"
         >Create</button
       >
