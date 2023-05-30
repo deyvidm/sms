@@ -2,9 +2,10 @@
     import { afterUpdate, createEventDispatcher, onMount } from 'svelte';
     import { attendees, get50Attendees, pb, updateAttendee } from './pocketbase';
     import type { AttendeeResponse, EventResponse } from './pocketbase-types';
+    import { apiClient } from '$lib/gin';
 
     // AttendeeResponse but with .exapand
-    export let who;
+    export let invite;
 
     const dispatch = createEventDispatcher();
 
@@ -14,9 +15,8 @@
     
 
     afterUpdate(() => {
-        // updateAttendee(who)
-            // .then((result) => console.log(result))
-            // .catch((err) => console.log(err));
+        console.log(invite)
+        apiClient.patch("/invites/"+invite.id,{paid:invite.paid})
     });
     
 </script>
@@ -36,18 +36,18 @@
                     <td>
                         <div class="flex items-center space-x-3">
                             <div class="font-bold">
-                                {who.contact.first_name}
-                                {who.contact.last_name}
+                                {invite.contact.first_name}
+                                {invite.contact.last_name}
                             </div>
                         </div>
                     </td>
                     <td>
-                        <span class="badge badge-lg">{who.status}</span>
+                        <span class="badge badge-lg">{invite.status}</span>
                     </td>
                     <td>
                         <label class="swap swap-flip text-3xl">
                             <!-- this hidden checkbox controls the state -->
-                            <input bind:checked={who.paid} on:click={onClick} type="checkbox" />
+                            <input bind:checked={invite.paid} on:click={onClick} type="checkbox" />
 
                             <div class="swap-on">💵</div>
                             <div class="swap-off">❌</div>

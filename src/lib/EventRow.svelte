@@ -78,7 +78,7 @@
         {/if}
 
         {#each attendees as a}
-            <EventAttendee who={a} />
+            <EventAttendee invite={a} />
         {/each}
     </div>
 </div>
