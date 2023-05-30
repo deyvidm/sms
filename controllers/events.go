@@ -7,6 +7,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func EventDetails(c *gin.Context) {
+	u, err := GetUserFromContext(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})
+		return
+	}
+	event := u.GetEventByID(c.Param("id"))
+	// event, err := models.GetEventByID(c.Param("id"))
+	// if err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"status": types.StatusFailed, "data": err.Error()})
+	// 	return
+	// }
+	c.JSON(http.StatusOK, gin.H{"status": types.StatusSuccess, "data": event.ToAPI()})
+}
+
 func AllEvents(c *gin.Context) {
 	user, err := GetUserFromContext(c)
 	if err != nil {

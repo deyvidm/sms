@@ -20,17 +20,17 @@ type User struct {
 }
 
 type APIUser struct {
-	Username string    `json:"username"`
-	Contacts []Contact `json:"contacts"`
-	Events   []Event   `json:"events"`
+	Username string       `json:"username"`
+	Contacts []APIContact `json:"contacts"`
+	Events   []APIEvent   `json:"events"`
 }
 
 func (u *User) ToAPIUser() APIUser {
 	fmt.Println(len(u.Contacts))
 	return APIUser{
 		Username: u.Username,
-		Contacts: u.Contacts,
-		Events:   u.Events,
+		Contacts: Contacts(u.Contacts).ToAPI(),
+		Events:   Events(u.Events).ToAPI(),
 	}
 }
 

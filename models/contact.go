@@ -8,22 +8,32 @@ type Contact struct {
 	Owner     string
 }
 
-func (c *Contact) toAPIContact() APIContact {
-	return APIContact{
-		FirstName: c.FirstName,
-		LastName:  c.LastName,
-		Phone:     c.Phone,
-		ID:        c.ID,
-	}
-}
-
 // used for returning cleaner data structs
 // otherwise API consumers also get createdAt, updatedAt, ID, etc.
 type APIContact struct {
+	ID        string `json:"id"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	Phone     string `json:"phone"`
-	ID        string `json:"id"`
+}
+
+func (c *Contact) ToAPI() APIContact {
+	return APIContact{
+		ID:        c.ID,
+		FirstName: c.FirstName,
+		LastName:  c.LastName,
+		Phone:     c.Phone,
+	}
+}
+
+type Contacts []Contact
+
+func (contacts Contacts) ToAPI() []APIContact {
+	var ret []APIContact
+	for _, c := range contacts {
+		ret = append(ret, c.ToAPI())
+	}
+	return ret
 }
 
 func (u *User) AllContacts() ([]APIContact, error) {
@@ -36,12 +46,12 @@ func (u *User) SaveContact(c Contact) (APIContact, error) {
 	var contact Contact
 	DB.Where("phone = ? AND owner = ? ", c.Phone, u.ID).First(&contact)
 	if contact != (Contact{}) {
-		return contact.toAPIContact(), nil
+		return contact.ToAPI(), nil
 	}
 	err := DB.Model(u).Association("Contacts").Append([]Contact{c})
 	if err != nil {
 		return APIContact{}, err
 	}
 	DB.Where("phone = ? AND owner = ? ", c.Phone, u.ID).First(&contact)
-	return contact.toAPIContact(), nil
+	return contact.ToAPI(), nil
 }
