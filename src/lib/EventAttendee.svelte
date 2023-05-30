@@ -14,10 +14,11 @@
     
 
     afterUpdate(() => {
-        updateAttendee(who)
+        // updateAttendee(who)
             // .then((result) => console.log(result))
-            .catch((err) => console.log(err));
+            // .catch((err) => console.log(err));
     });
+    
 </script>
 
 <div class="mb-2 collapse  border-base-300 bg-base-100 rounded-box">
