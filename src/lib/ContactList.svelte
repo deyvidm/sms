@@ -1,65 +1,27 @@
 <script lang="ts">
     import ContactRow from './ContactRow.svelte';
-    import { get50Contacts } from './pocketbase';
     import { beforeUpdate, afterUpdate, onDestroy, onMount } from 'svelte';
-    import type { AttendeeResponse, ContactResponse } from './pocketbase-types';
+
     import { createEventDispatcher } from 'svelte';
-    import { currentUser } from './gin';
     import type { Contact } from './gripes';
+
+    export let contacts: Array<Contact>;
 
     const dispatch = createEventDispatcher();
 
-    export let contacts: Array<any>;
-
     function handleMessage(event) {
-        let id = event.detail.id;
-        let checked = event.detail.checked;
-        let contact = contactIDMap.get(id);
-
-        if (contact == null) {
-            return;
-        }
-        if (checked) {
-            if (selectedContacts.indexOf(contact) < 0) {
-                selectedContacts.push(contact);
-            }
-        } else {
-            let i = selectedContacts.indexOf(contact);
-            if (i > -1) {
-                selectedContacts.splice(i, 1);
-            }
-        }
-        selectedContacts = selectedContacts;
-        remainingContacts = remainingContacts;
+        console.log(contacts.filter(c => c.id == event.detail.id))
         dispatch('message', {
-            recipients: selectedContacts,
+            recipient: contacts.filter(c => c.id == event.detail.id)[0]
         });
     }
 
-    onMount(async () => {
-        allContacts = contacts
-        if (!allContacts) {
-            return
-        }
-        allContacts.forEach((contact, i, arr) => {
-            contactIDMap.set(contact.id, contact);
-        });
-        remainingContacts = allContacts;
-        remainingContacts = remainingContacts.filter((contact)=>{return !ignore.includes(contact.id)})
+    beforeUpdate(() => {
     });
 
-    // an array of ContactIDs to exclude when displaying the list
-    // useful when trying to add more contacts to an existing event
-    // i.e. hide attending contacts
-    export let ignore = new Array<String>();
-
-    let allContacts = new Array();
-    let remainingContacts = new Array<Contact>();
-    let selectedContacts = new Array<Contact>();
-
-    let contactIDMap = new Map<string, Contact>();
-
-
+    onMount(async () => {
+    });
+    
 </script>
 
 <div class="overflow-x-auto w-full">
@@ -67,7 +29,7 @@
         <table class="table w-full">
             <thead>
                 <tr>
-                    <th>
+                    <th hidden={true} > 
                         <label>
                             <!-- <input bind:checked={yesall} type="checkbox" class="checkbox" /> -->
                         </label>
@@ -78,7 +40,7 @@
                 </tr>
             </thead>
             <tbody>
-                {#each remainingContacts as contact}
+                {#each contacts as contact}
                     <ContactRow on:message={handleMessage} checked={false} {contact} />
                 {/each}
             </tbody>
