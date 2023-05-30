@@ -53,8 +53,5 @@ func AssignPrivateRoutes(router *gin.RouterGroup) {
 
 const InternalPrefix = APIPrefix + "/internal"
 
-const UpdateInvite = "/invite/:id"
-
 func AssignInternalRoutes(router *gin.RouterGroup) {
-	router.PUT(UpdateInvite, controllers.PatchInvite)
 }
