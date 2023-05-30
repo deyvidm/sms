@@ -41,9 +41,11 @@ func (i *Invite) ToAPI() APIInvite {
 	}
 }
 
-func GetInvite(id string) (Invite, error) {
+func (u *User) GetInviteByID(id string) (Invite, error) {
 	var invite Invite
-	DB.Where("id = ?", id).First(&invite)
+	DB.Where("invites.id = ?", id).First(&invite)
+	// Prefill Event and check Organizer ID == user to stop user info leak
+
 	// if invite == (Invite{}) {
 	// 	return invite, fmt.Errorf("no invite with ID '%s'", id)
 	// }

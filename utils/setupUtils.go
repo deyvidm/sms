@@ -18,6 +18,7 @@ func SetupRouter() *gin.Engine {
 	router.Use(cors.New(cors.Config{
 		AllowOrigins: []string{"*"},
 		AllowHeaders: []string{"*"},
+		AllowMethods: []string{"*"},
 	}))
 	public := router.Group(routes.PublicPrefix)
 	routes.AssignPublicRoutes(public)

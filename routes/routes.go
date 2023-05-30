@@ -34,6 +34,8 @@ const NewEvent = "/events/new"
 const AllEvents = "/events"
 const EventDetails = "/events/:id"
 
+const InviteDetails = "/invites/:id"
+
 const NewMessage = "/messages/new"
 
 func AssignPrivateRoutes(router *gin.RouterGroup) {
@@ -44,13 +46,12 @@ func AssignPrivateRoutes(router *gin.RouterGroup) {
 	router.GET(AllEvents, controllers.AllEvents)
 	router.GET(EventDetails, controllers.EventDetails)
 
+	router.PATCH(InviteDetails, controllers.PatchInvite)
+
 	router.POST(NewMessage, controllers.NewMessage)
 }
 
 const InternalPrefix = APIPrefix + "/internal"
 
-const UpdateInvite = "/invite/:id"
-
 func AssignInternalRoutes(router *gin.RouterGroup) {
-	router.PUT(UpdateInvite, controllers.UpdateInvite)
 }
