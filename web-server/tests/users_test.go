@@ -7,9 +7,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/deyvidm/sms-backend/routes"
-	"github.com/deyvidm/sms-backend/types"
-	utils "github.com/deyvidm/sms-backend/utils"
+	"github.com/deyvidm/sms/web-server/routes"
+	"github.com/deyvidm/sms/web-server/types"
+	utils "github.com/deyvidm/sms/web-server/utils"
 )
 
 // this test is a series of steps

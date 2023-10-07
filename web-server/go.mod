@@ -1,9 +1,9 @@
-module github.com/deyvidm/sms-backend
+module github.com/deyvidm/sms/web-server
 
 go 1.19
 
 require (
-	github.com/deyvidm/sms-asynq v0.0.0-20230519152828-8be49b798c9c
+	github.com/deyvidm/sms/dispatcher v0.0.0-20231007182930-1f24cb462f38
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.8.1

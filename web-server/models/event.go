@@ -5,8 +5,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/deyvidm/sms-asynq/tasks"
-	"github.com/deyvidm/sms-backend/types"
+	"github.com/deyvidm/sms/dispatcher/tasks"
+	"github.com/deyvidm/sms/web-server/types"
 	"github.com/hibiken/asynq"
 	"gorm.io/gorm"
 )

@@ -3,9 +3,9 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/deyvidm/sms-asynq/tasks"
-	"github.com/deyvidm/sms-backend/models"
-	"github.com/deyvidm/sms-backend/types"
+	"github.com/deyvidm/sms/dispatcher/tasks"
+	"github.com/deyvidm/sms/web-server/models"
+	"github.com/deyvidm/sms/web-server/types"
 	"github.com/gin-gonic/gin"
 )
 

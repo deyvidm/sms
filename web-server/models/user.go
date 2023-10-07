@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/deyvidm/sms-backend/auth"
+	"github.com/deyvidm/sms/web-server/auth"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )

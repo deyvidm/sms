@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"github.com/deyvidm/sms-backend/routes"
-	"github.com/deyvidm/sms-backend/types"
-	"github.com/deyvidm/sms-backend/utils"
+	"github.com/deyvidm/sms/web-server/routes"
+	"github.com/deyvidm/sms/web-server/types"
+	"github.com/deyvidm/sms/web-server/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/require"
 )

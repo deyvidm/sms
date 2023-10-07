@@ -3,8 +3,8 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/deyvidm/sms-backend/auth"
-	"github.com/deyvidm/sms-backend/types"
+	"github.com/deyvidm/sms/web-server/auth"
+	"github.com/deyvidm/sms/web-server/types"
 	"github.com/gin-gonic/gin"
 )
 

@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/deyvidm/sms-backend/models"
-	"github.com/deyvidm/sms-backend/routes"
-	"github.com/deyvidm/sms-backend/types"
-	utils "github.com/deyvidm/sms-backend/utils"
+	"github.com/deyvidm/sms/web-server/models"
+	"github.com/deyvidm/sms/web-server/routes"
+	"github.com/deyvidm/sms/web-server/types"
+	utils "github.com/deyvidm/sms/web-server/utils"
 	"github.com/stretchr/testify/require"
 )
 
