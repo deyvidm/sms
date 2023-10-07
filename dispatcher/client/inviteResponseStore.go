@@ -3,7 +3,7 @@ package client
 import (
 	"context"
 
-	"github.com/deyvidm/sms-asynq/types"
+	"github.com/deyvidm/sms/dispatcher/types"
 	"github.com/redis/go-redis/v9"
 )
 

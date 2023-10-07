@@ -3,10 +3,10 @@ package main
 import (
 	"os"
 
-	"github.com/deyvidm/sms-asynq/client"
-	"github.com/deyvidm/sms-asynq/log"
-	"github.com/deyvidm/sms-asynq/tasks"
-	"github.com/deyvidm/sms-asynq/workers"
+	"github.com/deyvidm/sms/dispatcher/client"
+	"github.com/deyvidm/sms/dispatcher/log"
+	"github.com/deyvidm/sms/dispatcher/tasks"
+	"github.com/deyvidm/sms/dispatcher/workers"
 	"github.com/hibiken/asynq"
 	"github.com/joho/godotenv"
 	"github.com/redis/go-redis/v9"

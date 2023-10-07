@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/deyvidm/sms-asynq/log"
+	"github.com/deyvidm/sms/dispatcher/log"
 )
 
 const defaultAddress = "http://localhost:8080"

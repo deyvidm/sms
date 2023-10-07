@@ -4,11 +4,11 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/deyvidm/sms-asynq/client"
-	"github.com/deyvidm/sms-asynq/log"
-	"github.com/deyvidm/sms-asynq/tasks"
-	"github.com/deyvidm/sms-asynq/types"
-	"github.com/deyvidm/sms-asynq/utils"
+	"github.com/deyvidm/sms/dispatcher/client"
+	"github.com/deyvidm/sms/dispatcher/log"
+	"github.com/deyvidm/sms/dispatcher/tasks"
+	"github.com/deyvidm/sms/dispatcher/types"
+	"github.com/deyvidm/sms/dispatcher/utils"
 	"github.com/hibiken/asynq"
 )
 
