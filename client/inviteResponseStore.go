@@ -7,6 +7,8 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
+// This Store keeps track of recipient invites and their current status.
+// We log user invites to an ordered queue in Redis (1 for each user)
 type InviteResponseStore struct {
 	client *redis.Client
 }
