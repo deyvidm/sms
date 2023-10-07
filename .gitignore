@@ -19,6 +19,8 @@
 
 # Go workspace file
 go.work
-app.log
 dump.rdb
 .env
+sms
+data.db
+app.log
