@@ -12,4 +12,3 @@ WORKDIR /app
 COPY --from=build /app/asynq .
 
 CMD ["./asynq"]
-
