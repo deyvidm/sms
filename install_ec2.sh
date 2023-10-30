@@ -36,4 +36,3 @@ sudo cp nginx/nginx.conf /etc/nginx/nginx.conf
 sudo systemctl enable nginx
 sudo systemctl start nginx
 sudo systemctl status nginx
-
