@@ -1,8 +1,0 @@
-
-services:
-    dispatcher:
-        build: ./dispatcher
-            
-    redis:
-        image: "redis:alpine"
-
