@@ -26,10 +26,13 @@ sudo systemctl is-enabled redis6
 redis6-server --version
 redis6-cli ping
 
+cd .. # back to the root of SMS repo
+
 ####
 # Extra stuff to get this whole blob workin
 ###
 sudo yum install -y nginx
+sudo cp nginx/nginx.conf /etc/nginx/nginx.conf
 sudo systemctl enable nginx
 sudo systemctl start nginx
 sudo systemctl status nginx
