@@ -16,6 +16,7 @@ func SetupDB(db *gorm.DB) error {
 		Invite{},
 		SNSEvent{},
 		SNSRawMesage{},
+		Message{},
 	}
 
 	for _, m := range MODELS {

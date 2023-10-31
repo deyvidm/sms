@@ -37,7 +37,7 @@ type NewEvent struct {
 
 type NewMessage struct {
 	Content string `json:"content" binding:"required"`
-	To      int    `json:"to" bidnding:"required,num,gt=0"` // this will map to a specific Contact.ID
+	To      string `json:"to" bidnding:"required"` // this will map to a specific Contact.ID
 }
 
 // pointers because we want to allow asynq to http.PUT Status without forcing defaults on Paid

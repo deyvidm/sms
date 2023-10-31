@@ -22,9 +22,9 @@ func (u *User) SaveMessage(input types.NewMessage) error {
 		return fmt.Errorf("missing contact")
 	}
 	msg := Message{
-		From: u.Contact,
-		To:   recipient,
-		Body: input.Content,
+		SenderID:    u.ContactID,
+		RecipientID: recipient.ID,
+		Body:        input.Content,
 	}
 	return DB.Create(&msg).Error
 }
