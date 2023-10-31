@@ -34,3 +34,4 @@ node_modules
 .env.*
 vite.config.ts.timestamp-*
 .git
+DB
