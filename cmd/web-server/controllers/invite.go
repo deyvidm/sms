@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/deyvidm/sms/web-server/types"
+	"github.com/deyvidm/sms/cmd/web-server/types"
 	"github.com/gin-gonic/gin"
 )
 

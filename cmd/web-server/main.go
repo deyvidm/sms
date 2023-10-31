@@ -1,6 +1,6 @@
 package main
 
-import utils "github.com/deyvidm/sms/web-server/utils"
+import utils "github.com/deyvidm/sms/cmd/web-server/utils"
 
 func main() {
 	cleanupDB := utils.SetupDB(".env", "DB_FILE")

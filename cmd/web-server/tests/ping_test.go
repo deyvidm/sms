@@ -3,8 +3,8 @@ package tests
 import (
 	"testing"
 
-	"github.com/deyvidm/sms/web-server/types"
-	utils "github.com/deyvidm/sms/web-server/utils"
+	"github.com/deyvidm/sms/cmd/web-server/types"
+	utils "github.com/deyvidm/sms/cmd/web-server/utils"
 
 	"github.com/stretchr/testify/require"
 )

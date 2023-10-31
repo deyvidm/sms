@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/deyvidm/sms/common/types"
-	"github.com/deyvidm/sms/common/utils"
+	"github.com/deyvidm/sms/pkg/types"
+	"github.com/deyvidm/sms/pkg/utils"
 	"github.com/hibiken/asynq"
 )
 

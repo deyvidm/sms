@@ -1,6 +1,6 @@
 package tests
 
-import "github.com/deyvidm/sms/web-server/types"
+import "github.com/deyvidm/sms/cmd/web-server/types"
 
 var FirstLast = []types.FirstLastName{
 	{

@@ -3,9 +3,9 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/deyvidm/sms/common/tasks"
-	"github.com/deyvidm/sms/web-server/models"
-	"github.com/deyvidm/sms/web-server/types"
+	"github.com/deyvidm/sms/cmd/web-server/models"
+	"github.com/deyvidm/sms/cmd/web-server/types"
+	"github.com/deyvidm/sms/pkg/tasks"
 	"github.com/gin-gonic/gin"
 )
 

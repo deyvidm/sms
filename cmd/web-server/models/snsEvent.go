@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"log"
 
-	"github.com/deyvidm/sms/web-server/types"
+	"github.com/deyvidm/sms/cmd/web-server/types"
 )
 
 // This comes in Straight from SNS

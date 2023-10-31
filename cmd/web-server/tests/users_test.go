@@ -7,9 +7,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/deyvidm/sms/web-server/routes"
-	"github.com/deyvidm/sms/web-server/types"
-	utils "github.com/deyvidm/sms/web-server/utils"
+	"github.com/deyvidm/sms/cmd/web-server/routes"
+	"github.com/deyvidm/sms/cmd/web-server/types"
+	utils "github.com/deyvidm/sms/cmd/web-server/utils"
 )
 
 // this test is a series of steps

@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/deyvidm/sms/web-server/types"
+	"github.com/deyvidm/sms/cmd/web-server/types"
 )
 
 const (

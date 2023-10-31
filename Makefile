@@ -5,10 +5,10 @@ all: build test
 build: build-server build-dispatcher 
 
 build-server: 
-	go build -o bin/sms ./web-server
+	go build -o bin/web-server ./cmd/web-server
 
 build-dispatcher:
-	go build -o bin/dispatcher ./dispatcher
+	go build -o bin/dispatcher ./cmd/dispatcher
 
 run-server: 
 	./bin/sms

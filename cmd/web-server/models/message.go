@@ -3,7 +3,7 @@ package models
 import (
 	"fmt"
 
-	"github.com/deyvidm/sms/web-server/types"
+	"github.com/deyvidm/sms/cmd/web-server/types"
 )
 
 type Message struct {

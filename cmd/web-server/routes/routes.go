@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/deyvidm/sms/web-server/controllers"
+	"github.com/deyvidm/sms/cmd/web-server/controllers"
 	"github.com/gin-gonic/gin"
 )
 

@@ -3,9 +3,9 @@ package utils
 import (
 	"os"
 
-	"github.com/deyvidm/sms/web-server/middleware"
-	"github.com/deyvidm/sms/web-server/models"
-	"github.com/deyvidm/sms/web-server/routes"
+	"github.com/deyvidm/sms/cmd/web-server/middleware"
+	"github.com/deyvidm/sms/cmd/web-server/models"
+	"github.com/deyvidm/sms/cmd/web-server/routes"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
