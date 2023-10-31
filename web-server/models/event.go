@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/deyvidm/sms/dispatcher/tasks"
+	"github.com/deyvidm/sms/common/tasks"
 	"github.com/deyvidm/sms/web-server/types"
 	"github.com/hibiken/asynq"
 	"gorm.io/gorm"

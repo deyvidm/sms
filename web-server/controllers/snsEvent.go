@@ -3,7 +3,7 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/deyvidm/sms/dispatcher/tasks"
+	"github.com/deyvidm/sms/common/tasks"
 	"github.com/deyvidm/sms/web-server/models"
 	"github.com/deyvidm/sms/web-server/types"
 	"github.com/gin-gonic/gin"
