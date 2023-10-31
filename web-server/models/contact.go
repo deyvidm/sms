@@ -55,3 +55,9 @@ func (u *User) SaveContact(c Contact) (APIContact, error) {
 	DB.Where("phone = ? AND owner = ? ", c.Phone, u.ID).First(&contact)
 	return contact.ToAPI(), nil
 }
+
+func GetContactNumber(id string) (string, error) {
+	var contact Contact
+	DB.Where("id = ?", id).First(&contact)
+	return contact.Phone, nil
+}

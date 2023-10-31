@@ -1,8 +1,8 @@
 package main
 
 import (
+	"github.com/deyvidm/sms/common/tasks"
 	"github.com/deyvidm/sms/dispatcher/log"
-	"github.com/deyvidm/sms/dispatcher/tasks"
 	"github.com/hibiken/asynq"
 	"github.com/sirupsen/logrus"
 )

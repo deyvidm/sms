@@ -3,9 +3,9 @@ package main
 import (
 	"os"
 
+	"github.com/deyvidm/sms/common/tasks"
 	"github.com/deyvidm/sms/dispatcher/client"
 	"github.com/deyvidm/sms/dispatcher/log"
-	"github.com/deyvidm/sms/dispatcher/tasks"
 	"github.com/deyvidm/sms/dispatcher/workers"
 	"github.com/hibiken/asynq"
 	"github.com/joho/godotenv"

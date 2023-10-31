@@ -4,11 +4,11 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/deyvidm/sms/common/tasks"
+	"github.com/deyvidm/sms/common/types"
+	"github.com/deyvidm/sms/common/utils"
 	"github.com/deyvidm/sms/dispatcher/client"
 	"github.com/deyvidm/sms/dispatcher/log"
-	"github.com/deyvidm/sms/dispatcher/tasks"
-	"github.com/deyvidm/sms/dispatcher/types"
-	"github.com/deyvidm/sms/dispatcher/utils"
 	"github.com/hibiken/asynq"
 )
 
@@ -42,4 +42,15 @@ func (md *MessageDispatcher) HandleSendInviteTask(ctx context.Context, t *asynq.
 		ID:     p.InviteID,
 		Status: utils.Ptr(types.InviteStatus_Invited.String()),
 	})
+}
+
+func (md *MessageDispatcher) HandleNewMessageTask(ctx context.Context, t *asynq.Task) error {
+	var p tasks.NewMessagePayload
+	if err := json.Unmarshal(t.Payload(), &p); err != nil {
+		return err
+	}
+
+	logger.Infof("|%s|\tsending one-off message to %s : '%s'", t.Type(), p.ToPhoneNumber, p.Content)
+
+	return nil
 }

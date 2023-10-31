@@ -75,3 +75,7 @@ func CurrentUser(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"status": types.StatusSuccess, "data": u})
 }
+
+func GetContactNumber(c *gin.Context, id string) (string, error) {
+	return models.GetContactNumber(id)
+}
