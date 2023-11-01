@@ -57,13 +57,14 @@ func (md *MessageDispatcher) HandleNewMessageTask(ctx context.Context, t *asynq.
 	logger.Infof("|%s|\tsending one-off message to %s : '%s'", t.Type(), p.ToPhoneNumber, p.Content)
 
 	resp, err := md.pp.SendMessages(ctx, &pinpoint.SendMessagesInput{
-		ApplicationId: utils.Ptr("ecea11cc234a4af78bfe9831beca48bf"),
+		ApplicationId: utils.Ptr("ecea11cc234a4af78bfe9831beca48bf"), // TODO pop this in ENV
 		MessageRequest: &ppt.MessageRequest{
 			Addresses: map[string]ppt.AddressConfiguration{
 				p.ToPhoneNumber: {ChannelType: ppt.ChannelTypeSms},
 			},
 			MessageConfiguration: &ppt.DirectMessageConfiguration{
 				SMSMessage: &ppt.SMSMessage{
+					// OriginationNumber: utils.Ptr("xxx"), // TODO different user different number
 					Body:        &p.Content,
 					MessageType: ppt.MessageTypePromotional,
 				},
