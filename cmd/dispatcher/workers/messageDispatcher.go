@@ -38,10 +38,14 @@ func (md *MessageDispatcher) HandleSendInviteTask(ctx context.Context, t *asynq.
 
 	logger.Infof("|%s|\tinviting %s to %s : '%s'", t.Type(), p.ToPhoneNumber, p.InviteID, p.Content)
 
+	// pushes an invite onto an attendee's stack
 	if err := md.irs.SaveNewInviteEntry(p.ToPhoneNumber, p.InviteID); err != nil {
 		return err
 	}
 
+	// TOOD actually send an SMS
+
+	// tell the web-server that we've sent an invite (ie. update status from Pending to Sent or whatever)
 	return md.wbc.UpdateInvite(client.UpdateInvite{
 		ID:     p.InviteID,
 		Status: utils.Ptr(types.InviteStatus_Invited.String()),
@@ -56,8 +60,9 @@ func (md *MessageDispatcher) HandleNewMessageTask(ctx context.Context, t *asynq.
 
 	logger.Infof("|%s|\tsending one-off message to %s : '%s'", t.Type(), p.ToPhoneNumber, p.Content)
 
+	// reach out to AWS pinpoint and blast off an SMS
 	resp, err := md.pp.SendMessages(ctx, &pinpoint.SendMessagesInput{
-		ApplicationId: utils.Ptr("ecea11cc234a4af78bfe9831beca48bf"), // TODO pop this in ENV
+		ApplicationId: utils.Ptr("ecea11cc234a4af78bfe9831beca48bf"), // TODO pop this in ENV; its our Pinpoint APP ID
 		MessageRequest: &ppt.MessageRequest{
 			Addresses: map[string]ppt.AddressConfiguration{
 				p.ToPhoneNumber: {ChannelType: ppt.ChannelTypeSms},
@@ -77,6 +82,8 @@ func (md *MessageDispatcher) HandleNewMessageTask(ctx context.Context, t *asynq.
 		return err
 	}
 
+	// we can tear this apart for cool metric
+	// more importantly (TODO) check and handle Status (ie. 200? 400? 500?)
 	logger.Info(utils.JSONDump(resp.MessageResponse))
 	return nil
 }
