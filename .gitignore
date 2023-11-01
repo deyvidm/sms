@@ -29,6 +29,4 @@ node_modules
 vite.config.ts.timestamp-*
 .git
 DB
-dispatcher
-web-server
-
+bin/*
