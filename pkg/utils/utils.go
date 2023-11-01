@@ -11,12 +11,15 @@ func Ptr[T any](v T) *T {
 	return &v
 }
 
-func JSONDump(x interface{}) {
+func JSONDump(x interface{}) string {
 	b, err := json.MarshalIndent(x, "", "  ")
 	if err != nil {
 		fmt.Println("error:", err)
 	}
-	fmt.Print(string(b))
+	return string(b)
+}
+func PrintJSONDump(x interface{}) {
+	fmt.Print(JSONDump(x))
 }
 
 func Contains[T comparable](s []T, e T) bool {
