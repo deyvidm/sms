@@ -72,15 +72,10 @@ func (md *MessageDispatcher) HandleNewMessageTask(ctx context.Context, t *asynq.
 	})
 
 	if err != nil {
-		logger.Infof("|%s|\t fucked up sending, returning error", t.Type())
+		logger.Infof("|%s|\t error sending message", t.Type())
 		return err
 	}
 
-	logger.Infof("|%s|\t finished sending message", t.Type())
-	logger.Infof("|%s|\t dumping Result Metadata:", t.Type())
-	logger.Info(utils.JSONDump(resp.ResultMetadata))
-
-	logger.Infof("|%s|\t dumping Message Response:", t.Type())
 	logger.Info(utils.JSONDump(resp.MessageResponse))
 	return nil
 }
