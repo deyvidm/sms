@@ -35,7 +35,7 @@ func TestNewContactFlow(t *testing.T) {
 		FirstName: Contacts[0].FirstName,
 		LastName:  Contacts[0].LastName,
 		Phone:     Contacts[0].Phone,
-		ID:        2,
+		ID:        "2",
 	}
 
 	steps := []TestStep{
@@ -70,7 +70,7 @@ func TestAddMultipleContactsFlow(t *testing.T) {
 			FirstName: Contacts[i].FirstName,
 			LastName:  Contacts[i].LastName,
 			Phone:     Contacts[i].Phone,
-			ID:        uint(i + 2),
+			ID:        string(i + 2),
 		}
 		contactResponses = append(contactResponses, cr)
 		exp := ExpectedResponse{Code: 200, ResponseBody: map[string]interface{}{
