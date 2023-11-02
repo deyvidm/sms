@@ -77,6 +77,8 @@ func (md *MessageDispatcher) HandleNewMessageTask(ctx context.Context, t *asynq.
 
 	logger.Infof("|%s| sending one-off message to %s : '%s'", t.Type(), p.ToPhoneNumber, p.Content)
 
+	return nil // TODO rm this block before deploying
+
 	// reach out to AWS pinpoint and blast off an SMS
 	resp, err := md.pp.SendMessages(ctx, &pinpoint.SendMessagesInput{
 		ApplicationId: utils.Ptr("ecea11cc234a4af78bfe9831beca48bf"), // TODO pop this in ENV; its our Pinpoint APP ID
