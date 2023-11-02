@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/deyvidm/sms/cmd/dispatcher/log"
+	"github.com/deyvidm/sms/pkg/tasks"
 	"github.com/hibiken/asynq"
 	"github.com/sirupsen/logrus"
 )
@@ -16,7 +17,7 @@ func main() {
 	var t *asynq.Task
 
 	// t, _ = tasks.NewInviteTask("inviteID123", "+11234567890", "tiger butts")
-	// t, _ = tasks.NewMesssageTask("+11234567890", "message body goes here")
+	t, _ = tasks.NewMesssageTask("+11234567890", "message body goes here")
 	logAndEnqueue(client, t)
 
 }
