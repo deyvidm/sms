@@ -3,6 +3,7 @@ package workers
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/aws/aws-sdk-go-v2/service/pinpoint"
 	ppt "github.com/aws/aws-sdk-go-v2/service/pinpoint/types"
@@ -58,7 +59,23 @@ func (md *MessageDispatcher) HandleNewMessageTask(ctx context.Context, t *asynq.
 		return err
 	}
 
-	logger.Infof("|%s|\tsending one-off message to %s : '%s'", t.Type(), p.ToPhoneNumber, p.Content)
+	if len(p.Content) < 1 {
+		err := fmt.Errorf("message request contains no body")
+		logger.Error(err)
+		return err
+	}
+
+	// 10-digit phone number + area code (area code will always be "+X" where X is at least a single digit number)
+	// this makes the total number of characters in a valid number at least 12 (plus sign included)
+	// ex: +1xxxiiizzzz for North America => 12 characters
+	// ex: +41xxxiiizzzz for Switzerland  => 13 characters
+	if len(p.ToPhoneNumber) < 12 {
+		err := fmt.Errorf("unexpected phone number length: %d [%s]", len(p.ToPhoneNumber), p.ToPhoneNumber)
+		logger.Error(err)
+		return err
+	}
+
+	logger.Infof("|%s| sending one-off message to %s : '%s'", t.Type(), p.ToPhoneNumber, p.Content)
 
 	// reach out to AWS pinpoint and blast off an SMS
 	resp, err := md.pp.SendMessages(ctx, &pinpoint.SendMessagesInput{
@@ -78,7 +95,7 @@ func (md *MessageDispatcher) HandleNewMessageTask(ctx context.Context, t *asynq.
 	})
 
 	if err != nil {
-		logger.Infof("|%s|\t error sending message", t.Type())
+		logger.Infof("|%s|error sending message", t.Type())
 		return err
 	}
 
