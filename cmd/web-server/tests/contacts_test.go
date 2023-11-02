@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"fmt"
 	"net/http"
 	"testing"
 
@@ -70,7 +71,7 @@ func TestAddMultipleContactsFlow(t *testing.T) {
 			FirstName: Contacts[i].FirstName,
 			LastName:  Contacts[i].LastName,
 			Phone:     Contacts[i].Phone,
-			ID:        string(i + 2),
+			ID:        fmt.Sprint(i + 2),
 		}
 		contactResponses = append(contactResponses, cr)
 		exp := ExpectedResponse{Code: 200, ResponseBody: map[string]interface{}{
