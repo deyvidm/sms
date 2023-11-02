@@ -42,7 +42,7 @@ func (wbc *WebBackendClient) UpdateInvite(invite UpdateInvite) error {
 	}
 	req, err := http.NewRequest(http.MethodPut, wbc.Address+url, bytes.NewBuffer(bod))
 	if err != nil {
-		logger.Errorf("Error creating request:", err)
+		logger.Errorf("Error creating request: %+v", err)
 		return err
 	}
 	req.Header.Set("Content-Type", "application/json")
@@ -50,7 +50,7 @@ func (wbc *WebBackendClient) UpdateInvite(invite UpdateInvite) error {
 
 	resp, err := wbc.client.Do(req)
 	if err != nil {
-		logger.Errorf("Error sending request:", err)
+		logger.Errorf("Error sending request: %+v", err)
 		return err
 	}
 	defer resp.Body.Close()
