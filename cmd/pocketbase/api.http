@@ -1,0 +1,49 @@
+
+
+### Simulate an attendee responding to their SMS 
+### Only if the setting "enable raw message delivery" is ON in SNS
+POST http://127.0.0.1:8090/api/collections/response/records
+Content-Type: application/json
+
+{
+  "originationNumber" : "+16478653169",
+  "destinationNumber" : "+15876085626",
+  "messageKeyword" : "KEYWORD_642644262173",
+  "messageBody" : "Gy",
+  "previousPublishedMessageId" : "8f5e1bb3-6b9b-5776-9d78-473e4a8a6876",
+  "inboundMessageId" : "106b61b4-0f44-45e5-b9ab-6a787c9c647d"
+}
+
+###
+
+POST http://127.0.0.1:8090/api/collections/response/records
+Content-Type: application/json
+
+{
+  "previousPublishedMessageId": "test",
+  "originationNumber": "test",
+  "destinationNumber": "test",
+  "messageKeyword": "test",
+  "messageBody": "test",
+  "inboundMessageId": "test"
+}
+
+### Simulate an attendee responding to their SMS 
+### Only if the setting "enable raw message delivery" is OFF in SNS
+POST http://127.0.0.1:8090/api/collections/response/records
+Content-Type: application/json
+
+{
+  "Type" : "Notification",
+  "MessageId" : "f691db55-5a43-578d-9f8a-87de6bdf0181",
+  "TopicArn" : "arn:aws:sns:us-east-1:642644262173:SMSEventManager",
+  "Message" : "{\"originationNumber\":\"+16478653169\",\"destinationNumber\":\"+15876085626\",\"messageKeyword\":\"KEYWORD_642644262173\",\"messageBody\":\"Poop\",\"previousPublishedMessageId\":\"7bab7129-7609-50ee-a953-2da3a8ebc2c4\",\"inboundMessageId\":\"5892c0d1-c2b1-4561-aefa-9125573adf83\"}",
+  "Timestamp" : "2023-03-15T02:37:16.509Z",
+  "SignatureVersion" : "1",
+  "Signature" : "L8J349yyzMXnw6OhbZVE87NLjkAjWFbFZnb5XXv68cbsuT3mh34p0ALEvHeRJki/ljW2O4KxHwIfg9gFp5ivaU1eVZvh58bYuZ1BqeWzDZbFKj+oi0LnwiuSUwh37MhrAbrBO3vEtqh+ZF5POmtnWodwesEQ7fEHwi3ceRCDeqdSyzOcTRW5YULmiWyuOQnVn8NrLMTQ2B37uNZMDnw0uNyJILNz09cOLsIsuQ7oTlh8JZZQOL5SLLcdt/pUeeDcORu+mPV7icUBZlWJQlUar/5coTyeek2AZCCTrcmof10UsD3yk0VxmhYIO73wPD6s3KZhHvY+gQHAQJ/tWwRq7A==",
+  "SigningCertURL" : "https://sns.us-east-1.amazonaws.com/SimpleNotificationService-56e67fcb41f6fec09b0196692625d385.pem",
+  "UnsubscribeURL" : "https://sns.us-east-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:us-east-1:642644262173:SMSEventManager:7ca17196-f7f9-4b7f-8870-ec7757592c3b"
+}
+
+###
+
