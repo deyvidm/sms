@@ -2,19 +2,26 @@ remote := "root@${LINODE_IP}"
 
 all: build test
 
-build: build-server build-dispatcher 
+build: build-dispatcher build-pb
 
-build-server: 
-	go build -o bin/web-server ./cmd/web-server
+build-pb:
+	go build -o bin/pb ./cmd/pocketbase
 
 build-dispatcher:
 	go build -o bin/dispatcher ./cmd/dispatcher
+
+
+build-server: 
+	go build -o bin/web-server ./cmd/web-server
 
 run-server: 
 	./bin/sms
 
 run-dispatcher:
 	./bin/dispatcher
+
+run-pb:
+	./bin/pb serve
 
 test:
 	echo "tests OK lol"
