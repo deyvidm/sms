@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/deyvidm/sms/eventhooks"
-	"github.com/deyvidm/sms/routes"
+	"github.com/deyvidm/sms/cmd/pocketbase/eventhooks"
+	"github.com/deyvidm/sms/cmd/pocketbase/routes"
 
 	"github.com/pocketbase/pocketbase"
 )

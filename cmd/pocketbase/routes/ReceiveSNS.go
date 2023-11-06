@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/deyvidm/sms/utils"
+	"github.com/deyvidm/sms/cmd/pocketbase/utils"
 	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/apis"

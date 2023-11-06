@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/aws/aws-sdk-go-v2/service/sns"
-	"github.com/deyvidm/sms/utils"
+	"github.com/deyvidm/sms/cmd/pocketbase/utils"
 	"github.com/pocketbase/pocketbase/core"
 )
 
