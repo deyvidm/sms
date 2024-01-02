@@ -1,18 +1,38 @@
 remote := "root@${LINODE_IP}"
 
-all: build test
 
-build: build-dispatcher build-pb
+
+### docker build stuff
+pb-docker: clean-pb-docker build-pb-docker run-pb-docker
+
+clean-pb-docker:
+	-docker container stop pocketbase
+	-docker container rm pocketbase
+
+build-pb-docker:
+	docker build --target pocketbase -t pocketbase -f Dockerfile-go .
+
+run-pb-docker:
+	docker run -v ./pb_data:/app/pb_data -d -p 8090:8090 --name pocketbase pocketbase
+
+
+dispatcher-docker: build-dispatcher-docker run-dispatcher-docker
+
+build-dispatcher-docker:
+	docker build --target dispatcher -t dispatcher -f Dockerfile-go .
+
+run-dispatcher-docker:
+	docker run -d -p 8080:8080 --name dispatcher dispatcher
+
+
+### local build stuff
+build-local: build-dispatcher build-pb
 
 build-pb:
 	go build -o bin/pb ./cmd/pocketbase
 
 build-dispatcher:
 	go build -o bin/dispatcher ./cmd/dispatcher
-
-
-build-server: 
-	go build -o bin/web-server ./cmd/web-server
 
 run-server: 
 	./bin/sms
@@ -31,5 +51,3 @@ host: build
 
 deploy:
 	rsync -av -e ssh --exclude-from='.gitignore' . $(remote):/root/sms-backend
-
-

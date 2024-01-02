@@ -11,7 +11,6 @@ import (
 	"github.com/deyvidm/sms/cmd/dispatcher/workers"
 	"github.com/deyvidm/sms/pkg/tasks"
 	"github.com/hibiken/asynq"
-	"github.com/joho/godotenv"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -33,8 +32,9 @@ func main() {
 		DB:       1,  // default DB 0 is for asynq
 	})
 
-	if err := godotenv.Load(".env"); err != nil {
-		logger.Fatal(err)
+	_, found := os.LookupEnv("SECRET")
+	if !found {
+		logger.Fatalf("missing SECRET env variable")
 	}
 
 	cfg, err := config.LoadDefaultConfig(context.TODO(),
