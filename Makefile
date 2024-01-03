@@ -9,10 +9,10 @@ clean-web-docker:
 	-docker container rm web
 
 build-web-docker:
-	docker build --target web -t web -f ./cmd/web/Dockerfile .
+	docker build --target web -t web -f ./cmd/web/Dockerfile ./cmd/web
 
 run-web-docker:
-	docker run -d -p 3000:3000 --name web web
+	docker run -d -p 80:80 --name web web
 
 ### docker build stuff for pocketbase
 pb-docker: clean-pb-docker build-pb-docker run-pb-docker
