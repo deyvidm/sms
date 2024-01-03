@@ -11,7 +11,8 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install production dependencies.
-RUN npm ci --only=production
+# TODO -- seperate dev and prod dependencies
+RUN npm ci
 
 # Copy local code to the container image.
 COPY . ./
@@ -19,9 +20,10 @@ COPY . ./
 # Build the application
 RUN npm run build
 
+RUN ls -al
 # Use a minimal image to run a production build of the app.
 # This stage starts a new build stage and is not based on the Node.js image
-FROM nginx:stable-alpine
+FROM nginx:stable-alpine as web
 
 # Copy the build artifacts from the Node.js image into the nginx image.
 COPY --from=0 /usr/src/app/dist /usr/share/nginx/html
