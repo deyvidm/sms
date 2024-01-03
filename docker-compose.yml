@@ -7,17 +7,23 @@ services:
 
   dispatcher:
     build:
-      context: .
-      dockerfile: Dockerfile-go
-      target: dispatcher
+      context: ./cmd/dispatcher
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
 
   pocketbase:
     build:
-      context: .
-      dockerfile: Dockerfile-go
-      target: pocketbase
+      context: ./cmd/pocketbase
+      dockerfile: Dockerfile
     ports:
       - "8090:8090"
 
+  web:
+    build:
+      context: ./cmd/web
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./cmd/web:/app

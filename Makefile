@@ -1,8 +1,20 @@
 remote := "root@${LINODE_IP}"
 
 
+### docker build stuff for vite/web frontend
+web-docker: clean-web-docker build-web-docker run-web-docker
 
-### docker build stuff
+clean-web-docker:
+	-docker container stop web
+	-docker container rm web
+
+build-web-docker:
+	docker build --target web -t web -f ./cmd/web/Dockerfile .
+
+run-web-docker:
+	docker run -d -p 3000:3000 --name web web
+
+### docker build stuff for pocketbase
 pb-docker: clean-pb-docker build-pb-docker run-pb-docker
 
 clean-pb-docker:
@@ -10,16 +22,16 @@ clean-pb-docker:
 	-docker container rm pocketbase
 
 build-pb-docker:
-	docker build --target pocketbase -t pocketbase -f Dockerfile-go .
+	docker build --target pocketbase -t pocketbase -f ./cmd/pocketbase/Dockerfile .
 
 run-pb-docker:
 	docker run -v ./pb_data:/app/pb_data -d -p 8090:8090 --name pocketbase pocketbase
 
-
+### docker build stuff for dispatcher
 dispatcher-docker: build-dispatcher-docker run-dispatcher-docker
 
 build-dispatcher-docker:
-	docker build --target dispatcher -t dispatcher -f Dockerfile-go .
+	docker build --target dispatcher -t dispatcher -f ./cmd/dispatcher/Dockerfile .
 
 run-dispatcher-docker:
 	docker run -d -p 8080:8080 --name dispatcher dispatcher
