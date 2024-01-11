@@ -28,7 +28,11 @@ run-pb-docker:
 	docker run -v ./pb_data:/app/pb_data -d -p 8090:8090 --name pocketbase pocketbase
 
 ### docker build stuff for dispatcher
-dispatcher-docker: build-dispatcher-docker run-dispatcher-docker
+dispatcher-docker: clean-dispatcher-docker build-dispatcher-docker run-dispatcher-docker
+
+clean-dispatcher-docker:
+	-docker container stop dispatcher
+	-docker container rm dispatcher
 
 build-dispatcher-docker:
 	docker build --target dispatcher -t dispatcher -f ./cmd/dispatcher/Dockerfile .
